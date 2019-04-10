@@ -1,4 +1,4 @@
-package com.example.zagelx;
+package com.example.zagelx.OrdersPackage;
 
 public class Orders {
     private int userImage;

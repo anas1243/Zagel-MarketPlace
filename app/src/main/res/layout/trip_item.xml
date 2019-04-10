@@ -6,45 +6,13 @@
     android:background="@drawable/round_corners"
     android:orientation="vertical"
     android:padding="12dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginBottom="3dp"
-        android:orientation="horizontal">
-
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/user_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/sora"
-            app:civ_border_color="@android:color/tab_indicator_text"
-            app:civ_border_width="1.5dp" />
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:hint="NAME"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#000000" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/package_image"
+            android:id="@+id/delegate_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/sora"
@@ -52,27 +20,27 @@
             app:civ_border_width="2dp" />
 
         <TextView
-            android:id="@+id/package_name"
+            android:id="@+id/delegate_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:hint="PACKAGEnAME"
+            android:hint="HAMADA EL SHR2AWI"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/delivery_date"
+            android:id="@+id/route_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/package_name"
+            android:layout_below="@id/delegate_name"
             android:layout_centerHorizontal="true"
             android:hint="1/1/2001"
             android:textColor="#000000"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/delivery_price"
+            android:id="@+id/route_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

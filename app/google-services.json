@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "741633151216",
+    "firebase_url": "https://zagel-9f971.firebaseio.com",
+    "project_id": "zagel-9f971",
+    "storage_bucket": "zagel-9f971.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741633151216:android:d3b9999695d99d12",
+        "android_client_info": {
+          "package_name": "com.example.zagelx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741633151216-sqhrq4sb2gbo0p5j6npklmobbm4r3k9i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.zagelx",
+            "certificate_hash": "72ab22e4d39fae297e48f8514341f3fd6c0a2ce7"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDP82Ie4fPqdQlA9On6hCyTc8DgWLfmEdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741633151216-cmrottde6r6af7j9l20k2jm1nj5p9f7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

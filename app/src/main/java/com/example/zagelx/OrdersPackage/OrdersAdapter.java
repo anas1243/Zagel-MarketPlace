@@ -1,4 +1,4 @@
-package com.example.zagelx;
+package com.example.zagelx.OrdersPackage;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.R;
 
 import java.util.List;
 
