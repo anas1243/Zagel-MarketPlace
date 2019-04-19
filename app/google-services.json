@@ -21,6 +21,10 @@
             "package_name": "com.example.zagelx",
             "certificate_hash": "72ab22e4d39fae297e48f8514341f3fd6c0a2ce7"
           }
+        },
+        {
+          "client_id": "741633151216-cmrottde6r6af7j9l20k2jm1nj5p9f7m.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [

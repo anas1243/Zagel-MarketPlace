@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:text="TRIPS"
+            android:text="ORDERS"
             android:textColor="#ffffff" />
 
         <Button
@@ -36,7 +36,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:text="ORDERS"
+            android:text="TRIPS"
             android:textColor="#ffffff" />
 
     </LinearLayout>

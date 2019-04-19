@@ -1,25 +1,25 @@
-package com.example.zagelx.TripsPackage;
+package com.example.zagelx.Models;
 
 public class Trips {
 
-    private int delegateImage;
-    private String delegateName;
+    private int delegateImage = 0;//will be removed
+    private String delegateID = "";
 
-    private String routeDate;
-    private String routePrice;
+    private String routeDate = "";
+    private String routePrice = "";
 
-    private String source;
-    private String destination;
-    private int vehicleImage;
+    private String source = "";
+    private String destination = "";
+    private int vehicleImage = 0;
 
     public Trips() {
     }
 
-    public Trips(int delegateImage, String delegateName
+    public Trips(int delegateImage, String delegateID
             , String delvieryDate, String deliveryPrice,
                  String source, String destination, int vehicleImage) {
         this.delegateImage = delegateImage;
-        this.delegateName = delegateName;
+        this.delegateID = delegateID;
         this.routeDate = delvieryDate;
         this.routePrice = deliveryPrice;
         this.source = source;
@@ -31,8 +31,8 @@ public class Trips {
         return delegateImage;
     }
 
-    public String getDelegateName() {
-        return delegateName;
+    public String getDelegateID() {
+        return delegateID;
     }
 
     public String getRouteDate() {

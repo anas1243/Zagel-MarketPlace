@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Models.Trips;
 import com.example.zagelx.R;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
         Glide.with(delegateImageIV.getContext())
                 .load(trip.getDelegateImage())
                 .into(delegateImageIV);
-        delegateNameTV.setText(trip.getDelegateName());
+        delegateNameTV.setText(trip.getDelegateID());
         routeDateTV.setText(trip.getRouteDate());
         routePriceTV.setText(trip.getRoutePrice());
 

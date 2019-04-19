@@ -7,9 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.zagelx.TripsPackage.AddTripsActivity;
+import com.example.zagelx.Models.Orders;
 import com.example.zagelx.R;
-import com.example.zagelx.TripsPackage.TripsActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class OrdersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Create a new intent to open the {@link AddTripsActivity}
-                Intent i = new Intent(OrdersActivity.this, TripsActivity.class);
+                Intent i = new Intent(OrdersActivity.this, AddOrdersActivity.class);
                 startActivity(i);
             }
         });

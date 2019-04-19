@@ -9,13 +9,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Models.Orders;
 import com.example.zagelx.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrdersAdapter extends ArrayAdapter<Orders> {
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     public OrdersAdapter(Context context, int resource, List<Orders> objects) {
         super(context, resource, objects);
     }
@@ -45,7 +50,7 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
         Glide.with(userImageIV.getContext())
                 .load(order.getUserImage())
                 .into(userImageIV);
-        userNameTV.setText(order.getUserName());
+        userNameTV.setText(user.getDisplayName());
 
         Glide.with(packageImageIV.getContext())
                 .load(order.getPackageImage())

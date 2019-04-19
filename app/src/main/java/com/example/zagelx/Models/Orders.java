@@ -1,41 +1,44 @@
-package com.example.zagelx.OrdersPackage;
+package com.example.zagelx.Models;
 
 public class Orders {
-    private int userImage;
-    private String userName;
+    private int userImage = 0;//we be removed
+    private String merchantId = "";
+    private String acceptedDelegate;
+    private String packageState;
+    private String endConcumerMobile;
 
-    private int packageImage;
-    private String packageName;
-    private String deliveryDate;
-    private String deliveryPrice;
+    private int packageImage = 0;
+    private String packageName = "";
+    private String deliveryDate = "";
+    private String deliveryPrice = "";
 
-    private String source;
-    private String destination;
-    private int vehcileImage;
+    private String source = "";
+    private String destination = "";
+    private int vehicleImage = 0;
 
     public Orders() {
     }
 
-    public Orders(int userImage, String userName, int packageImage,
+    public Orders(int userImage, String merchantId, int packageImage,
                   String packageName, String delvieryDate, String deliveryPrice,
-                  String source, String destination, int vehcileImage) {
+                  String source, String destination, int vehicleImage) {
         this.userImage = userImage;
-        this.userName = userName;
+        this.merchantId = merchantId;
         this.packageImage = packageImage;
         this.packageName = packageName;
         this.deliveryDate = delvieryDate;
         this.deliveryPrice = deliveryPrice;
         this.source = source;
         this.destination = destination;
-        this.vehcileImage = vehcileImage;
+        this.vehicleImage = vehicleImage;
     }
 
     public int getUserImage() {
         return userImage;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getMerchantId() {
+        return merchantId;
     }
 
     public int getPackageImage() {
@@ -62,7 +65,7 @@ public class Orders {
         return destination;
     }
 
-    public int getVehcileImage() {
-        return vehcileImage;
+    public int getvehicleImage() {
+        return vehicleImage;
     }
 }

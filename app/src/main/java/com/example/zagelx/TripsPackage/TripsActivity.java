@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.zagelx.OrdersPackage.AddOrdersActivity;
+import com.example.zagelx.Models.Trips;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
 

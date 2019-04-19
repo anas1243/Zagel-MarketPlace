@@ -1,9 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="16dp">
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/package_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/box1"
+            android:scaleType="centerCrop"/>
+        <Button
+            android:id="@+id/add_packageImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UpLoad Pic"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="50dp"/>
     </LinearLayout>
 
-</RelativeLayout>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:useDefaultMargins="true"
+        android:alignmentMode="alignBounds"
+        android:id="@+id/grid_view"
+        >
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Order Name"
+            android:inputType="text"
+            android:id="@+id/package_name"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Order date"
+            android:inputType="text"
+            android:id="@+id/delivery_date"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Order Price"
+            android:inputType="text"
+            android:id="@+id/delivery_price"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="16dp"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Order source"
+            android:inputType="text"
+            android:id="@+id/source_txt_view"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="16dp"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Order destination"
+            android:inputType="text"
+            android:id="@+id/destination_txt_view"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="16dp"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="receiver mobile"
+            android:inputType="text"
+            android:id="@+id/receiver_mobile"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="16dp"/>
+
+    </GridLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Add Your Order"
+        android:id="@+id/orders_button"
+        />
+
+</LinearLayout>
