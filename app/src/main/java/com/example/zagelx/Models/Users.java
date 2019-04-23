@@ -1,5 +1,7 @@
 package com.example.zagelx.Models;
 
+import java.util.Date;
+
 public class Users {
     private String ID = "";
     private String name = "";
@@ -8,26 +10,30 @@ public class Users {
     private String gender = ""; //male:male, female:female
     private String noOFOrders = "";
     private String noOfTrips = "";
-    private int mobileNumber = 0;
+    private String mobileNumber = "";
     private String profilePictureURL = "";
     private String nationalIdURL = "";
     private String electricityReceiptURL = "";
     private String government = ""; // living government
     private int rate = 0;
     private boolean firstTimeLogIn = true;
+    //date with format year month day
+    private BirthDate birthDate = null;
 
 
     public Users() {
     }
 
-    public Users(String ID, String name, String gender, int mobileNumber,
-                 String profilePictureURL, boolean firstTimeLogIn) {
+    public Users(String ID, String name, String gender, String mobileNumber,
+                 String profilePictureURL, BirthDate birthDate,boolean firstTimeLogIn) {
         this.name = name;
         this.gender = gender;
         this.mobileNumber = mobileNumber;
         this.profilePictureURL = profilePictureURL;
         this.firstTimeLogIn = firstTimeLogIn;
         this.ID = ID;
+        this.birthDate = birthDate;
+        this.firstTimeLogIn = firstTimeLogIn;
     }
 
     public String getName() {
@@ -54,7 +60,7 @@ public class Users {
         return noOfTrips;
     }
 
-    public int getMobileNumber() {
+    public String getMobileNumber() {
         return mobileNumber;
     }
 
@@ -84,5 +90,9 @@ public class Users {
 
     public String getID() {
         return ID;
+    }
+
+    public BirthDate getBirthDate() {
+        return birthDate;
     }
 }

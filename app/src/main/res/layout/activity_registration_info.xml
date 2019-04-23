@@ -2,6 +2,7 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent">
@@ -72,7 +73,7 @@
                     android:textAllCaps="true" />
 
                 <EditText
-                    android:id="@+id/email_email"
+                    android:id="@+id/user_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -126,7 +127,7 @@
 
 
                 <Button
-                    android:id="@+id/btn_to_user_type"
+                    android:id="@+id/button_register"
                     style="@style/button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
