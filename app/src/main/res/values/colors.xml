@@ -6,4 +6,8 @@
     <color name="colorSecondary">#FFC300</color>
     <color name="lightGray">#dadada</color>
 
+    <color name="colorText">#dddddd</color>
+    <color name="colorHint">#959595</color>
+    <color name="colorButtonTransparent">#be050505</color>
+
 </resources>

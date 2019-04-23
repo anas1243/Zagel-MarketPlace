@@ -1,14 +1,25 @@
 package com.example.zagelx.OrdersPackage;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.R;
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,18 +31,29 @@ public class OrdersActivity extends AppCompatActivity {
     private OrdersAdapter mOrdersAdapter;
     private Button ordersButton;
     private Button tripsButton;
+    private ProgressBar progressBar;
 
+
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mOrdersDatabaseReference;
+    private ChildEventListener mChildEventListener;
+
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.orders_activity);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
+
         mOrdersListView = findViewById(R.id.main_list);
         ordersButton = findViewById(R.id.orders_button);
         tripsButton = findViewById(R.id.trips_button);
-
         ordersButton.setEnabled(false);
+        progressBar = findViewById(R.id.progressbar);
 
         tripsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,32 +64,46 @@ public class OrdersActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         // Initialize message ListView and its adapter
-        List<Orders> orders = new ArrayList<>(
-                Arrays.asList(
-                        new Orders(R.drawable.sora, "Anas Hassan",R.drawable.sora
-                                , "Mawad 5am w7sha", "20-10-2019"
-                                , "70 EGP","ALEXANDRIA", "CAIRO",
-                                R.drawable.vehicle_car ),
-                        new Orders(R.drawable.sora, "Hassan Mohamed",R.drawable.sora
-                                , "7BR mlaza2 f7t", "50-50-2050"
-                                , "2000 EGP","CAIRO", "ALEXANDRIA",
-                                R.drawable.vehicle_car ),
-                        new Orders(R.drawable.sora, "Aria mohsen",R.drawable.sora
-                                , "Shampoo Gamil", "100-100-2100"
-                                , "2000 EGP","ALEXANDRIA", "CAIRO",
-                                R.drawable.vehicle_car )
-                        ,
-                        new Orders(R.drawable.sora, "yass yass ya",R.drawable.sora
-                                , "dmoo3 kter baa", "00-00-2000"
-                                , "2000 EGP","KAFR EL DWAR", "ALEXANDRIA",
-                                R.drawable.vehicle_car )
-                        )
-        );
-        mOrdersAdapter = new OrdersAdapter(this, R.layout.order_item, orders);
+        List<Orders> ordersList = new ArrayList<>();
+        mOrdersAdapter = new OrdersAdapter(this, R.layout.order_item, ordersList);
         mOrdersListView.setAdapter(mOrdersAdapter);
+
+        if (user != null) {
+
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    Orders orders = dataSnapshot.getValue(Orders.class);
+                    mOrdersAdapter.add(orders);
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            };
+            mOrdersDatabaseReference.addChildEventListener(mChildEventListener);
+
+        } else {
+            AuthUI.getInstance().signOut(this);
+
+        }
     }
 }

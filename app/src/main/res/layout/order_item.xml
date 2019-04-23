@@ -94,7 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:hint="FROM"
-            android:textColorHint="@color/colorPrimary" />
+            android:textColorHint="@color/colorSecondary"
+            android:textColor="@color/colorSecondary"/>
 
         <TextView
             android:id="@+id/to_txt_view"
@@ -102,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:hint="TO"
-            android:textColorHint="@color/colorPrimary" />
+            android:textColorHint="@color/colorSecondary" />
 
         <TextView
             android:id="@+id/source_txt_view"

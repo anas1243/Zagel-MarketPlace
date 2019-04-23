@@ -3,9 +3,9 @@ package com.example.zagelx.Models;
 public class Orders {
     private int userImage = 0;//we be removed
     private String merchantId = "";
-    private String acceptedDelegate;
-    private String packageState;
-    private String endConcumerMobile;
+    private String acceptedDelegate = "";
+    private String packageState = "";
+    private String endConcumerMobile = "";
 
     private int packageImage = 0;
     private String packageName = "";
@@ -65,7 +65,19 @@ public class Orders {
         return destination;
     }
 
-    public int getvehicleImage() {
+    public String getAcceptedDelegate() {
+        return acceptedDelegate;
+    }
+
+    public String getPackageState() {
+        return packageState;
+    }
+
+    public String getEndConcumerMobile() {
+        return endConcumerMobile;
+    }
+
+    public int getVehicleImage() {
         return vehicleImage;
     }
 }

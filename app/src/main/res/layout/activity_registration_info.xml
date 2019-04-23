@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_image_url"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:focusable="true"
+                android:padding="0dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_file_upload"
+                app:civ_border_color="#FFFFFFFF"
+                app:civ_border_width="5dp" />
+
+            <Button
+                android:id="@+id/upload_button"
+                style="@style/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/button"
+                android:padding="8dp"
+                android:text="Upload picture" />
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="20dp">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAllCaps="true" />
+
+                <EditText
+                    android:id="@+id/email_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ems="10"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAllCaps="true" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/label_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:singleLine="true"
+                    android:text="@string/prompt_gender"
+                    android:textColor="@color/colorSecondary" />
+
+                <Spinner
+                    android:id="@+id/user_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="24dp"
+                    android:entries="@array/gender_array"
+                    android:prompt="@string/prompt_gender" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/label_text"
+                    android:layout_width="304dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="7dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/prompt_birthday"
+                    android:textColor="@color/colorSecondary" />
+
+                <DatePicker
+                    android:id="@+id/user_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:calendarViewShown="false"
+                    android:datePickerMode="spinner"
+                    android:elevation="24dp" />
+
+
+                <Button
+                    android:id="@+id/btn_to_user_type"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/button"
+                    android:text="Register" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</ScrollView>
+

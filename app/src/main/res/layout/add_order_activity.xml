@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="16dp">
     <LinearLayout
+        android:id="@+id/package_image_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -24,6 +25,7 @@
     </LinearLayout>
 
     <GridLayout
+        android:layout_below="@+id/package_image_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="2"
@@ -88,6 +90,15 @@
         android:layout_height="wrap_content"
         android:hint="Add Your Order"
         android:id="@+id/orders_button"
+        android:layout_below="@+id/grid_view"
         />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
 
-</LinearLayout>
+</RelativeLayout>

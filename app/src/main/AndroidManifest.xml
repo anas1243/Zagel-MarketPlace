@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Authentication.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,6 +20,7 @@
         <activity android:name=".OrdersPackage.AddOrdersActivity"></activity>
         <activity android:name=".TripsPackage.TripsActivity"></activity>
         <activity android:name=".OrdersPackage.OrdersActivity"></activity>
+        <activity android:name=".Authentication.AfterRegisterUserInfo"/>
     </application>
 
 </manifest>

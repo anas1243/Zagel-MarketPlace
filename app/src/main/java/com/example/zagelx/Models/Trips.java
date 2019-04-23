@@ -54,4 +54,5 @@ public class Trips {
     public int getVehicleImage() {
         return vehicleImage;
     }
+
 }

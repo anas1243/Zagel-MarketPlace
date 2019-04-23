@@ -1,6 +1,7 @@
 package com.example.zagelx.Models;
 
 public class Users {
+    private String ID = "";
     private String name = "";
     private String mode = ""; //delegate:d, merchant: m
     private String availabilityStatus = ""; //online:on, offline:off
@@ -13,25 +14,20 @@ public class Users {
     private String electricityReceiptURL = "";
     private String government = ""; // living government
     private int rate = 0;
+    private boolean firstTimeLogIn = true;
 
-    public Users(){}
 
-    public Users(String name, String mode, String availabilityStatus,
-                 String gender, String noOFOrders, String noOfTrips, int mobileNumber,
-                 String profilePictureURL, String nationalIdURL, String electricityReceiptURL,
-                 String government, int rate) {
+    public Users() {
+    }
+
+    public Users(String ID, String name, String gender, int mobileNumber,
+                 String profilePictureURL, boolean firstTimeLogIn) {
         this.name = name;
-        this.mode = mode;
-        this.availabilityStatus = availabilityStatus;
         this.gender = gender;
-        this.noOFOrders = noOFOrders;
-        this.noOfTrips = noOfTrips;
         this.mobileNumber = mobileNumber;
         this.profilePictureURL = profilePictureURL;
-        this.nationalIdURL = nationalIdURL;
-        this.electricityReceiptURL = electricityReceiptURL;
-        this.government = government;
-        this.rate = rate;
+        this.firstTimeLogIn = firstTimeLogIn;
+        this.ID = ID;
     }
 
     public String getName() {
@@ -80,5 +76,13 @@ public class Users {
 
     public int getRate() {
         return rate;
+    }
+
+    public boolean isFirstTimeLogIn() {
+        return firstTimeLogIn;
+    }
+
+    public String getID() {
+        return ID;
     }
 }

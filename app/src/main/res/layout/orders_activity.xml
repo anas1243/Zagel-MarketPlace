@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/main_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/darker_gray"
-        android:divider="@android:color/darker_gray"
+        android:background="@color/colorAccent"
+        android:divider="@color/colorAccent"
         android:dividerHeight="8dp"
         android:orientation="vertical"
         android:padding="8dp" />
@@ -26,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorSecondary"
             android:text="ORDERS"
             android:textColor="#ffffff" />
 
@@ -35,10 +36,19 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorSecondary"
             android:text="TRIPS"
             android:textColor="#ffffff" />
 
     </LinearLayout>
+    <!--TODO progress bar is not appear -->
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        />
+
 
 </RelativeLayout>
