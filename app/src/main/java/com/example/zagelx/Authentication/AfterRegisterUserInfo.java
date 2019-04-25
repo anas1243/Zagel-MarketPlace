@@ -54,7 +54,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
     private EditText userName, userEmail;
     private DatePicker userDate;
     private CircleImageView userPhotoUrl;
-    private Button uploadButton, registerButton;
+    private Button registerButton;
     private Spinner userGender;
 
     private UploadTask uploadTask;
@@ -83,17 +83,10 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
         userName = findViewById(R.id.user_name);
         userEmail = findViewById(R.id.user_email);
         userDate = findViewById(R.id.user_date);
-        userPhotoUrl = findViewById(R.id.user_image_url);
-        uploadButton = findViewById(R.id.upload_button);
+        userPhotoUrl = findViewById(R.id.iv_profile_image);
         userGender = findViewById(R.id.user_gender);
         registerButton = findViewById(R.id.button_register);
 
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseUserImage();
-            }
-        });
         userPhotoUrl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

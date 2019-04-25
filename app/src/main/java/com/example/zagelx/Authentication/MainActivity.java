@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+    public static Users currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
                     mUserValueEventListener = new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Users currentUser = dataSnapshot.getValue(Users.class);
-                            if(!currentUser.isFirstTimeLogIn())
+                            currentUser = dataSnapshot.getValue(Users.class);
+                            if (!currentUser.isFirstTimeLogIn())
                                 AnExistingUserlogin();
                             else
                                 addNewUser();
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
 
     }
+
     public void AnExistingUserlogin() {
         Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(MainActivity.this, OrdersActivity.class);

@@ -5,12 +5,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.Orders;
@@ -30,12 +33,17 @@ public class AddOrdersActivity extends AppCompatActivity {
     private static final String TAG = "AddOrdersActivity";
     private static final int RC_PHOTO_PICKER = 2;
 
-    private Button addPackageImage;
     private ImageView packageImage;
+    private ImageView editPackageImage;
 
     private EditText packageNameET;
-    private EditText deliveryDateET;
+    private DatePicker deliveryDateET;
     private EditText deliveryPriceET;
+
+    private SwitchCompat isPrePaidSwitch;
+    private TextView Vehicle;
+
+    private EditText packageDescriptionET;
 
     private EditText sourceET;
     private EditText destinationET;
@@ -60,7 +68,7 @@ public class AddOrdersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_order_activity);
+        setContentView(R.layout.add_orders_activity);
 
         packageImage = findViewById(R.id.package_image);
         packageNameET = findViewById(R.id.package_name);
@@ -71,7 +79,7 @@ public class AddOrdersActivity extends AppCompatActivity {
         sourceET = findViewById(R.id.source_txt_view);
         destinationET = findViewById(R.id.destination_txt_view);
         AddOrderButton = findViewById(R.id.orders_button);
-        addPackageImage = findViewById(R.id.add_packageImage);
+//        addPackageImage = findViewById(R.id.add_packageImage);
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -83,28 +91,28 @@ public class AddOrdersActivity extends AppCompatActivity {
         mPackagePhotoStorageReference = mFirebaseStorage.getReference().child("packages_photos");
 
 
-        addPackageImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/jpeg");
-                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
-            }
-        });
+//        addPackageImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType("image/jpeg");
+//                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+//                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+//            }
+//        });
 
-        AddOrderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Orders coolMessage = new Orders(00000, "Anas Hassan", 54545454
-                        , packageNameET.getText().toString(), deliveryDateET.getText().toString()
-                        , deliveryPriceET.getText().toString(), sourceET.getText().toString(),
-                        destinationET.getText().toString(), 00001);
-                mMessagesDatabaseReference.push().setValue(coolMessage);
-
-
-            }
-        });
+//        AddOrderButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Orders coolMessage = new Orders(00000, "Anas Hassan", 54545454
+//                        , packageNameET.getText().toString(), deliveryDateET.getText().toString()
+//                        , deliveryPriceET.getText().toString(), sourceET.getText().toString(),
+//                        destinationET.getText().toString(), 00001);
+//                mMessagesDatabaseReference.push().setValue(coolMessage);
+//
+//
+//            }
+//        });
 
 
     }

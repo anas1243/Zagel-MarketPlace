@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:hint="NAME"
+            android:text="NAME"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:hint="PACKAGEnAME"
+            android:text="PACKAGEnAME"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/package_name"
             android:layout_centerHorizontal="true"
-            android:hint="1/1/2001"
+            android:text="1/1/2001"
             android:textColor="#000000"
             android:textSize="18sp" />
 
@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:hint="70 EGP"
+            android:text="70 EGP"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -93,17 +93,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:hint="FROM"
-            android:textColorHint="@color/colorSecondary"
-            android:textColor="@color/colorSecondary"/>
+            android:text="FROM"
+            android:textColor="@color/colorSecondary"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/to_txt_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:hint="TO"
-            android:textColorHint="@color/colorSecondary" />
+            android:text="TO"
+            android:textColor="@color/colorSecondary"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/source_txt_view"
@@ -111,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:hint="ALEXANDRIA"
+            android:text="ALEXANDRIA"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -122,7 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:hint="CAIRO"
+            android:text="CAIRO"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />

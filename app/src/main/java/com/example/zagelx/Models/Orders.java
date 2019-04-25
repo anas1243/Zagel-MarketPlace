@@ -1,83 +1,98 @@
 package com.example.zagelx.Models;
 
 public class Orders {
-    private int userImage = 0;//we be removed
     private String merchantId = "";
-    private String acceptedDelegate = "";
-    private String packageState = "";
-    private String endConcumerMobile = "";
 
-    private int packageImage = 0;
     private String packageName = "";
-    private String deliveryDate = "";
+    private String packageImageURL = "";
+    private String packageDescription = "";
+    private String packagePrice = "";
+    private boolean isPrePaid = false;
+
+    private String acceptedDelegateID = "";
+    private BirthDate deliveryDate = null;
     private String deliveryPrice = "";
 
+    private String vehicle = "";
     private String source = "";
     private String destination = "";
-    private int vehicleImage = 0;
+    private String endConcumerMobile = "";
+
+    private String packageState = "";
+
 
     public Orders() {
     }
 
-    public Orders(int userImage, String merchantId, int packageImage,
-                  String packageName, String delvieryDate, String deliveryPrice,
-                  String source, String destination, int vehicleImage) {
-        this.userImage = userImage;
+    public Orders(String merchantId, String packageImageURL,
+                  String packageName, BirthDate delvieryDate, String deliveryPrice,
+                  String source, String destination) {
         this.merchantId = merchantId;
-        this.packageImage = packageImage;
+        this.packageImageURL = packageImageURL;
         this.packageName = packageName;
         this.deliveryDate = delvieryDate;
         this.deliveryPrice = deliveryPrice;
         this.source = source;
         this.destination = destination;
-        this.vehicleImage = vehicleImage;
     }
 
-    public int getUserImage() {
-        return userImage;
-    }
+
 
     public String getMerchantId() {
         return merchantId;
     }
 
-    public int getPackageImage() {
-        return packageImage;
-    }
-
     public String getPackageName() {
         return packageName;
     }
-
-    public String getDeliveryDate() {
-        return deliveryDate;
+    public String getPackageImageURL() {
+        return packageImageURL;
+    }
+    public String getPackagePrice() {
+        return packagePrice;
+    }
+    public String getPackageDescription() {
+        return packageDescription;
+    }
+    public boolean isPrePaid() {
+        return isPrePaid;
     }
 
+    public String getAcceptedDelegateID() {
+        return acceptedDelegateID;
+    }
+    public BirthDate getDeliveryDate() {
+        return deliveryDate;
+    }
     public String getDeliveryPrice() {
         return deliveryPrice;
     }
 
+    public String getVehicle() {
+        return vehicle;
+    }
     public String getSource() {
         return source;
     }
-
     public String getDestination() {
         return destination;
     }
-
-    public String getAcceptedDelegate() {
-        return acceptedDelegate;
+    public String getEndConcumerMobile() {
+        return endConcumerMobile;
     }
 
     public String getPackageState() {
         return packageState;
     }
 
-    public String getEndConcumerMobile() {
-        return endConcumerMobile;
-    }
 
-    public int getVehicleImage() {
-        return vehicleImage;
-    }
+
+
+
+
+
+
+
+
+
 }

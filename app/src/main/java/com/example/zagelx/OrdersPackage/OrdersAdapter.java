@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Authentication.MainActivity;
 import com.example.zagelx.Models.Orders;
+import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,7 +21,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrdersAdapter extends ArrayAdapter<Orders> {
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private Users user = MainActivity.currentUser;
 
     public OrdersAdapter(Context context, int resource, List<Orders> objects) {
         super(context, resource, objects);
@@ -48,16 +50,17 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
 
 
         Glide.with(userImageIV.getContext())
-                .load(order.getUserImage())
+                .load(user.getProfilePictureURL())
                 .into(userImageIV);
-        userNameTV.setText(user.getDisplayName());
+        userNameTV.setText(user.getName());
 
         Glide.with(packageImageIV.getContext())
                 .load(order.getPackageImage())
                 .into(packageImageIV);
         packageNameTV.setText(order.getPackageName());
         deliveryDateTV.setText(order.getDeliveryDate());
-        deliveryPriceTV.setText(order.getDeliveryPrice());
+        String price = order.getDeliveryPrice()+" egp";
+        deliveryPriceTV.setText(price);
 
         sourceTV.setText(order.getSource());
         destinationTV.setText(order.getDestination());
