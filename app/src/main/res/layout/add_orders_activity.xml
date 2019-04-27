@@ -24,7 +24,7 @@
             android:clickable="true">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_profile_image"
+                android:id="@+id/package_image"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="8dp"
@@ -37,10 +37,10 @@
                 app:civ_border_width="3dp" />
 
             <ImageView
-
+                android:id="@+id/edit_package_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignBottom="@+id/iv_profile_image"
+                android:layout_alignBottom="@+id/package_image"
                 android:layout_marginStart="8dp"
                 android:elevation="10dp"
                 android:src="@mipmap/ic_edit_image" />
@@ -83,7 +83,7 @@
                     android:layout_marginTop="16dp"
                     android:ems="10"
                     android:hint="Delivery Price"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true" />
@@ -115,6 +115,7 @@
                         android:textStyle="bold" />
 
                     <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/pre_paid_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -132,19 +133,36 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="7dp">
 
                 <TextView
                     android:id="@+id/Vehicle_text"
                     style="@style/label_text"
-                    android:layout_width="304dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="7dp"
+
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="Preferred Vehicle:"
                     android:textColor="@color/colorSecondary"
                     android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/vehicle_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="train"
+                        android:layout_marginLeft="10dp"
+                        android:textStyle="bold"
+                        android:textSize="24sp"
+                        android:textColor="@color/colorAccent"
+                        />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -152,34 +170,40 @@
                     android:layout_marginTop="8dp">
 
                     <ImageButton
+                        android:id="@+id/ic_car"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/vehicle_car" />
 
                     <ImageButton
+                        android:id="@+id/ic_bus"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/vehicle_bus"
                         android:layout_marginLeft="15dp"/>
 
                     <ImageButton
+                        android:id="@+id/ic_train"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/vehicle_train"
                         android:layout_marginLeft="15dp"/>
 
                     <ImageButton
+                        android:id="@+id/ic_metro"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/vehicle_metro"
                         android:layout_marginLeft="15dp"/>
 
                     <ImageButton
+                        android:id="@+id/ic_motorcycle"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/vehicle_motorcycle"
                         android:layout_marginLeft="15dp"/>
                     <ImageButton
+                        android:id="@+id/ic_nos_na2l"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/vehicle_nos_na2l"
@@ -232,7 +256,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/button"
-                    android:text="Register" />
+                    android:text="Yalla" />
 
             </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.example.zagelx.OrdersPackage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Authentication.MainActivity;
+import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
@@ -21,8 +23,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrdersAdapter extends ArrayAdapter<Orders> {
-    private Users user = MainActivity.currentUser;
-
     public OrdersAdapter(Context context, int resource, List<Orders> objects) {
         super(context, resource, objects);
     }
@@ -46,24 +46,30 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
         TextView destinationTV = convertView.findViewById(R.id.destination_txt_view);
         ImageView vehicleImageIV = convertView.findViewById(R.id.vehicle_image);
 
-        Orders order = getItem(position);
+
+
+        Orders CurrentOrder = getItem(position);
+        BirthDate oDate = CurrentOrder.getDeliveryDate();
 
 
         Glide.with(userImageIV.getContext())
-                .load(user.getProfilePictureURL())
+                .load(CurrentOrder.getMerchantImageURL())
                 .into(userImageIV);
-        userNameTV.setText(user.getName());
+        userNameTV.setText(CurrentOrder.getMerchantName());
 
         Glide.with(packageImageIV.getContext())
-                .load(order.getPackageImage())
+                .load(CurrentOrder.getPackageImageURL())
                 .into(packageImageIV);
-        packageNameTV.setText(order.getPackageName());
-        deliveryDateTV.setText(order.getDeliveryDate());
-        String price = order.getDeliveryPrice()+" egp";
+
+        Log.e("OrdersAdapter", "getView: "+ CurrentOrder.getPackageImageURL());
+        packageNameTV.setText(CurrentOrder.getPackageName());
+        String orderDate = oDate.getYear()+"-"+oDate.getMonth()+"-"+ oDate.getDay();
+        deliveryDateTV.setText(orderDate);
+        String price = CurrentOrder.getDeliveryPrice()+" egp";
         deliveryPriceTV.setText(price);
 
-        sourceTV.setText(order.getSource());
-        destinationTV.setText(order.getDestination());
+        sourceTV.setText(CurrentOrder.getSource());
+        destinationTV.setText(CurrentOrder.getDestination());
         vehicleImageIV.setImageResource(R.drawable.vehicle_car);
 
 

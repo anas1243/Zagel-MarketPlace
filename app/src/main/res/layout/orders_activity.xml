@@ -22,7 +22,8 @@
         android:divider="@color/colorAccent"
         android:dividerHeight="8dp"
         android:orientation="vertical"
-        android:padding="8dp" />
+        android:padding="8dp"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

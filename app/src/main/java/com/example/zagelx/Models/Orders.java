@@ -2,6 +2,8 @@ package com.example.zagelx.Models;
 
 public class Orders {
     private String merchantId = "";
+    private String merchantImageURL = "";
+    private String merchantName = "";
 
     private String packageName = "";
     private String packageImageURL = "";
@@ -24,22 +26,36 @@ public class Orders {
     public Orders() {
     }
 
-    public Orders(String merchantId, String packageImageURL,
-                  String packageName, BirthDate delvieryDate, String deliveryPrice,
-                  String source, String destination) {
+
+    public Orders(String merchantId, String merchantImageURL, String merchantName, String packageName, String packageImageURL,
+                  String packageDescription, String packagePrice, boolean isPrePaid,
+                  BirthDate deliveryDate, String deliveryPrice, String vehicle,
+                  String source, String destination, String endConcumerMobile) {
         this.merchantId = merchantId;
-        this.packageImageURL = packageImageURL;
+        this.merchantImageURL = merchantImageURL;
+        this.merchantName = merchantName;
+
         this.packageName = packageName;
-        this.deliveryDate = delvieryDate;
+        this.packageImageURL = packageImageURL;
+        this.packageDescription = packageDescription;
+        this.packagePrice = packagePrice;
+        this.isPrePaid = isPrePaid;
+        this.deliveryDate = deliveryDate;
         this.deliveryPrice = deliveryPrice;
+        this.vehicle = vehicle;
         this.source = source;
         this.destination = destination;
+        this.endConcumerMobile = endConcumerMobile;
     }
-
-
 
     public String getMerchantId() {
         return merchantId;
+    }
+    public String getMerchantImageURL() {
+        return merchantImageURL;
+    }
+    public String getMerchantName() {
+        return merchantName;
     }
 
     public String getPackageName() {

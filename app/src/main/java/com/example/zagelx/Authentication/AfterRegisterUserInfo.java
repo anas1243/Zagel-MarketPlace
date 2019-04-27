@@ -2,8 +2,10 @@ package com.example.zagelx.Authentication;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Users;
+import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +38,8 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -64,6 +69,8 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
 
     String uName, uEmail, uId;
     private String userPhotoUrlVar;
+
+    Bitmap bmp;
 
 
     @Override
@@ -150,7 +157,18 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            uploadTask = ProfileImageReference.putFile(filePath);
+
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+            }catch (IOException e){
+                Log.e(TAG, "uploadOrderImageAndProceed: ", e.fillInStackTrace() );
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+            byte[] data = baos.toByteArray();
+            //uploading the image
+            uploadTask = ProfileImageReference.putBytes(data);
+
 
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -189,19 +207,27 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         progressDialog.dismiss();
                         Uri downloadUri = task.getResult();
-                        if (downloadUri != null)
+                        if (downloadUri != null) {
                             userPhotoUrlVar = downloadUri.toString();
 
-                        Log.e(TAG, "validateTheUser: the pp url is " + userPhotoUrlVar);
+                            Log.e(TAG, "validateTheUser: the pp url is " + userPhotoUrlVar);
 
-                        uId = user.getUid();
-                        String uMobile = user.getPhoneNumber();
-                        String gender = userGender.getSelectedItem().toString();
-                        Users currenUser = new Users(uId, uName, gender, uMobile,
-                                userPhotoUrlVar, new BirthDate(userDate.getYear(),
-                                userDate.getMonth(), userDate.getDayOfMonth()), false);
+                            uId = user.getUid();
+                            String uMobile = user.getPhoneNumber();
+                            String gender = userGender.getSelectedItem().toString();
+                            Users currenUser = new Users(uId, uName, gender, uMobile,
+                                    userPhotoUrlVar, new BirthDate(userDate.getYear(),
+                                    userDate.getMonth()+1, userDate.getDayOfMonth()), false);
 
-                        usersDatabaseReference.child(uId).setValue(currenUser);
+                            usersDatabaseReference.child(uId).setValue(currenUser);
+
+                            Toast.makeText(AfterRegisterUserInfo.this, "Resgistered!", Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(AfterRegisterUserInfo.this, OrdersActivity.class);
+                            startActivity(i);
+                        }else{
+                            Toast.makeText(AfterRegisterUserInfo.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();
+
+                        }
                     }
                 }
             });

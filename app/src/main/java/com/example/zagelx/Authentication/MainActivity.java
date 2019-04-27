@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             currentUser = dataSnapshot.getValue(Users.class);
-                            if (!currentUser.isFirstTimeLogIn())
+                            if (currentUser != null)
                                 AnExistingUserlogin();
                             else
                                 addNewUser();
