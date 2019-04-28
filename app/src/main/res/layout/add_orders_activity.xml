@@ -155,7 +155,7 @@
                         android:id="@+id/vehicle_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="train"
+                        android:text="Car"
                         android:layout_marginLeft="10dp"
                         android:textStyle="bold"
                         android:textSize="24sp"
@@ -173,40 +173,40 @@
                         android:id="@+id/ic_car"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/vehicle_car" />
+                        android:background="@drawable/ic_car_selector" />
 
                     <ImageButton
                         android:id="@+id/ic_bus"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/vehicle_bus"
+                        android:background="@drawable/ic_bus_selector"
                         android:layout_marginLeft="15dp"/>
 
                     <ImageButton
                         android:id="@+id/ic_train"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/vehicle_train"
+                        android:background="@drawable/ic_train_selector"
                         android:layout_marginLeft="15dp"/>
 
                     <ImageButton
                         android:id="@+id/ic_metro"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/vehicle_metro"
+                        android:background="@drawable/ic_metro_selector"
                         android:layout_marginLeft="15dp"/>
 
                     <ImageButton
                         android:id="@+id/ic_motorcycle"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/vehicle_motorcycle"
+                        android:background="@drawable/ic_motorcycle_selector"
                         android:layout_marginLeft="15dp"/>
                     <ImageButton
                         android:id="@+id/ic_nos_na2l"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/vehicle_nos_na2l"
+                        android:background="@drawable/ic_nos_na2l_selector"
                         android:layout_marginLeft="15dp"/>
 
                 </LinearLayout>
@@ -250,7 +250,7 @@
 
 
                 <Button
-                    android:id="@+id/button_register"
+                    android:id="@+id/button_yalla"
                     style="@style/button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
