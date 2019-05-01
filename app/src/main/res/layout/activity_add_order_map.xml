@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/auto_complete_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
+
+        <RelativeLayout
+            android:id="@+id/relLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/border">
+
+            <ImageView
+                android:id="@+id/ic_magnify1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_magnify_yellow" />
+
+            <AutoCompleteTextView
+                android:id="@+id/source_autoComplete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="8dp"
+                android:layout_toRightOf="@+id/ic_magnify1"
+                android:background="@null"
+                android:hint="Enter source address , City or Zip code"
+                android:imeOptions="actionSearch"
+                android:inputType="textUri"
+                android:padding="4dp"
+                android:singleLine="true"
+                android:textColor="#000"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:id="@+id/ic_gpss"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_gps_yellow" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+
+            android:id="@+id/relLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/border">
+
+            <ImageView
+                android:id="@+id/ic_magnify2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_magnify_yellow" />
+
+            <AutoCompleteTextView
+                android:id="@+id/destination_autoComplete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="8dp"
+                android:layout_toRightOf="@+id/ic_magnify2"
+                android:background="@null"
+                android:hint="Enter distention address , City or Zip code"
+                android:imeOptions="actionSearch"
+                android:inputType="textUri"
+                android:padding="4dp"
+                android:singleLine="true"
+                android:textColor="#000"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:id="@+id/ic_gpsd"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_gps_yellow" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="@drawable/button"
+        android:text="Next" />
+
+    <ImageButton
+        android:id="@+id/go_current_location_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_gps_yellow"
+        android:layout_below="@+id/auto_complete_layout"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        />
+    <Button
+        android:id="@+id/currentLocation_is_source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current location is the source?"
+        android:layout_below="@id/auto_complete_layout"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/button"
+        android:padding="10dp"/>
+
+</RelativeLayout>

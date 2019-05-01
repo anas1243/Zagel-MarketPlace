@@ -22,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class OrdersActivity extends AppCompatActivity {
@@ -52,14 +51,21 @@ public class OrdersActivity extends AppCompatActivity {
         mOrdersListView = findViewById(R.id.main_list);
         ordersButton = findViewById(R.id.orders_button);
         tripsButton = findViewById(R.id.trips_button);
-        ordersButton.setEnabled(false);
         progressBar = findViewById(R.id.progressbar);
 
+        ordersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Create a new intent to open the {@link AddOrdersActivity}
+                Intent i = new Intent(OrdersActivity.this, AddOrdersActivity.class);
+                startActivity(i);
+            }
+        });
         tripsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Create a new intent to open the {@link AddTripsActivity}
-                Intent i = new Intent(OrdersActivity.this, AddOrdersActivity.class);
+                Intent i = new Intent(OrdersActivity.this, AddOrdersMapActivity.class);
                 startActivity(i);
             }
         });

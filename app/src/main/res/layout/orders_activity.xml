@@ -33,21 +33,21 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/orders_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorSecondary"
-            android:text="ORDERS"
-            android:textColor="#ffffff" />
-
-        <Button
             android:id="@+id/trips_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorSecondary"
-            android:text="TRIPS"
+            android:text="Add a Trip"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/orders_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorSecondary"
+            android:text="Add An Order"
             android:textColor="#ffffff" />
 
     </LinearLayout>

@@ -58,6 +58,8 @@
         <item>Customer</item>
     </string-array>
     <string name="title_activity_from_locationn_to_source">FromLocationnToSourceActivity</string>
+    
+    <string name="google_maps_key">AIzaSyBe6jwWmCXjLUKc-s-2BZQUmA6ulv_Occk</string>
 
 
 </resources>

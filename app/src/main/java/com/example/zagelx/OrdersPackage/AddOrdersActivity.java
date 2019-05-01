@@ -3,33 +3,35 @@ package com.example.zagelx.OrdersPackage;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.Authentication.MainActivity;
 import com.example.zagelx.Models.BirthDate;
+import com.example.zagelx.Models.LocationPair;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.firebase.ui.auth.data.model.User;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -45,9 +47,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
 
 public class AddOrdersActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,7 +72,9 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private EditText deliveryPriceET;
     private EditText endConcumerMobile;
     private SwitchCompat isPrePaidSwitch;
+    private SwitchCompat isBreakableSwitch;
     private TextView vehicle;
+
 
     private EditText packageDescriptionET;
     private EditText packagePriceET;
@@ -87,9 +98,16 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private UploadTask uploadTask;
     private Uri selectedImageUri;
 
-    private String merchantId, merchantImageURL, getMerchantName, oImageUrl, oName, dPrice, RMobile, oPrice, oVehicle, oDescription;
+    private String merchantId, merchantImageURL, getMerchantName, oImageUrl,
+            oName, dPrice, RMobile, oPrice, oVehicle, oDescription, oSource, oDestination;
+
+
     private boolean isPrePaid = false;
+    private boolean isBreakable = false;
     private BirthDate dDate;
+
+    double destenationLatlng[];
+    double sourceLatlng[];
 
     Bitmap bmp;
 
@@ -97,6 +115,22 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_orders_activity);
+
+        Intent i = getIntent();
+
+         destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
+         sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
+
+
+        oSource = latlngToAddress(sourceLatlng[0], sourceLatlng[1]).getAdminArea()
+                .replace("Governorate","").trim();
+        oDestination = latlngToAddress(destenationLatlng[0], destenationLatlng[1]).getAdminArea()
+                .replace("Governorate","").trim();
+
+        Log.e(TAG, "onCreate: currentOrderLocation: source is " + new LatLng(sourceLatlng[0]
+                , sourceLatlng[1]) + " destination is " + new LatLng(destenationLatlng[0]
+                , destenationLatlng[1]));
+
 
         packageImage = findViewById(R.id.package_image);
         editPackageImage = findViewById(R.id.edit_package_image);
@@ -107,6 +141,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
 
         isPrePaidSwitch = findViewById(R.id.pre_paid_switch);
+        isBreakableSwitch = findViewById(R.id.breakable_switch);
         packagePriceET = findViewById(R.id.package_price);
         deliveryDateDP = findViewById(R.id.delivery_date);
 
@@ -164,17 +199,29 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         icNosNal.setOnClickListener(this);
         packageImage.setOnClickListener(this);
         editPackageImage.setOnClickListener(this);
-
         AddOrderButton.setOnClickListener(this);
 
         isPrePaidSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
+                if (isChecked) {
                     isPrePaid = true;
-                else
+                    packagePriceET.setVisibility(View.VISIBLE);
+                } else {
                     isPrePaid = false;
+                    packagePriceET.setVisibility(View.GONE);
+                }
 
+            }
+        });
+
+        isBreakableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    isBreakable = true;
+                else
+                    isBreakable = false;
             }
         });
 
@@ -190,6 +237,28 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
             Glide.with(getApplicationContext()).load(selectedImageUri).into(packageImage);
 
         }
+    }
+
+    Address latlngToAddress(double LATITUDE, double LONGITUDE) {
+        Address returnedAddress;
+        Geocoder geocoder = new Geocoder(AddOrdersActivity.this, Locale.getDefault());
+        Log.e(TAG, "getCompleteAddressString: " + LATITUDE + " " + LONGITUDE);
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+
+            if (addresses != null) {
+                returnedAddress = addresses.get(0);
+                return returnedAddress;
+            } else {
+                Log.e(TAG, "No Address returned!");
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "Cannot get Address!" + e.getMessage());
+            return null;
+        }
+
     }
 
     private void validateTheUser() {
@@ -285,8 +354,12 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
                             Orders order = new Orders(merchantId, merchantImageURL, getMerchantName, oName, oImageUrl
                                     , oDescription, oPrice
-                                    , isPrePaid, dDate,
-                                    dPrice, oVehicle, "alexandria", "cairo", RMobile);
+                                    , isPrePaid, isBreakable, dDate,
+                                    dPrice, oVehicle, oSource, oDestination, RMobile
+                                    , new LocationPair(sourceLatlng[0]+"", sourceLatlng[1]+"")
+                                    , new LocationPair(destenationLatlng[0]+"", destenationLatlng[1]+""));
+
+
                             mOrdersDatabaseReference.push().setValue(order);
 
 
@@ -398,6 +471,13 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
             icMotorcycle.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_motorcycle));
             icNosNal.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_nos_na2l));
 
+        }
+    }
+
+    public void hideSoftKeyboard() {
+        if (getCurrentFocus() != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -70,7 +71,28 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
 
         sourceTV.setText(CurrentOrder.getSource());
         destinationTV.setText(CurrentOrder.getDestination());
-        vehicleImageIV.setImageResource(R.drawable.vehicle_car);
+        switch (CurrentOrder.getVehicle()){
+            case "Car":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);
+                break;
+            case "Train":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_train_yellow);
+                break;
+            case "MotorCycle":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_motorcycle_yellow);
+                break;
+            case "Metro":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_metro_yellow);
+                break;
+            case "Nos Na2l":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_nos_na2l_yellow);
+                break;
+            case "Bus":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_bus_yellow);
+                break;
+        }
+
+
 
 
 
