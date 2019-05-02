@@ -19,14 +19,11 @@ public class Orders implements Serializable {
     private String deliveryPrice = "";
 
     private String vehicle = "";
-    private String source = "";
-    private String destination = "";
     private String endConsumerMobile = "";
 
     private String packageState = "";
 
-    private LocationPair currentOrderSourceLocation;
-    private LocationPair currentOrderDestinationLocation;
+    private LocationInfo currentOrderLocationInfo;
 
 
     public Orders() {
@@ -36,7 +33,7 @@ public class Orders implements Serializable {
     public Orders(String merchantId, String merchantImageURL, String merchantName, String packageName, String packageImageURL,
                   String packageDescription, String packagePrice, boolean isPrePaid, boolean isBreakable,
                   BirthDate deliveryDate, String deliveryPrice, String vehicle,
-                  String source, String destination, String endConsumerMobile, LocationPair currentOrderSourceLocation, LocationPair currentOrderDestinationLocation) {
+                  String endConsumerMobile, LocationInfo currentOrderLocationInfo) {
         this.merchantId = merchantId;
         this.merchantImageURL = merchantImageURL;
         this.merchantName = merchantName;
@@ -50,19 +47,8 @@ public class Orders implements Serializable {
         this.deliveryDate = deliveryDate;
         this.deliveryPrice = deliveryPrice;
         this.vehicle = vehicle;
-        this.source = source;
-        this.destination = destination;
         this.endConsumerMobile = endConsumerMobile;
-        this.currentOrderSourceLocation = currentOrderSourceLocation;
-        this.currentOrderDestinationLocation = currentOrderDestinationLocation;
-    }
-
-    public LocationPair getCurrentOrderDestinationLocation() {
-        return currentOrderDestinationLocation;
-    }
-
-    public LocationPair getCurrentOrderSourceLocation() {
-        return currentOrderSourceLocation;
+        this.currentOrderLocationInfo = currentOrderLocationInfo;
     }
 
     public String getMerchantId() {
@@ -113,14 +99,6 @@ public class Orders implements Serializable {
         return vehicle;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
     public String getEndConsumerMobile() {
         return endConsumerMobile;
     }
@@ -133,5 +111,8 @@ public class Orders implements Serializable {
         return isBreakable;
     }
 
+    public LocationInfo getCurrentOrderLocationInfo() {
+        return currentOrderLocationInfo;
+    }
 
 }

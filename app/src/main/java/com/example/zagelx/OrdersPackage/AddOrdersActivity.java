@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
-import com.example.zagelx.Models.LocationPair;
+import com.example.zagelx.Models.LocationInfo;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
@@ -49,8 +49,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -95,8 +93,9 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private Uri selectedImageUri;
 
     private String merchantId, merchantImageURL, getMerchantName, oImageUrl,
-            oName, dPrice, RMobile, oPrice, oVehicle, oDescription, oSource, oDestination;
+            oName, dPrice, RMobile, oPrice, oVehicle, oDescription;
 
+    private LocationInfo currenLocationInfo;
 
     private boolean isPrePaid = false;
     private boolean isBreakable = false;
@@ -112,17 +111,17 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_orders_activity);
 
-        Intent i = getIntent();
 
+        currenLocationInfo = new LocationInfo();
+        Intent i = getIntent();
         destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
         sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
 
-        Log.e(TAG, "onCreate: " + latlngToAddress(sourceLatlng[0], sourceLatlng[1]) + latlngToAddress(destenationLatlng[0], destenationLatlng[1]));
+        Log.e(TAG, "onCreate: " + latlngToAddress(sourceLatlng[0], sourceLatlng[1])
+                + latlngToAddress(destenationLatlng[0], destenationLatlng[1]));
 
-        oSource = latlngToAddress(sourceLatlng[0], sourceLatlng[1]).getAdminArea()
-                .replace("Governorate", "").trim();
-        oDestination = latlngToAddress(destenationLatlng[0], destenationLatlng[1]).getSubAdminArea()
-                .replace("Governorate", "").trim();
+        SetLocationInfo(sourceLatlng[0], sourceLatlng[1], "S");
+        SetLocationInfo(destenationLatlng[0], destenationLatlng[1], "D");
 
 
         Log.e(TAG, "onCreate: currentOrderLocation: source is " + new LatLng(sourceLatlng[0]
@@ -229,6 +228,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -260,6 +260,80 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
             return null;
         }
 
+    }
+
+    public String getAddressListFromLatLong(double lat, double lng, String WhichLocation) {
+
+        String adminName = "";
+        Geocoder geocoder = new Geocoder(this);
+
+        List<Address> list;
+        try {
+            list = geocoder.getFromLocation(lat, lng, 20);
+
+            // 20 is no of address you want to fetch near by the given lat-long
+
+            for (Address address : list) {
+                if (address.getAdminArea() != null) {
+                    Log.e(TAG, "getAddressListFromLatLong: " + address.getAdminArea());
+                    return address.getAdminArea();
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return adminName;
+    }
+
+    public void SetLocationInfo(double lat, double lng, String whichLocation) {
+
+        Geocoder geocoder = new Geocoder(this);
+        List<Address> list;
+        try {
+            list = geocoder.getFromLocation(lat, lng, 20);
+
+            // 20 is no of address you want to fetch near by the given lat-long
+
+            for (Address address : list) {
+                if (address.getAdminArea() != null && address.getSubAdminArea() != null
+                        && address.getLocality() != null) {
+                    if (whichLocation.equals("S")) {
+                        currenLocationInfo.setSLocationInfo(lat + "", lng + ""
+                                , address.getAdminArea().replace("Governorate", "").trim()
+                                , address.getSubAdminArea(), address.getLocality());
+                        Log.e(TAG, "SetLocationInfo: "+ address );
+                        return;
+                    } else if (whichLocation.equals("D")) {
+                        currenLocationInfo.setdLocationInfo(lat + "", lng + ""
+                                , address.getAdminArea().replace("Governorate", "").trim()
+                                , address.getSubAdminArea(), address.getLocality());
+                        Log.e(TAG, "SetLocationInfo: "+ address );
+                        return;
+                    }
+                }
+            }
+
+            for (Address address : list) {
+                if (address.getAdminArea() != null && address.getSubAdminArea() != null
+                ) {
+                    if (whichLocation.equals("S")) {
+                        currenLocationInfo.setSLocationInfo(lat + "", lng + ""
+                                , address.getAdminArea().replace("Governorate", "").trim()
+                                , address.getSubAdminArea(), "");
+                        Log.e(TAG, "SetLocationInfo: "+ address );
+                        return;
+                    } else if (whichLocation.equals("D")) {
+                        currenLocationInfo.setdLocationInfo(lat + "", lng + ""
+                                , address.getAdminArea().replace("Governorate", "").trim()
+                                , address.getSubAdminArea(), "");
+                        Log.e(TAG, "SetLocationInfo: "+ address );
+                        return;
+                    }
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     private void validateTheUser() {
@@ -356,9 +430,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                             Orders order = new Orders(merchantId, merchantImageURL, getMerchantName, oName, oImageUrl
                                     , oDescription, oPrice
                                     , isPrePaid, isBreakable, dDate,
-                                    dPrice, oVehicle, oSource, oDestination, RMobile
-                                    , new LocationPair(sourceLatlng[0] + "", sourceLatlng[1] + "")
-                                    , new LocationPair(destenationLatlng[0] + "", destenationLatlng[1] + ""));
+                                    dPrice, oVehicle, RMobile
+                                    , currenLocationInfo);
 
 
                             mOrdersDatabaseReference.push().setValue(order);

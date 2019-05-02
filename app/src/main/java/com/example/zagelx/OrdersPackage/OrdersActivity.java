@@ -30,7 +30,7 @@ public class OrdersActivity extends AppCompatActivity {
     private OrdersAdapter mOrdersAdapter;
     private Button ordersButton;
     private Button tripsButton;
-    private ProgressBar progressBar;
+//    private ProgressBar progressBar;
 
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -51,13 +51,13 @@ public class OrdersActivity extends AppCompatActivity {
         mOrdersListView = findViewById(R.id.main_list);
         ordersButton = findViewById(R.id.orders_button);
         tripsButton = findViewById(R.id.trips_button);
-        progressBar = findViewById(R.id.progressbar);
+        //progressBar = findViewById(R.id.progressbar);
 
         ordersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Create a new intent to open the {@link AddOrdersActivity}
-                Intent i = new Intent(OrdersActivity.this, AddOrdersActivity.class);
+                Intent i = new Intent(OrdersActivity.this, TestAddress.class);
                 startActivity(i);
             }
         });
@@ -82,7 +82,7 @@ public class OrdersActivity extends AppCompatActivity {
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Orders orders = dataSnapshot.getValue(Orders.class);
                     mOrdersAdapter.add(orders);
-                    progressBar.setVisibility(View.GONE);
+                    //progressBar.setVisibility(View.GONE);
                 }
 
                 @Override

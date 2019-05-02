@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.zagelx.Models.LocationInfo;
 import com.example.zagelx.R;
 import com.example.anas.zagel.Adaptors.PlaceAutocompleteAdapter;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,7 +41,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 

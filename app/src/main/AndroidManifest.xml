@@ -47,6 +47,7 @@
         <activity android:name=".OrdersPackage.OrdersActivity"/>
         <activity android:name=".Authentication.AfterRegisterUserInfo"/>
         <activity android:name=".OrdersPackage.AddOrdersMapActivity"/>
+        <activity android:name=".OrdersPackage.TestAddress"/>
     </application>
 
 </manifest>

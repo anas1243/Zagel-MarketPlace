@@ -1,69 +1,118 @@
 package com.example.zagelx.Models;
 
-import android.location.Address;
+public class LocationInfo {
+    String sLat = "";
+    String sLng = "";
+    String sAdminArea = "";      //el mo7afza
+    String sSubAdmin = "";       //el markaz
+    String sLocality = "";       //el 7ay
 
-import com.google.android.gms.maps.model.LatLng;
+    String dLat = "";
+    String dLng = "";
+    String dAdminArea = "";      //el mo7afza
+    String dSubAdmin = "";       //el markaz
+    String dLocality = "";       //el 7ay
 
-import java.io.Serializable;
-
-public class LocationInfo implements Serializable {
-
-    private  LatLng orderSourceLatLng;
-    private  LatLng orderDestinationLatLng;
-    private  Address sourceAddress;
-    private  Address destinationAddress;
 
     public LocationInfo() {
     }
 
-    public LatLng getOrderSourceLatLng() {
-        return orderSourceLatLng;
+    public String getsLat() {
+        return sLat;
     }
 
-    public LatLng getOrderDestinationLatLng() {
-        return orderDestinationLatLng;
+    public String getsLng() {
+        return sLng;
     }
 
-    public Address getSourceAddress() {
-        return sourceAddress;
+
+    public String getsAdminArea() {
+        return sAdminArea;
     }
 
-    public Address getDestinationAddress() {
-        return destinationAddress;
+    public String getsSubAdmin() {
+        return sSubAdmin;
     }
 
-    public LocationInfo(LatLng orderSourceLatLng, LatLng orderDestinationLatLng, Address sourceAddress, Address destinationAddress) {
-        this.orderSourceLatLng = orderSourceLatLng;
-        this.orderDestinationLatLng = orderDestinationLatLng;
-        this.sourceAddress = sourceAddress;
-        this.destinationAddress = destinationAddress;
-
-
+    public String getsLocality() {
+        return sLocality;
     }
 
-    public void setOrderSourceLatLng(LatLng orderSourceLatLng) {
-        this.orderSourceLatLng = orderSourceLatLng;
+    public void setsLat(String sLat) {
+        this.sLat = sLat;
     }
 
-    public void setOrderDestinationLatLng(LatLng orderDestinationLatLng) {
-        this.orderDestinationLatLng = orderDestinationLatLng;
+    public void setsLng(String sLng) {
+        this.sLng = sLng;
     }
 
-    public void setSourceAddress(Address sourceAddress) {
-        this.sourceAddress = sourceAddress;
+    public void setsAdminArea(String sAdminArea) {
+        this.sAdminArea = sAdminArea;
     }
 
-    public void setDestinationAddress(Address destinationAddress) {
-        this.destinationAddress = destinationAddress;
+    public void setsSubAdmin(String sSubAdmin) {
+        this.sSubAdmin = sSubAdmin;
     }
 
-    @Override
-    public String toString() {
-        return "LocationInfo{" +
-                "orderSourceLatLng=" + orderSourceLatLng +
-                ", orderDestinationLatLng=" + orderDestinationLatLng +
-                ", sourceAddress=" + sourceAddress +
-                ", destinationAddress=" + destinationAddress +
-                '}';
+    public void setsLocality(String sLocality) {
+        this.sLocality = sLocality;
+    }
+
+    public void setSLocationInfo(String sLat, String sLng, String sAdminArea,
+                                 String sSubAdmin, String sLocality) {
+        this.sLat = sLat;
+        this.sLng = sLng;
+        this.sAdminArea = sAdminArea;
+        this.sSubAdmin = sSubAdmin;
+        this.sLocality = sLocality;
+    }
+
+    public void setdLocationInfo( String dLat, String dLng, String dAdminArea,
+                                  String dSubAdmin, String dLocality) {
+        this.dLat = dLat;
+        this.dLng = dLng;
+        this.dAdminArea = dAdminArea;
+        this.dSubAdmin = dSubAdmin;
+        this.dLocality = dLocality;
+    }
+
+    public void setdLat(String dLat) {
+        this.dLat = dLat;
+    }
+
+    public void setdLng(String dLng) {
+        this.dLng = dLng;
+    }
+
+    public void setdAdminArea(String dAdminArea) {
+        this.dAdminArea = dAdminArea;
+    }
+
+    public void setdSubAdmin(String dSubAdmin) {
+        this.dSubAdmin = dSubAdmin;
+    }
+
+    public void setdLocality(String dLocality) {
+        this.dLocality = dLocality;
+    }
+
+    public String getdLat() {
+        return dLat;
+    }
+
+    public String getdLng() {
+        return dLng;
+    }
+
+    public String getdAdminArea() {
+        return dAdminArea;
+    }
+
+    public String getdSubAdmin() {
+        return dSubAdmin;
+    }
+
+    public String getdLocality() {
+        return dLocality;
     }
 }
