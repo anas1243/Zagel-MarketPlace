@@ -7,17 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.Authentication.MainActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Orders;
-import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -29,11 +24,16 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
     }
 
     @Override
+    public Orders getItem(int position) {
+        return super.getItem(super.getCount() - position - 1);
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.order_item, parent, false);
+            convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.order_item
+                    , parent, false);
         }
-
 
         CircleImageView userImageIV = convertView.findViewById(R.id.user_image);
         TextView userNameTV = convertView.findViewById(R.id.user_name);
@@ -46,7 +46,6 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
         TextView sourceTV = convertView.findViewById(R.id.source_txt_view);
         TextView destinationTV = convertView.findViewById(R.id.destination_txt_view);
         ImageView vehicleImageIV = convertView.findViewById(R.id.vehicle_image);
-
 
 
         Orders CurrentOrder = getItem(position);
@@ -62,16 +61,16 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
                 .load(CurrentOrder.getPackageImageURL())
                 .into(packageImageIV);
 
-        Log.e("OrdersAdapter", "getView: "+ CurrentOrder.getPackageImageURL());
+        Log.e("OrdersAdapter", "getView: " + CurrentOrder.getPackageImageURL());
         packageNameTV.setText(CurrentOrder.getPackageName());
-        String orderDate = oDate.getYear()+"-"+oDate.getMonth()+"-"+ oDate.getDay();
+        String orderDate = oDate.getYear() + "-" + oDate.getMonth() + "-" + oDate.getDay();
         deliveryDateTV.setText(orderDate);
-        String price = CurrentOrder.getDeliveryPrice()+" egp";
+        String price = CurrentOrder.getDeliveryPrice() + " egp";
         deliveryPriceTV.setText(price);
 
         sourceTV.setText(CurrentOrder.getSource());
         destinationTV.setText(CurrentOrder.getDestination());
-        switch (CurrentOrder.getVehicle()){
+        switch (CurrentOrder.getVehicle()) {
             case "Car":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);
                 break;
@@ -91,9 +90,6 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
                 vehicleImageIV.setImageResource(R.drawable.vehicle_bus_yellow);
                 break;
         }
-
-
-
 
 
         return convertView;

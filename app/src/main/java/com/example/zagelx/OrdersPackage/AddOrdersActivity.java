@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -47,14 +46,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -118,14 +114,16 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
         Intent i = getIntent();
 
-         destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
-         sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
+        destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
+        sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
 
+        Log.e(TAG, "onCreate: " + latlngToAddress(sourceLatlng[0], sourceLatlng[1]) + latlngToAddress(destenationLatlng[0], destenationLatlng[1]));
 
         oSource = latlngToAddress(sourceLatlng[0], sourceLatlng[1]).getAdminArea()
-                .replace("Governorate","").trim();
-        oDestination = latlngToAddress(destenationLatlng[0], destenationLatlng[1]).getAdminArea()
-                .replace("Governorate","").trim();
+                .replace("Governorate", "").trim();
+        oDestination = latlngToAddress(destenationLatlng[0], destenationLatlng[1]).getSubAdminArea()
+                .replace("Governorate", "").trim();
+
 
         Log.e(TAG, "onCreate: currentOrderLocation: source is " + new LatLng(sourceLatlng[0]
                 , sourceLatlng[1]) + " destination is " + new LatLng(destenationLatlng[0]
@@ -156,8 +154,6 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
         packageDescriptionET = findViewById(R.id.package_description);
 
-
-        //TODO make them autoComplete
         sourceET = findViewById(R.id.source_txt_view);
         destinationET = findViewById(R.id.destination_txt_view);
 
@@ -166,15 +162,20 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
-
-
         mFirebaseStorage = FirebaseStorage.getInstance();
-        mPackagePhotoStorageReference = mFirebaseStorage.getReference().child("packages_photos");
-
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         merchantId = mFirebaseAuth.getCurrentUser().getUid();
+//        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date()).replaceAll(" ","")
+//                .replace(".","");
+//        Log.e(TAG, "onCreate: "+ currentDateTimeString );
+//        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders").child(merchantId+":"+currentDateTimeString);
+
+        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
+
+        mPackagePhotoStorageReference = mFirebaseStorage.getReference().child("packages_photos");
+
+
         mUsersDatabaseReference = mFirebaseDatabase.getReference().child(("Users")).child(merchantId);
 
         mUsersDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -356,8 +357,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                                     , oDescription, oPrice
                                     , isPrePaid, isBreakable, dDate,
                                     dPrice, oVehicle, oSource, oDestination, RMobile
-                                    , new LocationPair(sourceLatlng[0]+"", sourceLatlng[1]+"")
-                                    , new LocationPair(destenationLatlng[0]+"", destenationLatlng[1]+""));
+                                    , new LocationPair(sourceLatlng[0] + "", sourceLatlng[1] + "")
+                                    , new LocationPair(destenationLatlng[0] + "", destenationLatlng[1] + ""));
 
 
                             mOrdersDatabaseReference.push().setValue(order);
