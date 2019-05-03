@@ -1,15 +1,22 @@
 package com.example.zagelx.OrdersPackage;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.R;
 import com.firebase.ui.auth.AuthUI;
@@ -57,15 +64,22 @@ public class OrdersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Create a new intent to open the {@link AddOrdersActivity}
-                Intent i = new Intent(OrdersActivity.this, TestAddress.class);
-                startActivity(i);
+                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    Intent i = new Intent(OrdersActivity.this, AddOrdersMapActivity.class);
+                    startActivity(i);
+                } else {
+                    isGPSopened();
+                }
+
             }
         });
         tripsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Create a new intent to open the {@link AddTripsActivity}
-                Intent i = new Intent(OrdersActivity.this, AddOrdersMapActivity.class);
+                Intent i = new Intent(OrdersActivity.this, TestAddress.class);
                 startActivity(i);
             }
         });
@@ -111,5 +125,45 @@ public class OrdersActivity extends AppCompatActivity {
             AuthUI.getInstance().signOut(this);
 
         }
+    }
+
+    private void isGPSopened() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+        }
+
+        if (!gps_enabled) {
+            showSettingsAlert();
+        }
+    }
+
+    public void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrdersActivity.this);
+
+        alertDialog.setTitle("GPS is settings");
+
+        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+        alertDialog.setPositiveButton("Open", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                OrdersActivity.this.startActivity(intent);
+            }
+        });
+
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialog.show();
     }
 }
