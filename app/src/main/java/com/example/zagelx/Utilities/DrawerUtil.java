@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.zagelx.AboutUsActivity;
 import com.example.zagelx.Authentication.MainActivity;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
+import com.example.zagelx.UserInfo.DashboardActivity;
 import com.example.zagelx.UserInfo.Notifications;
 import com.example.zagelx.UserInfo.ProfileActivity;
 import com.example.zagelx.R;
@@ -61,15 +62,20 @@ public class DrawerUtil extends Activity {
 
         PrimaryDrawerItem drawerItemHome = new PrimaryDrawerItem().withIdentifier(1)
                 .withName(R.string.nav_home).withIcon(R.drawable.ic_home);
+
         PrimaryDrawerItem drawerItemProfile = new PrimaryDrawerItem().withIdentifier(2)
                 .withName(R.string.nav_profile).withIcon(R.drawable.ic_profile);
 
-        SecondaryDrawerItem drawerItemNotify = new SecondaryDrawerItem().withIdentifier(3)
+        SecondaryDrawerItem drawerItemDashboard = new SecondaryDrawerItem().withIdentifier(3)
+                .withName(R.string.nav_dashboard).withIcon(R.drawable.ic_dash_board);
+
+        SecondaryDrawerItem drawerItemNotify = new SecondaryDrawerItem().withIdentifier(4)
                 .withName(R.string.nav_listen).withIcon(R.drawable.ic_notification);
-        SecondaryDrawerItem drawerItemAboutUs = new SecondaryDrawerItem().withIdentifier(4)
+
+        SecondaryDrawerItem drawerItemAboutUs = new SecondaryDrawerItem().withIdentifier(5)
                 .withName(R.string.nav_about_us).withIcon(R.drawable.ic_about_us);
 
-        SecondaryDrawerItem drawerItemLogOut = new SecondaryDrawerItem().withIdentifier(5)
+        SecondaryDrawerItem drawerItemLogOut = new SecondaryDrawerItem().withIdentifier(6)
                 .withName(R.string.nav_logout).withIcon(R.drawable.ic_logout);
 
 
@@ -103,6 +109,7 @@ public class DrawerUtil extends Activity {
                         drawerItemHome,
                         drawerItemProfile,
                         new DividerDrawerItem(),
+                        drawerItemDashboard,
                         drawerItemNotify,
                         new DividerDrawerItem(),
                         drawerItemAboutUs,
@@ -120,15 +127,19 @@ public class DrawerUtil extends Activity {
                             // load profile/user screen.
                             Intent intent = new Intent(activity, ProfileActivity.class);
                             view.getContext().startActivity(intent);
-                        } else if (drawerItem.getIdentifier() == 3 && !(activity instanceof Notifications)) {
-                            Intent intent = new Intent(activity, MainActivity.class);
+                        }else if (drawerItem.getIdentifier() == 3 && !(activity instanceof DashboardActivity)) {
+                            Intent intent = new Intent(activity, DashboardActivity.class);
                             view.getContext().startActivity(intent);
 
-                        } else if (drawerItem.getIdentifier() == 4 && !(activity instanceof AboutUsActivity)) {
+                        } else if (drawerItem.getIdentifier() == 4 && !(activity instanceof Notifications)) {
+                            Intent intent = new Intent(activity, Notifications.class);
+                            view.getContext().startActivity(intent);
+
+                        } else if (drawerItem.getIdentifier() == 5 && !(activity instanceof AboutUsActivity)) {
                             Intent intent = new Intent(activity, AboutUsActivity.class);
                             view.getContext().startActivity(intent);
 
-                        }else if (drawerItem.getIdentifier() == 5) {
+                        }else if (drawerItem.getIdentifier() == 6) {
                             AuthUI.getInstance().signOut(activity).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     // user is now signed out

@@ -450,7 +450,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                                     , currenLocationInfo);
 
 
-                            mOrdersDatabaseReference.push().setValue(order);
+                            mOrdersDatabaseReference.child(System.currentTimeMillis()+merchantId).setValue(order);
+
 
 
                             Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
