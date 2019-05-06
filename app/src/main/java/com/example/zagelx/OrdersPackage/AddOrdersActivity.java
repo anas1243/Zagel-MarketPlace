@@ -301,32 +301,48 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                         currenLocationInfo.setSLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , address.getSubAdminArea(), address.getLocality());
-                        Log.e(TAG, "SetLocationInfo: "+ address );
+                        Log.e(TAG, "SetLocationInfo: " + address);
                         return;
                     } else if (whichLocation.equals("D")) {
                         currenLocationInfo.setdLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , address.getSubAdminArea(), address.getLocality());
-                        Log.e(TAG, "SetLocationInfo: "+ address );
+                        Log.e(TAG, "SetLocationInfo: " + address);
                         return;
                     }
                 }
             }
 
             for (Address address : list) {
-                if (address.getAdminArea() != null && address.getSubAdminArea() != null
-                ) {
+                if (address.getAdminArea() != null && address.getSubAdminArea() != null) {
                     if (whichLocation.equals("S")) {
                         currenLocationInfo.setSLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , address.getSubAdminArea(), "");
-                        Log.e(TAG, "SetLocationInfo: "+ address );
+                        Log.e(TAG, "SetLocationInfo: " + address);
                         return;
                     } else if (whichLocation.equals("D")) {
                         currenLocationInfo.setdLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , address.getSubAdminArea(), "");
-                        Log.e(TAG, "SetLocationInfo: "+ address );
+                        Log.e(TAG, "SetLocationInfo: " + address);
+                        return;
+                    }
+                }
+            }
+            for (Address address : list) {
+                if (address.getAdminArea() != null) {
+                    if (whichLocation.equals("S")) {
+                        currenLocationInfo.setSLocationInfo(lat + "", lng + ""
+                                , address.getAdminArea().replace("Governorate", "").trim()
+                                , "", "");
+                        Log.e(TAG, "SetLocationInfo: " + address);
+                        return;
+                    } else if (whichLocation.equals("D")) {
+                        currenLocationInfo.setdLocationInfo(lat + "", lng + ""
+                                , address.getAdminArea().replace("Governorate", "").trim()
+                                , "", "");
+                        Log.e(TAG, "SetLocationInfo: " + address);
                         return;
                     }
                 }

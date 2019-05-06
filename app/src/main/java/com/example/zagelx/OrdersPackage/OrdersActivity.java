@@ -10,15 +10,17 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.zagelx.Authentication.MainActivity;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.R;
+import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +32,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class OrdersActivity extends AppCompatActivity {
 
@@ -46,6 +51,12 @@ public class OrdersActivity extends AppCompatActivity {
 
     private FirebaseUser user;
 
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    DrawerUtil drawer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +70,16 @@ public class OrdersActivity extends AppCompatActivity {
         ordersButton = findViewById(R.id.orders_button);
         tripsButton = findViewById(R.id.trips_button);
         //progressBar = findViewById(R.id.progressbar);
+
+
+
+
+
+        ButterKnife.bind(OrdersActivity.this);
+        setSupportActionBar(toolbar);
+
+        drawer = new DrawerUtil(MainActivity.currentUser.getName(), MainActivity.currentUser.getMobileNumber());
+        drawer.getDrawer(OrdersActivity.this, toolbar);
 
         ordersButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +185,32 @@ public class OrdersActivity extends AppCompatActivity {
             }
         });
 
+        alertDialog.show();
+    }
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Exit Application?");
+        alertDialogBuilder
+                .setMessage("Click yes to exit!")
+                .setCancelable(false)
+                .setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                moveTaskToBack(true);
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                                System.exit(1);
+                            }
+                        })
+
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 }

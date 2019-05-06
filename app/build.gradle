@@ -61,5 +61,17 @@ dependencies {
     //forLatLngBounds
     implementation 'com.google.maps.android:android-maps-utils:0.4.4'
 
+    //Butter-Knife
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //rating
+
+
+    implementation('com.mikepenz:materialdrawer:5.9.5@aar') {
+        transitive = true
+        exclude group: 'com.android.support'
+        implementation 'com.hyman:flowlayout-lib:1.1.2'
+    }
+
 }
 apply plugin: 'com.google.gms.google-services'
