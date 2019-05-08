@@ -1,41 +1,60 @@
 package com.example.zagelx.Models;
 
+import java.util.Map;
+
 public class Trips {
 
-    private int delegateImage = 0;//will be removed
+    private String delegateImageURL = "";
     private String delegateID = "";
+    private String delegateName = "";
 
-    private String routeDate = "";
+    private BirthDate routeDate = null;
     private String routePrice = "";
+    private String routeDescription = "";
 
-    private String source = "";
-    private String destination = "";
-    private int vehicleImage = 0;
+    private String vehicle = "";
+
+    private LocationInfo currentOrderLocationInfo = null;
+
+    private String maxNoOrders = "";
+    private Map<String, String> routeOrders ;
+
+    private boolean isPrePaid = false;
+    private String maxPrePaidLimit = "";
 
     public Trips() {
     }
 
-    public Trips(int delegateImage, String delegateID
-            , String delvieryDate, String deliveryPrice,
-                 String source, String destination, int vehicleImage) {
-        this.delegateImage = delegateImage;
+    public Trips(String delegateImageURL, String delegateID
+            , String delegateName, BirthDate routeDate, String routePrice
+            , String routeDescription, String vehicle, LocationInfo currentOrderLocationInfo
+            , String maxNoOrders, boolean isPrePaid, String maxPrePaidLimit) {
+        this.delegateImageURL = delegateImageURL;
         this.delegateID = delegateID;
-        this.routeDate = delvieryDate;
-        this.routePrice = deliveryPrice;
-        this.source = source;
-        this.destination = destination;
-        this.vehicleImage = vehicleImage;
+        this.delegateName = delegateName;
+        this.routeDate = routeDate;
+        this.routePrice = routePrice;
+        this.routeDescription = routeDescription;
+        this.vehicle = vehicle;
+        this.currentOrderLocationInfo = currentOrderLocationInfo;
+        this.maxNoOrders = maxNoOrders;
+        this.isPrePaid = isPrePaid;
+        this.maxPrePaidLimit = maxPrePaidLimit;
     }
 
-    public int getDelegateImage() {
-        return delegateImage;
+    public String getDelegateImageURL() {
+        return delegateImageURL;
     }
 
     public String getDelegateID() {
         return delegateID;
     }
 
-    public String getRouteDate() {
+    public String getDelegateName() {
+        return delegateName;
+    }
+
+    public BirthDate getRouteDate() {
         return routeDate;
     }
 
@@ -43,16 +62,31 @@ public class Trips {
         return routePrice;
     }
 
-    public String getSource() {
-        return source;
+    public String getRouteDescription() {
+        return routeDescription;
     }
 
-    public String getDestination() {
-        return destination;
+    public String getVehicle() {
+        return vehicle;
     }
 
-    public int getVehicleImage() {
-        return vehicleImage;
+    public LocationInfo getCurrentOrderLocationInfo() {
+        return currentOrderLocationInfo;
     }
 
+    public Map<String, String> getRouteOrders() {
+        return routeOrders;
+    }
+
+    public String getMaxNoOrders() {
+        return maxNoOrders;
+    }
+
+    public boolean isPrePaid() {
+        return isPrePaid;
+    }
+
+    public String getMaxPrePaidLimit() {
+        return maxPrePaidLimit;
+    }
 }

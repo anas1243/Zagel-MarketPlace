@@ -82,7 +82,7 @@
         </activity>
 
         <activity
-            android:name=".AboutUsActivity"
+            android:name=".UserInfo.AboutUsActivity"
             android:parentActivityName=".OrdersPackage.OrdersActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -97,6 +97,22 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".OrdersPackage.OrdersActivity" />
+        </activity>
+        <activity
+            android:name=".UserInfo.DashboardActivity"
+            android:parentActivityName=".OrdersPackage.OrdersActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".OrdersPackage.OrdersActivity" />
+        </activity>
+        <activity
+            android:name=".TripsPackage.AddTripsMapActivity"
+            android:parentActivityName=".TripsPackage.TripsActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".TripsPackage.TripsActivity" />
         </activity>
 
     </application>

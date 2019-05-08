@@ -25,6 +25,16 @@
     <string name="yalla">Yalla</string>
     <string name="prompt_weight">Estimated Weight</string>
 
+    <!-- Add Trips labels -->
+    <string name="trip_price">Trip Price</string>
+    <string name="max_no_orders">Maximum number of orders</string>
+    <string name="is_prepaid">Pre-Paid trip?</string>
+    <string name="trip_vehicle_lable">Trip Vehicle:</string>
+    <string name="trip_notes">Trips Notes</string>
+    <string name="delivery_date_label">Delivery Date</string>
+    <string name="maximum_prepaid_price">Maximum pre-paid Price</string>
+
+
 
 
     <string name="full_name">full name</string>

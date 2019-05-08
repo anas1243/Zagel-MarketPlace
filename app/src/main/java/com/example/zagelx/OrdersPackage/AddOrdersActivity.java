@@ -30,6 +30,7 @@ import com.example.zagelx.Models.LocationInfo;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
+import com.example.zagelx.UserInfo.DashboardActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,7 +69,6 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private SwitchCompat isPrePaidSwitch;
     private SwitchCompat isBreakableSwitch;
     private TextView vehicle;
-
 
     private EditText packageDescriptionET;
     private EditText packagePriceET;
@@ -449,13 +449,10 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                                     dPrice, oVehicle, RMobile
                                     , currenLocationInfo);
 
-
-                            mOrdersDatabaseReference.child(System.currentTimeMillis()+merchantId).setValue(order);
-
-
+                            mOrdersDatabaseReference.child(System.currentTimeMillis() + merchantId).setValue(order);
 
                             Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(AddOrdersActivity.this, OrdersActivity.class);
+                            Intent i = new Intent(AddOrdersActivity.this, DashboardActivity.class);
                             startActivity(i);
                         } else {
                             Toast.makeText(AddOrdersActivity.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();

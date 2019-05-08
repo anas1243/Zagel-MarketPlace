@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.R;
 
@@ -22,9 +23,15 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
     }
 
     @Override
+    public Trips getItem(int position) {
+        return super.getItem(super.getCount() - position - 1);
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.trip_item, parent, false);
+            convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.trip_item
+                    , parent, false);
         }
 
 
@@ -37,18 +44,42 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
         TextView destinationTV = convertView.findViewById(R.id.destination_txt_view);
         ImageView vehicleImageIV = convertView.findViewById(R.id.vehicle_image);
 
-        Trips trip = getItem(position);
+        Trips currentTrip = getItem(position);
+        BirthDate rDate = currentTrip.getRouteDate();
+
+        String tripDate = rDate.getYear() + "-" + rDate.getMonth() + "-" + rDate.getDay();
 
         Glide.with(delegateImageIV.getContext())
-                .load(trip.getDelegateImage())
+                .load(currentTrip.getDelegateImageURL())
                 .into(delegateImageIV);
-        delegateNameTV.setText(trip.getDelegateID());
-        routeDateTV.setText(trip.getRouteDate());
-        routePriceTV.setText(trip.getRoutePrice());
+        delegateNameTV.setText(currentTrip.getDelegateName());
+        routeDateTV.setText(tripDate);
+        String price = currentTrip.getRoutePrice() + " egp";
+        routePriceTV.setText(price);
 
-        sourceTV.setText(trip.getSource());
-        destinationTV.setText(trip.getDestination());
-        vehicleImageIV.setImageResource(R.drawable.vehicle_car);
+        sourceTV.setText(currentTrip.getCurrentOrderLocationInfo().getsAdminArea());
+        destinationTV.setText(currentTrip.getCurrentOrderLocationInfo().getdAdminArea());
+
+        switch (currentTrip.getVehicle()) {
+            case "Car":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);
+                break;
+            case "Train":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_train_yellow);
+                break;
+            case "MotorCycle":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_motorcycle_yellow);
+                break;
+            case "Metro":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_metro_yellow);
+                break;
+            case "Nos Na2l":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_nos_na2l_yellow);
+                break;
+            case "Bus":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_bus_yellow);
+                break;
+        }
 
 
         return convertView;

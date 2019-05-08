@@ -12,8 +12,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import com.example.zagelx.AboutUsActivity;
-import com.example.zagelx.Authentication.MainActivity;
+import com.example.zagelx.UserInfo.AboutUsActivity;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.UserInfo.DashboardActivity;
 import com.example.zagelx.UserInfo.Notifications;
@@ -41,16 +40,17 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 public class DrawerUtil extends Activity {
     String userId, photoUrl, name, phone, uId;
 
-    public DrawerUtil(String name, String phone) {
+    public DrawerUtil(String name, String phone, String photoUrl) {
         this.name = name;
         this.phone = phone;
+        this.photoUrl = photoUrl;
     }
 
     public void getDrawer(final Activity activity, Toolbar toolbar) {
         DrawerImageLoader.init(new AbstractDrawerImageLoader() {
             @Override
             public void set(ImageView imageView, Uri uri, Drawable placeholder, String tag) {
-                Glide.with(activity).load(MainActivity.currentUser.getProfilePictureURL()).into(imageView);
+                Glide.with(activity).load(photoUrl).into(imageView);
             }
 
             @Override
@@ -58,7 +58,7 @@ public class DrawerUtil extends Activity {
             }
         });
         // Create the AccountHeader
-        DrawerUtil drawer = new DrawerUtil(name, phone);
+        DrawerUtil drawer = new DrawerUtil(name, phone,photoUrl);
 
         PrimaryDrawerItem drawerItemHome = new PrimaryDrawerItem().withIdentifier(1)
                 .withName(R.string.nav_home).withIcon(R.drawable.ic_home);
@@ -84,7 +84,7 @@ public class DrawerUtil extends Activity {
                 .withHeaderBackground(R.drawable.clouds_background)
                 .addProfiles(
                         new ProfileDrawerItem().withName(name).withEmail(phone)
-                                .withIcon(MainActivity.currentUser.getProfilePictureURL())
+                                .withIcon(photoUrl)
                         //.withTextColor(R.color.colorPrimaryDark)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {

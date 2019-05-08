@@ -1,6 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-</LinearLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="20dp">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+
+                <EditText
+
+                    android:id="@+id/trip_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ems="10"
+                    android:hint="@string/trip_price"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAllCaps="true" />
+
+                <EditText
+
+                    android:id="@+id/max_no_orders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ems="10"
+                    android:hint="@string/max_no_orders"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAllCaps="true" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/is_prepaid"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/pre_paid_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:checked="false"
+                        android:theme="@style/SCBSwitch" />
+
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/maximum_price_prepaid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/maximum_prepaid_price"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="7dp">
+
+                    <TextView
+                        android:id="@+id/Vehicle_text"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@string/trip_vehicle_lable"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/vehicle_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Car"
+                        android:layout_marginLeft="10dp"
+                        android:textStyle="bold"
+                        android:textSize="24sp"
+                        android:textColor="@color/colorAccent"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <ImageButton
+                        android:id="@+id/ic_car"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:background="@drawable/vehicle_car_yellow" />
+
+                    <ImageButton
+                        android:id="@+id/ic_bus"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_bus_selector"
+                        android:layout_marginLeft="15dp"/>
+
+                    <ImageButton
+                        android:id="@+id/ic_train"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_train_selector"
+                        android:layout_marginLeft="15dp"/>
+
+                    <ImageButton
+                        android:id="@+id/ic_metro"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_metro_selector"
+                        android:layout_marginLeft="15dp"/>
+
+                    <ImageButton
+                        android:id="@+id/ic_motorcycle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_motorcycle_selector"
+                        android:layout_marginLeft="15dp"/>
+                    <ImageButton
+                        android:id="@+id/ic_nos_na2l"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_nos_na2l_selector"
+                        android:layout_marginLeft="15dp"/>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/label_text"
+                    android:layout_width="304dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="7dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/delivery_date_label"
+                    android:textColor="@color/colorSecondary"
+                    android:textStyle="bold" />
+
+                <DatePicker
+                    android:id="@+id/trip_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:calendarViewShown="false"
+                    android:datePickerMode="spinner"
+                    android:elevation="24dp" />
+
+                <EditText
+                    android:id="@+id/trip_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:hint="@string/trip_notes"
+                    android:inputType="textMultiLine"
+                    android:minHeight="100dp"
+                    android:padding="16dp"
+                    />
+
+
+                <Button
+                    android:id="@+id/button_yalla"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/button"
+                    android:text="Yalla" android:layout_marginTop="16dp"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</ScrollView>
+

@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:hint="HAMADA EL SHR2AWI"
+            android:text="HAMADA EL SHR2AWI"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/delegate_name"
             android:layout_centerHorizontal="true"
-            android:hint="1/1/2001"
+            android:text="1/1/2001"
             android:textColor="#000000"
             android:textSize="18sp" />
 
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:hint="70 EGP"
+            android:text="70 EGP"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -61,16 +61,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:hint="FROM"
-            android:textColorHint="@color/colorPrimary" />
+            android:text="FROM"
+            android:textColor="@color/colorSecondary" />
 
         <TextView
             android:id="@+id/to_txt_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:hint="TO"
-            android:textColorHint="@color/colorPrimary" />
+            android:text="TO"
+            android:textColor="@color/colorSecondary" />
 
         <TextView
             android:id="@+id/source_txt_view"
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:hint="ALEXANDRIA"
+            android:text="ALEXANDRIA"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -89,15 +89,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:hint="CAIRO"
+            android:text="CAIRO"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/vehicle_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerInParent="true"
             android:src="@drawable/vehicle_car" />
 

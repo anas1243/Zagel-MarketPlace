@@ -1,7 +1,9 @@
-package com.example.zagelx;
+package com.example.zagelx.UserInfo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.zagelx.R;
 
 public class AboutUsActivity extends AppCompatActivity {
 
