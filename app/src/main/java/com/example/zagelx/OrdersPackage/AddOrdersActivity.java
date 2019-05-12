@@ -452,7 +452,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                             mOrdersDatabaseReference.child(System.currentTimeMillis() + merchantId).setValue(order);
 
                             Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(AddOrdersActivity.this, DashboardActivity.class);
+                            Intent i = new Intent(AddOrdersActivity.this, OrdersActivity.class);
                             startActivity(i);
                         } else {
                             Toast.makeText(AddOrdersActivity.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();

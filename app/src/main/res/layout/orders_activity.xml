@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_container"
+<RelativeLayout
+    android:id="@+id/main_main_layout" xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
     <include layout="@layout/toolbar_navdrawer"></include>
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/main_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical">
 
     <!--TODO progress bar is not appear -->
     <!--<ProgressBar-->
@@ -63,3 +69,13 @@
 
 
 </LinearLayout>
+<Button
+    android:id="@+id/add_order_cbutton"
+android:layout_width="40dp"
+android:layout_height="40dp"
+android:layout_below="@id/toolbar"
+android:layout_alignParentRight="true"
+android:layout_marginTop="16dp"
+android:layout_marginRight="16dp"
+android:background="@drawable/ic_add10" />
+    </RelativeLayout>

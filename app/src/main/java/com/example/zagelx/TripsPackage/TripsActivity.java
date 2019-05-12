@@ -44,7 +44,9 @@ public class TripsActivity extends AppCompatActivity {
     private TripsAdapter mTripsAdapter;
     private Button ordersButton;
     private Button tripsButton;
+    private Button addTrip_cButton;
 //    private ProgressBar progressBar;
+
 
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -75,21 +77,32 @@ public class TripsActivity extends AppCompatActivity {
         mTripsListView = findViewById(R.id.main_list);
         ordersButton = findViewById(R.id.orders_button);
         tripsButton = findViewById(R.id.trips_button);
+        addTrip_cButton = findViewById(R.id.add_trip_cbutton);
         //progressBar = findViewById(R.id.progressbar);
 
-
-        ordersButton.setOnClickListener(new View.OnClickListener() {
+        addTrip_cButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Create a new intent to open the {@link AddOrdersActivity}
                 LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    Intent i = new Intent(TripsActivity.this, OrdersActivity.class);
+                    Intent i = new Intent(TripsActivity.this, AddTripsMapActivity.class);
                     startActivity(i);
                 } else {
                     isGPSopened();
                 }
+            }
+        });
+
+
+        ordersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Create a new intent to open the {@link AddOrdersActivity}
+
+                    Intent i = new Intent(TripsActivity.this, OrdersActivity.class);
+                    startActivity(i);
 
             }
         });
@@ -97,7 +110,7 @@ public class TripsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.scroll_view), "Already there!", Snackbar.LENGTH_LONG);
+                        .make(findViewById(R.id.main_main_layout), "Already there!", Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });

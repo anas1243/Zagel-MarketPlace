@@ -45,6 +45,7 @@ public class OrdersActivity extends AppCompatActivity {
     private OrdersAdapter mOrdersAdapter;
     private Button ordersButton;
     private Button tripsButton;
+    private Button addOrderCButton;
 //    private ProgressBar progressBar;
 
 
@@ -76,8 +77,23 @@ public class OrdersActivity extends AppCompatActivity {
         mOrdersListView = findViewById(R.id.main_list);
         ordersButton = findViewById(R.id.orders_button);
         tripsButton = findViewById(R.id.trips_button);
+        addOrderCButton= findViewById(R.id.add_order_cbutton);
         //progressBar = findViewById(R.id.progressbar);
 
+        addOrderCButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    Intent i = new Intent(OrdersActivity.this, AddOrdersMapActivity.class);
+                    startActivity(i);
+                } else {
+                    isGPSopened();
+                }
+
+            }
+        });
 
         ordersButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +108,7 @@ public class OrdersActivity extends AppCompatActivity {
 //                    isGPSopened();
 //                }
                 Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.scroll_view), "Already there!", Snackbar.LENGTH_LONG);
+                        .make(findViewById(R.id.main_main_layout), "Already there!", Snackbar.LENGTH_LONG);
                 snackbar.show();
 
             }
@@ -101,14 +117,9 @@ public class OrdersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Create a new intent to open the {@link AddTripsActivity}
-                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     Intent i = new Intent(OrdersActivity.this, TripsActivity.class);
                     startActivity(i);
-                } else {
-                    isGPSopened();
-                }
             }
         });
 
