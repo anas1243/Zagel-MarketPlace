@@ -94,6 +94,9 @@ public class TripsActivity extends AppCompatActivity {
                 }
             }
         });
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.main_main_layout), "خطوط مندوبي الشحن !", Snackbar.LENGTH_LONG);
+        snackbar.show();
 
 
         ordersButton.setOnClickListener(new View.OnClickListener() {

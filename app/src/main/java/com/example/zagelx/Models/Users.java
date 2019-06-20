@@ -5,6 +5,7 @@ import java.util.Date;
 public class Users {
     private String ID = "";
     private String name = "";
+    private String email = "";
     private String mode = ""; //delegate:d, merchant: m
     private String availabilityStatus = ""; //online:on, offline:off
     private String gender = ""; //male:male, female:female
@@ -25,8 +26,9 @@ public class Users {
     }
 
     public Users(String ID, String name, String gender, String mobileNumber,
-                 String profilePictureURL, BirthDate birthDate,boolean firstTimeLogIn) {
+                 String profilePictureURL, BirthDate birthDate, String mode,String email,String government, boolean firstTimeLogIn) {
         this.name = name;
+        this.email = email;
         this.gender = gender;
         this.mobileNumber = mobileNumber;
         this.profilePictureURL = profilePictureURL;
@@ -34,6 +36,8 @@ public class Users {
         this.ID = ID;
         this.birthDate = birthDate;
         this.firstTimeLogIn = firstTimeLogIn;
+        this.mode = mode;
+        this.government = government;
     }
 
     public String getName() {
@@ -95,4 +99,9 @@ public class Users {
     public BirthDate getBirthDate() {
         return birthDate;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
 }

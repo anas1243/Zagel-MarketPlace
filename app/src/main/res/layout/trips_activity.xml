@@ -50,7 +50,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/colorSecondary"
-                android:text="Add a Trip"
+                android:text="Trips"
                 android:textColor="#ffffff"
                 android:textSize="18sp" />
 
@@ -60,7 +60,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/colorSecondary"
-                android:text="Add An Order"
+                android:text="Orders"
                 android:textColor="#ffffff"
                 android:textSize="18sp" />
 

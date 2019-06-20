@@ -89,9 +89,8 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true" />
-
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/type_label"
                     style="@style/label_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -109,6 +108,45 @@
                     android:elevation="24dp"
                     android:entries="@array/gender_array"
                     android:prompt="@string/prompt_gender" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/label_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:singleLine="true"
+                    android:text="Business type"
+                    android:textColor="@color/colorSecondary" />
+
+                <Spinner
+                    android:id="@+id/user_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="24dp"
+                    android:entries="@array/type_array"
+                    android:prompt="@string/prompt_type" />
+
+                <TextView
+                    style="@style/label_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:singleLine="true"
+                    android:text="living location"
+                    android:textColor="@color/colorSecondary" />
+
+                <Spinner
+                    android:id="@+id/user_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="24dp"
+                    android:entries="@array/location_array"
+                    android:prompt="@string/prompt_location" />
 
                 <TextView
                     android:id="@+id/textView3"

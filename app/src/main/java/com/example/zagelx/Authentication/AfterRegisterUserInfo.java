@@ -62,7 +62,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
     private DatePicker userDate;
     private CircleImageView userPhotoUrl;
     private Button registerButton;
-    private Spinner userGender;
+    private Spinner userGender, userType, userLocation;
 
     private UploadTask uploadTask;
     private Uri filePath = null;
@@ -79,7 +79,6 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_info);
-        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -87,13 +86,16 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         user = firebaseAuth.getCurrentUser();
         usersDatabaseReference = firebaseDatabase.getReference().child("Users");
-        ProfileImageReference = storage.getReference().child("profile_images/" + UUID.randomUUID().toString());
+        ProfileImageReference = storage.getReference().child("profile_images/" +"ProfilePic-->"+ user.getUid());
 
         userName = findViewById(R.id.user_name);
         userEmail = findViewById(R.id.user_email);
         userDate = findViewById(R.id.user_date);
+        userDate.updateDate(1995,0,1);
         userPhotoUrl = findViewById(R.id.iv_profile_image);
         userGender = findViewById(R.id.user_gender);
+        userType = findViewById(R.id.user_type);
+        userLocation = findViewById(R.id.user_location);
         registerButton = findViewById(R.id.button_register);
 
         userPhotoUrl.setOnClickListener(new View.OnClickListener() {
@@ -217,9 +219,11 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                             uId = user.getUid();
                             String uMobile = user.getPhoneNumber();
                             String gender = userGender.getSelectedItem().toString();
+                            String type = userType.getSelectedItem().toString();
+                            String location = userLocation.getSelectedItem().toString();
                             Users currenUser = new Users(uId, uName, gender, uMobile,
                                     userPhotoUrlVar, new BirthDate(userDate.getYear(),
-                                    userDate.getMonth()+1, userDate.getDayOfMonth()), false);
+                                    userDate.getMonth()+1, userDate.getDayOfMonth()),type, uEmail, location, false);
 
                             usersDatabaseReference.child(uId).setValue(currenUser);
 

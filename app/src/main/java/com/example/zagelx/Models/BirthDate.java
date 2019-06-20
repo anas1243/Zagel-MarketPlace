@@ -37,4 +37,9 @@ public class BirthDate {
     public void setDay(int day) {
         this.day = day;
     }
+
+    @Override
+    public String toString() {
+        return day+"-"+month+"-"+year;
+    }
 }

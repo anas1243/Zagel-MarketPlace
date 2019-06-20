@@ -3,6 +3,7 @@ package com.example.zagelx.OrdersPackage;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -30,7 +31,6 @@ import com.example.zagelx.Models.LocationInfo;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.UserInfo.DashboardActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,6 +52,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
 
 public class AddOrdersActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -141,7 +142,6 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         isBreakableSwitch = findViewById(R.id.breakable_switch);
         packagePriceET = findViewById(R.id.package_price);
         deliveryDateDP = findViewById(R.id.delivery_date);
-
         vehicle = findViewById(R.id.vehicle_name);
 
         icBus = findViewById(R.id.ic_bus);
@@ -542,7 +542,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void clearVehicleOptionsColor() {
+    public void clearVehicleOptionsColor() {editPackageImage.setOnClickListener(this);
+        AddOrderButton.setOnClickListener(this);
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             icBus.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_bus));
             icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car));

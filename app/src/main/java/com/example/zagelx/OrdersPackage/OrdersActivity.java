@@ -108,7 +108,7 @@ public class OrdersActivity extends AppCompatActivity {
 //                    isGPSopened();
 //                }
                 Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.main_main_layout), "Already there!", Snackbar.LENGTH_LONG);
+                        .make(findViewById(R.id.main_main_layout), "Already there!", Snackbar.LENGTH_SHORT);
                 snackbar.show();
 
             }
@@ -122,6 +122,10 @@ public class OrdersActivity extends AppCompatActivity {
                     startActivity(i);
             }
         });
+
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.main_main_layout), "الشحنات !", Snackbar.LENGTH_LONG);
+        snackbar.show();
 
         // Initialize message ListView and its adapter
         List<Orders> ordersList = new ArrayList<>();
