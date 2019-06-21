@@ -388,7 +388,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
             progressDialog.show();
 
             final StorageReference photoRef =
-                    mPackagePhotoStorageReference.child(selectedImageUri.getLastPathSegment());
+                    mPackagePhotoStorageReference.child(merchantId+System.currentTimeMillis());
             try {
                 bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
             } catch (IOException e) {

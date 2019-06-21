@@ -102,7 +102,7 @@ public class OrdersActivity extends AppCompatActivity {
 //                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 //
 //                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//                    Intent i = new Intent(OrdersActivity.this, AddOrdersMapActivity.class);
+//                    Intent i = new Intent(OrdersActivity.thiselectedImageUri.getLastPathSegment()s, AddOrdersMapActivity.class);
 //                    startActivity(i);
 //                } else {
 //                    isGPSopened();

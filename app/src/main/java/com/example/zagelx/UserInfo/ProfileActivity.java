@@ -23,9 +23,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Authentication.AfterRegisterUserInfo;
 import com.example.zagelx.Models.BirthDate;
+import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference usersDatabaseReference;
+    private DatabaseReference ordersDatabaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage storage;
     private StorageReference ProfileImageReference;
@@ -85,6 +88,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         storage = FirebaseStorage.getInstance();
         user = firebaseAuth.getCurrentUser();
         usersDatabaseReference = firebaseDatabase.getReference().child("Users").child(user.getUid());
+        ordersDatabaseReference = firebaseDatabase.getReference().child("Orders");
         ProfileImageReference = storage.getReference().child("profile_images/"
                 + "ProfilePic-->" + user.getUid());
 
@@ -109,7 +113,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         newLocation = findViewById(R.id.new_location);
         newType = findViewById(R.id.new_type);
         newDate = findViewById(R.id.new_date);
-        newDate.updateDate(1995,0,1);
+        newDate.updateDate(1995, 0, 1);
 
         saveButton = findViewById(R.id.button_save_edit);
         cancelButton = findViewById(R.id.button_cancel_edit);
@@ -138,9 +142,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 userDate.setText(date);
                 userType.setText(currentUser.getMode());
                 userLocation.setText(currentUser.getGovernment());
-                Glide.with(userImage)
-                        .load(currentUser.getProfilePictureURL())
-                        .into(userImage);
+                if (editImageFlag) {
+                    Glide.with(userImage)
+                            .load(filePath)
+                            .into(userImage);
+                } else {
+                    Glide.with(userImage)
+                            .load(currentUser.getProfilePictureURL())
+                            .into(userImage);
+                }
             }
 
 
@@ -252,10 +262,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 newEmail.requestFocus();
                 return;
             }
-                usersDatabaseReference.child("email").setValue(newEmail.getText().toString());
-                snackbar = Snackbar
-                        .make(findViewById(R.id.scroll_view), "your Email has been changed!", Snackbar.LENGTH_LONG);
-                snackbar.show();
+            usersDatabaseReference.child("email").setValue(newEmail.getText().toString());
+            snackbar = Snackbar
+                    .make(findViewById(R.id.scroll_view), "your Email has been changed!", Snackbar.LENGTH_LONG);
+            snackbar.show();
 
         }
         if (newDate.getVisibility() == View.VISIBLE) {
@@ -315,8 +325,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             try {
                 bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-            }catch (IOException e){
-                Log.e(TAG, "uploadOrderImageAndProceed: ", e.fillInStackTrace() );
+            } catch (IOException e) {
+                Log.e(TAG, "uploadOrderImageAndProceed: ", e.fillInStackTrace());
             }
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
@@ -364,14 +374,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         Uri downloadUri = task.getResult();
                         if (downloadUri != null) {
                             userPhotoUrlVar = downloadUri.toString();
-
+                            changeordersMerchantsURL();
                             Log.e(TAG, "validateTheUser: the pp url is " + userPhotoUrlVar);
 
                             usersDatabaseReference.child("profilePictureURL").setValue(userPhotoUrlVar);
 
                             Intent i = new Intent(ProfileActivity.this, ProfileActivity.class);
                             startActivity(i);
-                        }else{
+                        } else {
                             Toast.makeText(ProfileActivity.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();
 
                         }
@@ -381,6 +391,26 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         }
     }
+
+    public void changeordersMerchantsURL() {
+        ordersDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot item_snapshot : dataSnapshot.getChildren()) {
+                    String orderID = item_snapshot.getKey();
+                    if (orderID.contains(user.getUid())) {
+                        ordersDatabaseReference.child(orderID).child("merchantImageURL").setValue(userPhotoUrlVar);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

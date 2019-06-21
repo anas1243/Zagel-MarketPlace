@@ -115,4 +115,11 @@ public class Orders implements Serializable {
         return currentOrderLocationInfo;
     }
 
+    public void setMerchantImageURL(String merchantImageURL) {
+        this.merchantImageURL = merchantImageURL;
+    }
+
+    public void setMerchantName(String merchantName) {
+        this.merchantName = merchantName;
+    }
 }
