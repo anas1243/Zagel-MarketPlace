@@ -21,13 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.Authentication.AfterRegisterUserInfo;
 import com.example.zagelx.Models.BirthDate;
-import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -55,6 +52,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference usersDatabaseReference;
     private DatabaseReference ordersDatabaseReference;
+    private DatabaseReference tripsDatabaseReference;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage storage;
     private StorageReference ProfileImageReference;
@@ -89,6 +87,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         user = firebaseAuth.getCurrentUser();
         usersDatabaseReference = firebaseDatabase.getReference().child("Users").child(user.getUid());
         ordersDatabaseReference = firebaseDatabase.getReference().child("Orders");
+        tripsDatabaseReference = firebaseDatabase.getReference().child("Trips");
         ProfileImageReference = storage.getReference().child("profile_images/"
                 + "ProfilePic-->" + user.getUid());
 
@@ -374,7 +373,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         Uri downloadUri = task.getResult();
                         if (downloadUri != null) {
                             userPhotoUrlVar = downloadUri.toString();
-                            changeordersMerchantsURL();
+                            changeOrdersMerchantsURL();
+                            changeTripsDelegatesURL();
                             Log.e(TAG, "validateTheUser: the pp url is " + userPhotoUrlVar);
 
                             usersDatabaseReference.child("profilePictureURL").setValue(userPhotoUrlVar);
@@ -392,7 +392,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void changeordersMerchantsURL() {
+    public void changeOrdersMerchantsURL() {
         ordersDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -400,6 +400,25 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     String orderID = item_snapshot.getKey();
                     if (orderID.contains(user.getUid())) {
                         ordersDatabaseReference.child(orderID).child("merchantImageURL").setValue(userPhotoUrlVar);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void changeTripsDelegatesURL() {
+       tripsDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot item_snapshot : dataSnapshot.getChildren()) {
+                    String tripID = item_snapshot.getKey();
+                    if (tripID.contains(user.getUid())) {
+                        tripsDatabaseReference.child(tripID).child("delegateImageURL").setValue(userPhotoUrlVar);
                     }
                 }
             }
