@@ -7,36 +7,6 @@
     android:orientation="vertical"
     android:padding="12dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginBottom="3dp"
-        android:orientation="horizontal">
-
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/user_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/profile_placeholder"
-            app:civ_border_color="@android:color/tab_indicator_text"
-            app:civ_border_width="1.5dp" />
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="NAME"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#000000" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
@@ -47,7 +17,7 @@
             android:id="@+id/package_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/profile_placeholder"
+            android:src="@drawable/sora"
             app:civ_border_color="@android:color/tab_indicator_text"
             app:civ_border_width="2dp" />
 
