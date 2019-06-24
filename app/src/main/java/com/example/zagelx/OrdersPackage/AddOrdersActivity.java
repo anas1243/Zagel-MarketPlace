@@ -98,8 +98,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
     private LocationInfo currenLocationInfo;
 
-    private boolean isPrePaid = false;
-    private boolean isBreakable = false;
+    private Boolean isPrePaid;
+    private Boolean isBreakable;
     private BirthDate dDate;
 
     double destenationLatlng[];
@@ -447,7 +447,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                                     , oDescription, oPrice
                                     , isPrePaid, isBreakable, dDate,
                                     dPrice, oVehicle, RMobile
-                                    , currenLocationInfo);
+                                    , currenLocationInfo,"New");
 
                             mOrdersDatabaseReference.child(System.currentTimeMillis() + merchantId).setValue(order);
 

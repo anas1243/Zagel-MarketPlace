@@ -1,6 +1,8 @@
 package com.example.zagelx.Models;
 
-public class BirthDate {
+import java.io.Serializable;
+
+public class BirthDate implements Serializable {
     private int year;
     private int month;
     private int day;

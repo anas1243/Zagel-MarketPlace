@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_image"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
+                android:src="@drawable/profile_placeholder"
+                app:civ_border_color="@color/md_white_1000"
+                app:civ_border_width="1.5dp" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@id/user_image"
+                android:text="Merchant Name"
+                android:textColor="@color/md_white_1000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.iarcuschin.simpleratingbar.SimpleRatingBar
+                android:id="@+id/rb_rating_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_name"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/user_image"
+                app:srb_borderColor="@color/md_white_1000"
+                app:srb_fillColor="@color/colorSecondary"
+                app:srb_isIndicator="true"
+                app:srb_numberOfStars="5"
+                app:srb_rating="0"
+                app:srb_starBorderWidth="2"
+                app:srb_starCornerRadius="4"
+                app:srb_stepSize="1" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/user_name"
+                android:src="@drawable/ic_user_verification" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="20dp">
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/package_image"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:src="@drawable/box1"
+                        app:civ_border_color="@color/md_white_1000"
+                        app:civ_border_width="1.5dp" />
+
+                    <TextView
+                        android:id="@+id/package_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:text="Order Name"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_toRightOf="@id/package_image"/>
+                    <TextView
+                        android:id="@+id/package_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:text="negotiable"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_below="@id/package_name"
+                        android:layout_toRightOf="@id/package_image"/>
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/source_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_gps_yellow" />
+
+
+                    <TextView
+                        android:id="@+id/source_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/source_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Source:"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/package_source"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/source_lable"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/source_icon"
+                        android:maxLines="3"
+                        android:text="alexandria" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/destination_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_gps_yellow" />
+
+
+                    <TextView
+                        android:id="@+id/destination_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/destination_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Destination:"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/package_destination"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/destination_lable"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/destination_icon"
+                        android:maxLines="3"
+                        android:text="Cairo" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/data_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_birth_date" />
+
+                    <TextView
+                        android:id="@+id/package_date_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/data_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Delivery Date:"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/package_date"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/package_date_lable"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/data_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="27/7/1996" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/delivery_fees_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_cash" />
+
+
+                    <TextView
+                        android:id="@+id/delivery_fees_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/delivery_fees_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Devliery fees:"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/delivery_fees"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/delivery_fees_lable"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/delivery_fees_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="60 EGP" />
+
+                    <ImageView
+                        android:id="@+id/info_delivery_fees"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_about_us" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/pre_paid_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_cash" />
+
+                    <TextView
+                        android:id="@+id/pre_paid_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/pre_paid_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Pre Paid Value:"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/package_pre_paid_value"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/pre_paid_lable"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/pre_paid_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="1500 EGP" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/breakable_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_breakable" />
+
+
+                    <TextView
+                        android:id="@+id/breakable_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/breakable_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Is Breakable ?"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/package_breakability"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/breakable_lable"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/breakable_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="breakable" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/vehicle_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/vehicle_car_yellow" />
+
+
+                    <TextView
+                        android:id="@+id/vehicle_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/vehicle_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Vehicle:"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/package_vehicle"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/vehicle_lable"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/vehicle_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="car" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/notes_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_notes" />
+
+
+                    <TextView
+                        android:id="@+id/notes_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/notes_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="General Notes:"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/package_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/notes_icon"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/border"
+                        android:ems="10"
+                        android:gravity="start"
+                        android:hint="Package notes"
+                        android:inputType="textMultiLine"
+                        android:minHeight="100dp"
+                        android:padding="16dp"
+                        android:enabled="false"/>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button_bid_fees"
+                        style="@style/button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_blue"
+                        android:text="change fees request"
+                        />
+
+                    <Button
+                        android:id="@+id/button_delivery_request"
+                        style="@style/button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button"
+                        android:text="delivery request" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+</ScrollView>

@@ -1,6 +1,8 @@
 package com.example.zagelx.Models;
 
-public class LocationInfo {
+import java.io.Serializable;
+
+public class LocationInfo implements Serializable {
     String sLat = "";
     String sLng = "";
     String sAdminArea = "";      //el mo7afza
@@ -114,5 +116,27 @@ public class LocationInfo {
 
     public String getdLocality() {
         return dLocality;
+    }
+
+    @Override
+    public String toString() {
+        return "LocationInfo{" +
+                "sLat='" + sLat + '\'' +
+                ", sLng='" + sLng + '\'' +
+                ", sAdminArea='" + sAdminArea + '\'' +
+                ", sSubAdmin='" + sSubAdmin + '\'' +
+                ", sLocality='" + sLocality + '\'' +
+                ", dLat='" + dLat + '\'' +
+                ", dLng='" + dLng + '\'' +
+                ", dAdminArea='" + dAdminArea + '\'' +
+                ", dSubAdmin='" + dSubAdmin + '\'' +
+                ", dLocality='" + dLocality + '\'' +
+                '}';
+    }
+    public String fullSourceLocation(){
+        return sAdminArea+", "+sSubAdmin+", "+sLocality;
+    }
+    public String fullDestinationLocation(){
+        return dAdminArea+", "+dSubAdmin+", "+dLocality;
     }
 }

@@ -12,11 +12,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.zagelx.Authentication.MainActivity;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
@@ -58,6 +62,7 @@ public class OrdersActivity extends AppCompatActivity {
     private FirebaseUser user;
     private Users currentUser;
 
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     DrawerUtil drawer;
@@ -83,6 +88,7 @@ public class OrdersActivity extends AppCompatActivity {
         addOrderCButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -128,9 +134,10 @@ public class OrdersActivity extends AppCompatActivity {
         snackbar.show();
 
         // Initialize message ListView and its adapter
-        List<Orders> ordersList = new ArrayList<>();
-        mOrdersAdapter = new OrdersAdapter(this, R.layout.order_item, ordersList);
+        final List<Orders> ordersList = new ArrayList<>();
+        mOrdersAdapter = new OrdersAdapter(OrdersActivity.this, R.layout.order_item, ordersList);
         mOrdersListView.setAdapter(mOrdersAdapter);
+
 
         if (user != null) {
 
@@ -160,6 +167,7 @@ public class OrdersActivity extends AppCompatActivity {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Orders orders = dataSnapshot.getValue(Orders.class);
+                    Log.e("test orders", "onChildAdded: " +orders );
                     mOrdersAdapter.add(orders);
 
                     //progressBar.setVisibility(View.GONE);

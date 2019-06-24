@@ -2,12 +2,14 @@ package com.example.zagelx.OrdersPackage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
@@ -19,9 +21,12 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrdersAdapter extends ArrayAdapter<Orders> {
+    Context context ;
     public OrdersAdapter(Context context, int resource, List<Orders> objects) {
         super(context, resource, objects);
+        this.context = context;
     }
+
 
     @Override
     public Orders getItem(int position) {
@@ -29,11 +34,13 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.order_item
                     , parent, false);
         }
+
+        View listItemView = convertView;
 
         CircleImageView userImageIV = convertView.findViewById(R.id.user_image);
         TextView userNameTV = convertView.findViewById(R.id.user_name);
@@ -48,7 +55,7 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
         ImageView vehicleImageIV = convertView.findViewById(R.id.vehicle_image);
 
 
-        Orders CurrentOrder = getItem(position);
+        final Orders CurrentOrder = getItem(position);
         BirthDate oDate = CurrentOrder.getDeliveryDate();
 
 
@@ -63,7 +70,7 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
 
         Log.e("OrdersAdapter", "getView: " + CurrentOrder.getPackageImageURL());
         packageNameTV.setText(CurrentOrder.getPackageName());
-        String orderDate = oDate.getYear() + "-" + oDate.getMonth() + "-" + oDate.getDay();
+        final String orderDate = oDate.getYear() + "-" + oDate.getMonth() + "-" + oDate.getDay();
         deliveryDateTV.setText(orderDate);
         String price = CurrentOrder.getDeliveryPrice() + " egp";
         deliveryPriceTV.setText(price);
@@ -90,6 +97,17 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
                 vehicleImageIV.setImageResource(R.drawable.vehicle_bus_yellow);
                 break;
         }
+
+        listItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(context, OrderDetails.class);
+                Log.e("zero one test test", "onClick: "+ CurrentOrder.isPrePaid() );
+                i.putExtra("Package_ID", CurrentOrder);
+                context.startActivity(i);
+            }
+        });
 
 
         return convertView;

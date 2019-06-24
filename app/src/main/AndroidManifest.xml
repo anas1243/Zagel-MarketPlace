@@ -114,6 +114,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TripsPackage.TripsActivity" />
         </activity>
+        <activity android:name=".OrdersPackage.OrderDetails" />
 
     </application>
 
