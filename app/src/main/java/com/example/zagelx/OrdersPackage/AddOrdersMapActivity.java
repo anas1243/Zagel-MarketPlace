@@ -340,6 +340,7 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
             Log.e(TAG, "destenationLatlngArray: " +destenationLatlng.toString());
 
             Intent i = new Intent(AddOrdersMapActivity.this, AddOrdersActivity.class);
+            i.putExtra("FROM_ACTIVITY", "AddOrdersMapActivity");
             i.putExtra("sourceLatlng", sourceLatlng);
             i.putExtra("destenationLatlng", destenationLatlng);
             startActivity(i);

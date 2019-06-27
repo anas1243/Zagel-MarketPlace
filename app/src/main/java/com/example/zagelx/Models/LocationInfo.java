@@ -1,5 +1,7 @@
 package com.example.zagelx.Models;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 
 public class LocationInfo implements Serializable {
@@ -134,9 +136,10 @@ public class LocationInfo implements Serializable {
                 '}';
     }
     public String fullSourceLocation(){
-        return sAdminArea+", "+sSubAdmin+", "+sLocality;
+        return sAdminArea+", "+sSubAdmin;
     }
     public String fullDestinationLocation(){
-        return dAdminArea+", "+dSubAdmin+", "+dLocality;
+        return dAdminArea+", "+dSubAdmin;
     }
+
 }

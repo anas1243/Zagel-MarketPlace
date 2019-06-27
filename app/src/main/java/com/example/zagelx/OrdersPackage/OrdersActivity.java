@@ -89,14 +89,43 @@ public class OrdersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    Intent i = new Intent(OrdersActivity.this, AddOrdersMapActivity.class);
-                    startActivity(i);
-                } else {
-                    isGPSopened();
-                }
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrdersActivity.this);
+
+                alertDialog.setTitle("Pin on Map?");
+
+                alertDialog.setMessage("do you want to set a pin on the map" +
+                        " to make the process more easy and accurate");
+
+                alertDialog.setPositiveButton("Yes Open the Map", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                            Intent i = new Intent(OrdersActivity.this, AddOrdersMapActivity.class);
+                            startActivity(i);
+                        } else {
+                            isGPSopened();
+                        }
+                    }
+                });
+
+                alertDialog.setNegativeButton("i don't have the accurate location", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent i = new Intent(OrdersActivity.this, AddOrdersActivity.class);
+                        i.putExtra("FROM_ACTIVITY", "OrdersActivity");
+                        startActivity(i);
+                    }
+                });
+
+                alertDialog.show();
+
 
             }
         });

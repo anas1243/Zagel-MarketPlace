@@ -38,6 +38,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
+    private DatabaseReference mTripsDatabaseReference;
     private DatabaseReference mUserDatabaseReference;
     private ChildEventListener mChildEventListener;
     private ValueEventListener mUserEventListener;
@@ -60,7 +61,7 @@ public class DashboardActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
-
+        mTripsDatabaseReference = mFirebaseDatabase.getReference().child("Trips");
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
 
 

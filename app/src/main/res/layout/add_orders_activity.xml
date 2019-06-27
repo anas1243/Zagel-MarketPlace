@@ -101,6 +101,82 @@
                     android:singleLine="true"
                     android:textAllCaps="true" />
 
+                <TextView
+                    style="@style/label_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:singleLine="true"
+                    android:text="Source Location"
+                    android:textColor="@color/colorSecondary" />
+
+                <Spinner
+                    android:id="@+id/user_Slocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="24dp"
+                    android:entries="@array/location_array"
+                    android:prompt="@string/prompt_location" />
+
+                <TextView
+                    style="@style/label_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:singleLine="true"
+                    android:text="Source Area"
+                    android:textColor="@color/colorSecondary" />
+
+                <Spinner
+                    android:id="@+id/area_Sname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="24dp"
+                    android:entries="@array/الإسكندرية"
+                    android:prompt="@string/prompt_location" />
+
+                <TextView
+                    style="@style/label_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:singleLine="true"
+                    android:text="Destination Location"
+                    android:textColor="@color/colorSecondary" />
+
+                <Spinner
+                    android:id="@+id/user_Dlocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="24dp"
+                    android:entries="@array/location_array"
+                    android:prompt="@string/prompt_location" />
+
+                <TextView
+                    style="@style/label_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:singleLine="true"
+                    android:text="Destination Area"
+                    android:textColor="@color/colorSecondary" />
+
+                <Spinner
+                    android:id="@+id/area_Dname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="24dp"
+                    android:entries="@array/الإسكندرية"
+                    android:prompt="@string/prompt_location" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

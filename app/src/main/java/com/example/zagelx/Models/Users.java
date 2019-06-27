@@ -1,7 +1,5 @@
 package com.example.zagelx.Models;
 
-import java.util.Date;
-
 public class Users {
     private String ID = "";
     private String name = "";
@@ -103,5 +101,4 @@ public class Users {
     public String getEmail() {
         return email;
     }
-
 }
