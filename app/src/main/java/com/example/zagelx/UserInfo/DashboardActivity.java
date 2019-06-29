@@ -2,7 +2,6 @@ package com.example.zagelx.UserInfo;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,9 +9,8 @@ import android.util.Log;
 import android.widget.ListView;
 
 import com.example.zagelx.Models.Orders;
+import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
-import com.example.zagelx.OrdersPackage.OrdersActivity;
-import com.example.zagelx.OrdersPackage.OrdersAdapter;
 import com.example.zagelx.R;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
@@ -33,8 +31,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DashboardActivity extends AppCompatActivity {
-    private ListView mOrdersListView;
-    private DashboardAdapter mOrdersAdapter;
+    private ListView mListView;
+    private DashboardOrdersAdapter mOrdersAdapter;
+    private DashboardTipsAdapter mTripsAdapter;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
@@ -46,7 +45,9 @@ public class DashboardActivity extends AppCompatActivity {
     private FirebaseUser user;
     private Users currentUser;
 
-    private Query query;
+    private Query queryOrders;
+    private Query queryTrips;
+    private String userType;
 
 
     @BindView(R.id.toolbar)
@@ -63,18 +64,14 @@ public class DashboardActivity extends AppCompatActivity {
         mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
         mTripsDatabaseReference = mFirebaseDatabase.getReference().child("Trips");
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
+        mListView = findViewById(R.id.main_list);
 
-
-        mOrdersListView = findViewById(R.id.main_list);
-
-
-        final List<Orders> ordersList = new ArrayList<>();
-        mOrdersAdapter = new DashboardAdapter(DashboardActivity.this, R.layout.order_list_dashboard, ordersList);
-        mOrdersListView.setAdapter(mOrdersAdapter);
 
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.main_main_layout), "الشحنات الخاصة بك !", Snackbar.LENGTH_LONG);
         snackbar.show();
+
+
 
         if (user != null) {
 
@@ -89,6 +86,62 @@ public class DashboardActivity extends AppCompatActivity {
                     drawer = new DrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(),currentUser.getProfilePictureURL());
                     drawer.getDrawer(DashboardActivity.this, toolbar);
+                    userType = currentUser.getMode();
+                    Log.e("testtttttttttt", "onDataChange: "+userType+"  merchant el mafrod" );
+
+                    if(userType.equals("Merchant")){
+                        final List<Orders> ordersList = new ArrayList<>();
+                        mOrdersAdapter = new DashboardOrdersAdapter(DashboardActivity.this
+                                , R.layout.order_list_dashboard, ordersList);
+                        mListView.setAdapter(mOrdersAdapter);
+
+
+                        queryOrders = mOrdersDatabaseReference.orderByChild("merchantId").equalTo(user.getUid());
+                        queryOrders.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    for (DataSnapshot order : dataSnapshot.getChildren()) {
+                                        Orders currentOrder = order.getValue(Orders.class);
+                                        mOrdersAdapter.add(currentOrder);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                    else{
+
+                        final List<Trips> TripsList = new ArrayList<>();
+                        mTripsAdapter = new DashboardTipsAdapter(DashboardActivity.this
+                                , R.layout.trip_item, TripsList);
+                        mListView.setAdapter(mTripsAdapter);
+
+                        queryTrips = mTripsDatabaseReference.orderByChild("delegateID").equalTo(user.getUid());
+                        queryTrips.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    for (DataSnapshot trip : dataSnapshot.getChildren()) {
+                                        Trips currentTrip = trip.getValue(Trips.class);
+                                        mTripsAdapter.add(currentTrip);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+
                 }
 
                 @Override
@@ -101,23 +154,8 @@ public class DashboardActivity extends AppCompatActivity {
                     .addListenerForSingleValueEvent(mUserEventListener);
 
 
-            query = mOrdersDatabaseReference.orderByChild("merchantId").equalTo(user.getUid());
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot order : dataSnapshot.getChildren()) {
-                            Orders currentOrder = order.getValue(Orders.class);
-                            mOrdersAdapter.add(currentOrder);
-                        }
-                    }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
 
 
 

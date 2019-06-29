@@ -396,7 +396,7 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
         return strAdd;
     }
 
-    private void geoLocateById(String placeID, final String LocationToSaveInto) {
+    private void geoLocateById(String placeID, final String LocationToBeSavedInto) {
         mGeoDataClient.getPlaceById(placeID).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
             @SuppressLint("RestrictedApi")
             @Override
@@ -407,10 +407,10 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
                     Log.e(TAG, "Place found: " + myPlace.getName());
                     hideSoftKeyboard();
 
-                    if (LocationToSaveInto.equals("S")) {
+                    if (LocationToBeSavedInto.equals("S")) {
                         sourceLatlng[0] = myPlace.getLatLng().latitude;
                         sourceLatlng[1] = myPlace.getLatLng().longitude;
-                    }else if (LocationToSaveInto.equals("D")) {
+                    }else if (LocationToBeSavedInto.equals("D")) {
                         destenationLatlng[0] = myPlace.getLatLng().latitude;
                         destenationLatlng[1] = myPlace.getLatLng().longitude;
                     }

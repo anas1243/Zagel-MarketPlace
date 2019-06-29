@@ -15,7 +15,7 @@
             android:id="@+id/delegate_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/sora"
+            android:src="@drawable/profile_placeholder"
             app:civ_border_color="@android:color/tab_indicator_text"
             app:civ_border_width="2dp" />
 

@@ -34,6 +34,8 @@ import com.example.zagelx.Models.LocationInfo;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
+import com.example.zagelx.UserInfo.DashboardActivity;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -75,6 +77,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
     private Spinner userSLocation, userSAreaName, userDLocation, userDAreaName;
     ArrayAdapter<CharSequence> adapter;
+    private TextView userSLocationLable, userSAreaNameLable, userDLocationLable, userDAreaNameLable;
 
     private EditText packageDescriptionET;
     private EditText packagePriceET;
@@ -121,31 +124,9 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
         currentLocationInfo = new LocationInfo();
 //        Intent i = getIntent();
-//        destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
-//        sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
-//
-//        Log.e(TAG, "onCreate: " + latlngToAddress(sourceLatlng[0], sourceLatlng[1])
-//                + latlngToAddress(destenationLatlng[0], destenationLatlng[1]));
-//
-//        SetLocationInfo(sourceLatlng[0], sourceLatlng[1], "S");
-//        SetLocationInfo(destenationLatlng[0], destenationLatlng[1], "D");
-//
-//
-//        Log.e(TAG, "onCreate: currentOrderLocation: source is " + new LatLng(sourceLatlng[0]
-//                , sourceLatlng[1]) + " destination is " + new LatLng(destenationLatlng[0]
-//                , destenationLatlng[1]));
 
-        Intent i = getIntent();
-        String previousActivity = i.getStringExtra("FROM_ACTIVITY");
-        if (previousActivity.equals("AddOrdersMapActivity")) {
-            destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
-            sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
-            currentLocationInfo.setsLat(sourceLatlng[0]+"");
-            currentLocationInfo.setsLng(sourceLatlng[1]+"");
-            currentLocationInfo.setdLat(destenationLatlng[0]+"");
-            currentLocationInfo.setdLng(destenationLatlng[1]+"");
 
-        }
+
 
         packageImage = findViewById(R.id.package_image);
         editPackageImage = findViewById(R.id.edit_package_image);
@@ -168,6 +149,13 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         userDAreaName = findViewById(R.id.area_Dname);
 
 
+        userSLocationLable = findViewById(R.id.user_Slocation_lable);
+        userSAreaNameLable = findViewById(R.id.area_Sname_lable);
+
+        userDLocationLable = findViewById(R.id.user_Dlocation_lable);
+        userDAreaNameLable = findViewById(R.id.area_Dname_lable);
+
+
         icBus = findViewById(R.id.ic_bus);
         icCar = findViewById(R.id.ic_car);
         icTrain = findViewById(R.id.ic_train);
@@ -182,6 +170,42 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
 
         AddOrderButton = findViewById(R.id.button_yalla);
+
+        Intent i = getIntent();
+        String previousActivity = i.getStringExtra("FROM_ACTIVITY");
+        if (previousActivity.equals("AddOrdersMapActivity")) {
+            userSLocation.setVisibility(View.GONE);
+            userSAreaName.setVisibility(View.GONE);
+            userDLocation.setVisibility(View.GONE);
+            userDAreaName.setVisibility(View.GONE);
+
+            userSLocationLable.setVisibility(View.GONE);
+            userSAreaNameLable.setVisibility(View.GONE);
+            userDLocationLable.setVisibility(View.GONE);
+            userDAreaNameLable.setVisibility(View.GONE);
+
+//            destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
+//            sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
+//            currentLocationInfo.setsLat(sourceLatlng[0]+"");
+//            currentLocationInfo.setsLng(sourceLatlng[1]+"");
+//            currentLocationInfo.setdLat(destenationLatlng[0]+"");
+//            currentLocationInfo.setdLng(destenationLatlng[1]+"");
+
+            destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
+            sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
+
+            Log.e(TAG, "onCreate: " + latlngToAddress(sourceLatlng[0], sourceLatlng[1])
+                    + latlngToAddress(destenationLatlng[0], destenationLatlng[1]));
+
+            SetLocationInfo(sourceLatlng[0], sourceLatlng[1], "S");
+            SetLocationInfo(destenationLatlng[0], destenationLatlng[1], "D");
+
+
+            Log.e(TAG, "onCreate: currentOrderLocation: source is " + new LatLng(sourceLatlng[0]
+                    , sourceLatlng[1]) + " destination is " + new LatLng(destenationLatlng[0]
+                    , destenationLatlng[1]));
+
+        }
 
 
         userSLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -807,11 +831,15 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
                             Log.e(TAG, "validateTheUser: the pp url is " + oImageUrl);
 
-                            currentLocationInfo.setsAdminArea(userSLocation.getSelectedItem().toString());
-                            currentLocationInfo.setsSubAdmin(userSAreaName.getSelectedItem().toString());
 
-                            currentLocationInfo.setdAdminArea(userDLocation.getSelectedItem().toString());
-                            currentLocationInfo.setdSubAdmin(userDAreaName.getSelectedItem().toString());
+                            if (userSLocation.getVisibility() == View.VISIBLE) {
+
+                                currentLocationInfo.setsAdminArea(userSLocation.getSelectedItem().toString());
+                                currentLocationInfo.setsSubAdmin(userSAreaName.getSelectedItem().toString());
+
+                                currentLocationInfo.setdAdminArea(userDLocation.getSelectedItem().toString());
+                                currentLocationInfo.setdSubAdmin(userDAreaName.getSelectedItem().toString());
+                            }
 
                             Orders order = new Orders(merchantId, merchantImageURL, getMerchantName, oName, oImageUrl
                                     , oDescription, oPrice
@@ -822,7 +850,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                             mOrdersDatabaseReference.child(System.currentTimeMillis() + merchantId).setValue(order);
 
                             Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(AddOrdersActivity.this, OrdersActivity.class);
+                            Intent i = new Intent(AddOrdersActivity.this, DashboardActivity.class);
                             startActivity(i);
                         } else {
                             Toast.makeText(AddOrdersActivity.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();

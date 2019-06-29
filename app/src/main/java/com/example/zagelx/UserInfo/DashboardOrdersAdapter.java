@@ -20,9 +20,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DashboardAdapter extends ArrayAdapter<Orders> {
+public class DashboardOrdersAdapter extends ArrayAdapter<Orders> {
     Context context ;
-    public DashboardAdapter(Context context, int resource, List<Orders> objects) {
+    public DashboardOrdersAdapter(Context context, int resource, List<Orders> objects) {
         super(context, resource, objects);
         this.context = context;
     }

@@ -363,7 +363,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:elevation="24dp"
-                        android:entries="@array/location_array"
+                        android:entries="@array/AR_location_array"
                         android:prompt="@string/prompt_location"
                         android:layout_below="@id/location_lable"
                         android:visibility="gone"
