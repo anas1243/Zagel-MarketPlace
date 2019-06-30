@@ -2,6 +2,8 @@ package com.example.zagelx.TripsPackage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,8 +20,10 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TripsAdapter extends ArrayAdapter<Trips> {
+    Context context;
     public TripsAdapter(Context context, int resource, List<Trips> objects) {
         super(context, resource, objects);
+        this.context = context;
     }
 
     @Override
@@ -34,6 +38,7 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
                     , parent, false);
         }
 
+        View listItemView = convertView;
 
         CircleImageView delegateImageIV = convertView.findViewById(R.id.delegate_image);
         TextView delegateNameTV = convertView.findViewById(R.id.delegate_name);
@@ -44,7 +49,7 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
         TextView destinationTV = convertView.findViewById(R.id.destination_txt_view);
         ImageView vehicleImageIV = convertView.findViewById(R.id.vehicle_image);
 
-        Trips currentTrip = getItem(position);
+        final Trips currentTrip = getItem(position);
         BirthDate rDate = currentTrip.getRouteDate();
 
         String tripDate = rDate.getYear() + "-" + rDate.getMonth() + "-" + rDate.getDay();
@@ -80,6 +85,17 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
                 vehicleImageIV.setImageResource(R.drawable.vehicle_bus_yellow);
                 break;
         }
+
+        listItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(context, TripsDetails.class);
+                Log.e("zero one test test", "onClick: "+ currentTrip.isPrePaid() );
+                i.putExtra("Route_ID", currentTrip);
+                context.startActivity(i);
+            }
+        });
 
 
         return convertView;

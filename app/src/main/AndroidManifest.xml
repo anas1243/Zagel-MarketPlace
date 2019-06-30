@@ -115,6 +115,7 @@
                 android:value=".TripsPackage.TripsActivity" />
         </activity>
         <activity android:name=".OrdersPackage.OrderDetails" />
+        <activity android:name=".TripsPackage.TripsDetails" />
 
     </application>
 

@@ -84,14 +84,10 @@ public class TripsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Create a new intent to open the {@link AddOrdersActivity}
-                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    Intent i = new Intent(TripsActivity.this, AddTripsMapActivity.class);
+                    Intent i = new Intent(TripsActivity.this, AddTripsActivity.class);
                     startActivity(i);
-                } else {
-                    isGPSopened();
-                }
+
             }
         });
         Snackbar snackbar = Snackbar

@@ -11,11 +11,14 @@ import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +26,8 @@ import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfo;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
+import com.example.zagelx.OrdersPackage.AddOrdersActivity;
 import com.example.zagelx.R;
-import com.example.zagelx.UserInfo.DashboardActivity;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,6 +45,7 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
     private DatePicker routeDateDP;
     private EditText routePriceET;
     private SwitchCompat isPrePaidSwitch;
+    private SwitchCompat isBreakableSwitch;
     private TextView vehicle;
 
     private EditText routeNotesET;
@@ -56,6 +59,9 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
     private ImageButton icCar, icBus, icTrain, icMetro, icMotorcycle, icNosNal;
 
+    private Spinner routeSLocation, routeSAreaName, routeDLocation, routeDAreaName;
+    ArrayAdapter<CharSequence> adapter;
+
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mTripsDatabaseReference;
     private DatabaseReference mUsersDatabaseReference;
@@ -64,44 +70,31 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
     private String delegateId, delegateName, delegateImageURL, TPrice, maxNoOrders, oMaxPrice, tVehicle, tNotes;
 
-    private LocationInfo currenLocationInfo;
-
     private boolean isPrePaid = false;
+    private Boolean isBreakable = false;
     private BirthDate dDate;
-
-    double destenationLatlng[];
-    double sourceLatlng[];
+    private LocationInfo currentLocationInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_trips_activity);
 
-
-        currenLocationInfo = new LocationInfo();
-        Intent i = getIntent();
-        destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
-        sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
-
-        Log.e(TAG, "onCreate: " + latlngToAddress(sourceLatlng[0], sourceLatlng[1])
-                + latlngToAddress(destenationLatlng[0], destenationLatlng[1]));
-
-        SetLocationInfo(sourceLatlng[0], sourceLatlng[1], "S");
-        SetLocationInfo(destenationLatlng[0], destenationLatlng[1], "D");
-
-
-        Log.e(TAG, "onCreate: currentOrderLocation: source is " + new LatLng(sourceLatlng[0]
-                , sourceLatlng[1]) + " destination is " + new LatLng(destenationLatlng[0]
-                , destenationLatlng[1]));
-
-
+        currentLocationInfo = new LocationInfo();
         routePriceET = findViewById(R.id.trip_price);
         isPrePaidSwitch = findViewById(R.id.pre_paid_switch);
+        isBreakableSwitch = findViewById(R.id.breakable_switch);
         maxPrepaidPriceET = findViewById(R.id.maximum_price_prepaid);
         routeDateDP = findViewById(R.id.trip_date);
         maxNoOrdersET = findViewById(R.id.max_no_orders);
 
         vehicle = findViewById(R.id.vehicle_name);
+
+        routeSLocation = findViewById(R.id.user_Slocation);
+        routeSAreaName = findViewById(R.id.area_Sname);
+
+        routeDLocation = findViewById(R.id.user_Dlocation);
+        routeDAreaName = findViewById(R.id.area_Dname);
 
         icBus = findViewById(R.id.ic_bus);
         icCar = findViewById(R.id.ic_car);
@@ -123,6 +116,345 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         delegateId = mFirebaseAuth.getCurrentUser().getUid();
+
+        routeSLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
+                String AreaName = routeSLocation.getSelectedItem().toString();
+
+                switch (AreaName) {
+                    case "الإسكندرية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الإسكندرية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "القاهرة":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.القاهرة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "الإسماعيلية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الإسماعيلية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "السويس":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.السويس, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "أسوان":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.أسوان, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "بورسعيد":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.بورسعيد, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "الشرقية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الشرقية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "كفر الشيخ":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.كفر_الشيخ, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "أسيوط":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.أسيوط, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "جنوب سيناء":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.جنوب_سيناء, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "مطروح":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.مطروح, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "الأقصر":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الأقصر, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "الجيزة":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الجيزة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "الغربية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الغربية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "المنوفية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.المنوفية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "البحر الأحمر":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.البحر_الأحمر, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "الدقهلية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الدقهلية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "الفيوم":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الفيوم, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "المنيا":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.المنيا, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "البحيرة":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.البحيرة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "دمياط":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.دمياط, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "الوادي الجديد":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الوادي_الجديد, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "قنا":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.قنا, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "بني سويف":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.بني_سويف, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "سوهاج":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.سوهاج, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+                    case "القليوبية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.القليوبية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeSAreaName.setAdapter(adapter);
+                        break;
+
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+
+        routeDLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
+                String AreaName = routeDLocation.getSelectedItem().toString();
+
+                switch (AreaName) {
+                    case "الإسكندرية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الإسكندرية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "القاهرة":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.القاهرة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "الإسماعيلية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الإسماعيلية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "السويس":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.السويس, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "أسوان":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.أسوان, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "بورسعيد":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.بورسعيد, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "الشرقية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الشرقية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "كفر الشيخ":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.كفر_الشيخ, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "أسيوط":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.أسيوط, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "جنوب سيناء":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.جنوب_سيناء, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "مطروح":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.مطروح, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "الأقصر":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الأقصر, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "الجيزة":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الجيزة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "الغربية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الغربية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "المنوفية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.المنوفية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "البحر الأحمر":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.البحر_الأحمر, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "الدقهلية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الدقهلية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "الفيوم":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الفيوم, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "المنيا":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.المنيا, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "البحيرة":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.البحيرة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "دمياط":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.دمياط, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "الوادي الجديد":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.الوادي_الجديد, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "قنا":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.قنا, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "بني سويف":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.بني_سويف, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "سوهاج":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.سوهاج, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+                    case "القليوبية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddTripsActivity.this, R.array.القليوبية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        routeDAreaName.setAdapter(adapter);
+                        break;
+
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
         mTripsDatabaseReference = mFirebaseDatabase.getReference().child("Trips");
 
@@ -165,96 +497,18 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-    }
-
-    Address latlngToAddress(double LATITUDE, double LONGITUDE) {
-        Address returnedAddress;
-        Geocoder geocoder = new Geocoder(AddTripsActivity.this, Locale.getDefault());
-        Log.e(TAG, "getCompleteAddressString: " + LATITUDE + " " + LONGITUDE);
-        try {
-            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
-
-            if (addresses != null) {
-                returnedAddress = addresses.get(0);
-                return returnedAddress;
-            } else {
-                Log.e(TAG, "No Address returned!");
-                return null;
+        isBreakableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    isBreakable = true;
+                else
+                    isBreakable = false;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "Cannot get Address!" + e.getMessage());
-            return null;
-        }
+        });
 
     }
 
-    public void SetLocationInfo(double lat, double lng, String whichLocation) {
-
-        Geocoder geocoder = new Geocoder(this);
-        List<Address> list;
-        try {
-            list = geocoder.getFromLocation(lat, lng, 20);
-
-            // 20 is no of address you want to fetch near by the given lat-long
-
-            for (Address address : list) {
-                if (address.getAdminArea() != null && address.getSubAdminArea() != null
-                        && address.getLocality() != null) {
-                    if (whichLocation.equals("S")) {
-                        currenLocationInfo.setSLocationInfo(lat + "", lng + ""
-                                , address.getAdminArea().replace("Governorate", "").trim()
-                                , address.getSubAdminArea(), address.getLocality());
-                        Log.e(TAG, "SetLocationInfo: " + address);
-                        return;
-                    } else if (whichLocation.equals("D")) {
-                        currenLocationInfo.setdLocationInfo(lat + "", lng + ""
-                                , address.getAdminArea().replace("Governorate", "").trim()
-                                , address.getSubAdminArea(), address.getLocality());
-                        Log.e(TAG, "SetLocationInfo: " + address);
-                        return;
-                    }
-                }
-            }
-
-            for (Address address : list) {
-                if (address.getAdminArea() != null && address.getSubAdminArea() != null) {
-                    if (whichLocation.equals("S")) {
-                        currenLocationInfo.setSLocationInfo(lat + "", lng + ""
-                                , address.getAdminArea().replace("Governorate", "").trim()
-                                , address.getSubAdminArea(), "");
-                        Log.e(TAG, "SetLocationInfo: " + address);
-                        return;
-                    } else if (whichLocation.equals("D")) {
-                        currenLocationInfo.setdLocationInfo(lat + "", lng + ""
-                                , address.getAdminArea().replace("Governorate", "").trim()
-                                , address.getSubAdminArea(), "");
-                        Log.e(TAG, "SetLocationInfo: " + address);
-                        return;
-                    }
-                }
-            }
-            for (Address address : list) {
-                if (address.getAdminArea() != null) {
-                    if (whichLocation.equals("S")) {
-                        currenLocationInfo.setSLocationInfo(lat + "", lng + ""
-                                , address.getAdminArea().replace("Governorate", "").trim()
-                                , "", "");
-                        Log.e(TAG, "SetLocationInfo: " + address);
-                        return;
-                    } else if (whichLocation.equals("D")) {
-                        currenLocationInfo.setdLocationInfo(lat + "", lng + ""
-                                , address.getAdminArea().replace("Governorate", "").trim()
-                                , "", "");
-                        Log.e(TAG, "SetLocationInfo: " + address);
-                        return;
-                    }
-                }
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
 
     private void validateTheUser() {
         oMaxPrice = maxPrepaidPriceET.getText().toString().trim();
@@ -264,22 +518,12 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         tNotes = routeNotesET.getText().toString().trim();
         dDate = new BirthDate(routeDateDP.getYear(),
                 routeDateDP.getMonth() + 1, routeDateDP.getDayOfMonth());
-//        if (uName.equals("")) {
-//            //Snackbar.make(findViewById(R.id.scroll_view), "Enter your name", Snackbar.LENGTH_LONG).show();
-//            userName.setError("Enter your name");
-//            userName.requestFocus();
-//            return;
-//        } else if (uEmail.equals("") || !Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()) {
-//            userEmail.setError("Enter a valid email address");
-//            userEmail.requestFocus();
-//            return;
-//        } else if (filePath == null) {
-//            Snackbar snackbar = Snackbar
-//                    .make(findViewById(R.id.scroll_view), "Choose your photo", Snackbar.LENGTH_LONG);
-//            snackbar.show();
-//        } else {
-//            uploadOrderImageAndProceed();
-//        }
+
+        currentLocationInfo.setsAdminArea(routeSLocation.getSelectedItem().toString());
+        currentLocationInfo.setsSubAdmin(routeSAreaName.getSelectedItem().toString());
+
+        currentLocationInfo.setdAdminArea(routeDLocation.getSelectedItem().toString());
+        currentLocationInfo.setdSubAdmin(routeDAreaName.getSelectedItem().toString());
         uploadTripAndProceed();
     }
 
@@ -367,17 +611,11 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void hideSoftKeyboard() {
-        if (getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
     private void uploadTripAndProceed(){
 
         Trips trip = new Trips(delegateImageURL ,delegateId , delegateName, dDate, TPrice
-                , tNotes, tVehicle, currenLocationInfo,
-                maxNoOrders , isPrePaid, oMaxPrice);
+                , tNotes, tVehicle, currentLocationInfo,
+                maxNoOrders , isPrePaid, isBreakable, oMaxPrice);
 
         mTripsDatabaseReference.child(System.currentTimeMillis() + delegateId).setValue(trip);
 

@@ -1,8 +1,9 @@
 package com.example.zagelx.Models;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class Trips {
+public class Trips implements Serializable {
 
     private String delegateImageURL = "";
     private String delegateID = "";
@@ -19,7 +20,8 @@ public class Trips {
     private String maxNoOrders = "";
     private Map<String, String> routeOrders ;
 
-    private boolean isPrePaid = false;
+    private boolean prePaid = false;
+    private boolean breakable = false;
     private String maxPrePaidLimit = "";
 
     public Trips() {
@@ -28,7 +30,7 @@ public class Trips {
     public Trips(String delegateImageURL, String delegateID
             , String delegateName, BirthDate routeDate, String routePrice
             , String routeDescription, String vehicle, LocationInfo currentOrderLocationInfo
-            , String maxNoOrders, boolean isPrePaid, String maxPrePaidLimit) {
+            , String maxNoOrders, boolean prePaid, boolean breakable, String maxPrePaidLimit) {
         this.delegateImageURL = delegateImageURL;
         this.delegateID = delegateID;
         this.delegateName = delegateName;
@@ -38,7 +40,8 @@ public class Trips {
         this.vehicle = vehicle;
         this.currentOrderLocationInfo = currentOrderLocationInfo;
         this.maxNoOrders = maxNoOrders;
-        this.isPrePaid = isPrePaid;
+        this.prePaid = prePaid;
+        this.breakable = breakable;
         this.maxPrePaidLimit = maxPrePaidLimit;
     }
 
@@ -83,10 +86,14 @@ public class Trips {
     }
 
     public boolean isPrePaid() {
-        return isPrePaid;
+        return prePaid;
     }
 
     public String getMaxPrePaidLimit() {
         return maxPrePaidLimit;
+    }
+
+    public boolean isBreakable() {
+        return breakable;
     }
 }

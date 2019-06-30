@@ -75,7 +75,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private SwitchCompat isBreakableSwitch;
     private TextView vehicle;
 
-    private Spinner userSLocation, userSAreaName, userDLocation, userDAreaName;
+    private Spinner packageSLocation, packageSAreaName, packageDLocation, packageDAreaName;
     ArrayAdapter<CharSequence> adapter;
     private TextView userSLocationLable, userSAreaNameLable, userDLocationLable, userDAreaNameLable;
 
@@ -142,11 +142,11 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         deliveryDateDP = findViewById(R.id.delivery_date);
         vehicle = findViewById(R.id.vehicle_name);
 
-        userSLocation = findViewById(R.id.user_Slocation);
-        userSAreaName = findViewById(R.id.area_Sname);
+        packageSLocation = findViewById(R.id.user_Slocation);
+        packageSAreaName = findViewById(R.id.area_Sname);
 
-        userDLocation = findViewById(R.id.user_Dlocation);
-        userDAreaName = findViewById(R.id.area_Dname);
+        packageDLocation = findViewById(R.id.user_Dlocation);
+        packageDAreaName = findViewById(R.id.area_Dname);
 
 
         userSLocationLable = findViewById(R.id.user_Slocation_lable);
@@ -174,10 +174,10 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         Intent i = getIntent();
         String previousActivity = i.getStringExtra("FROM_ACTIVITY");
         if (previousActivity.equals("AddOrdersMapActivity")) {
-            userSLocation.setVisibility(View.GONE);
-            userSAreaName.setVisibility(View.GONE);
-            userDLocation.setVisibility(View.GONE);
-            userDAreaName.setVisibility(View.GONE);
+            packageSLocation.setVisibility(View.GONE);
+            packageSAreaName.setVisibility(View.GONE);
+            packageDLocation.setVisibility(View.GONE);
+            packageDAreaName.setVisibility(View.GONE);
 
             userSLocationLable.setVisibility(View.GONE);
             userSAreaNameLable.setVisibility(View.GONE);
@@ -208,166 +208,166 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         }
 
 
-        userSLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        packageSLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
-                String AreaName = userSLocation.getSelectedItem().toString();
+                String AreaName = packageSLocation.getSelectedItem().toString();
 
                 switch (AreaName) {
                     case "الإسكندرية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الإسكندرية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "القاهرة":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.القاهرة, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "الإسماعيلية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الإسماعيلية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "السويس":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.السويس, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "أسوان":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.أسوان, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "بورسعيد":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.بورسعيد, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "الشرقية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الشرقية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "كفر الشيخ":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.كفر_الشيخ, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "أسيوط":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.أسيوط, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "جنوب سيناء":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.جنوب_سيناء, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "مطروح":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.مطروح, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "الأقصر":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الأقصر, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "الجيزة":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الجيزة, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "الغربية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الغربية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "المنوفية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.المنوفية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "البحر الأحمر":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.البحر_الأحمر, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "الدقهلية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الدقهلية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "الفيوم":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الفيوم, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "المنيا":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.المنيا, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "البحيرة":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.البحيرة, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "دمياط":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.دمياط, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "الوادي الجديد":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الوادي_الجديد, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "قنا":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.قنا, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "بني سويف":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.بني_سويف, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "سوهاج":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.سوهاج, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
                     case "القليوبية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.القليوبية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userSAreaName.setAdapter(adapter);
+                        packageSAreaName.setAdapter(adapter);
                         break;
 
                 }
@@ -378,166 +378,166 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         });
 
 
-        userDLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        packageDLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
-                String AreaName = userDLocation.getSelectedItem().toString();
+                String AreaName = packageDLocation.getSelectedItem().toString();
 
                 switch (AreaName) {
                     case "الإسكندرية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الإسكندرية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "القاهرة":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.القاهرة, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "الإسماعيلية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الإسماعيلية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "السويس":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.السويس, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "أسوان":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.أسوان, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "بورسعيد":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.بورسعيد, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "الشرقية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الشرقية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "كفر الشيخ":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.كفر_الشيخ, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "أسيوط":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.أسيوط, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "جنوب سيناء":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.جنوب_سيناء, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "مطروح":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.مطروح, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "الأقصر":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الأقصر, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "الجيزة":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الجيزة, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "الغربية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الغربية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "المنوفية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.المنوفية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "البحر الأحمر":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.البحر_الأحمر, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "الدقهلية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الدقهلية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "الفيوم":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الفيوم, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "المنيا":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.المنيا, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "البحيرة":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.البحيرة, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "دمياط":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.دمياط, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "الوادي الجديد":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.الوادي_الجديد, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "قنا":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.قنا, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "بني سويف":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.بني_سويف, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "سوهاج":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.سوهاج, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
                     case "القليوبية":
                         adapter = ArrayAdapter.createFromResource(
                                 AddOrdersActivity.this, R.array.القليوبية, android.R.layout.simple_spinner_item);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        userDAreaName.setAdapter(adapter);
+                        packageDAreaName.setAdapter(adapter);
                         break;
 
                 }
@@ -832,13 +832,13 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                             Log.e(TAG, "validateTheUser: the pp url is " + oImageUrl);
 
 
-                            if (userSLocation.getVisibility() == View.VISIBLE) {
+                            if (packageSLocation.getVisibility() == View.VISIBLE) {
 
-                                currentLocationInfo.setsAdminArea(userSLocation.getSelectedItem().toString());
-                                currentLocationInfo.setsSubAdmin(userSAreaName.getSelectedItem().toString());
+                                currentLocationInfo.setsAdminArea(packageSLocation.getSelectedItem().toString());
+                                currentLocationInfo.setsSubAdmin(packageSAreaName.getSelectedItem().toString());
 
-                                currentLocationInfo.setdAdminArea(userDLocation.getSelectedItem().toString());
-                                currentLocationInfo.setdSubAdmin(userDAreaName.getSelectedItem().toString());
+                                currentLocationInfo.setdAdminArea(packageDLocation.getSelectedItem().toString());
+                                currentLocationInfo.setdSubAdmin(packageDAreaName.getSelectedItem().toString());
                             }
 
                             Orders order = new Orders(merchantId, merchantImageURL, getMerchantName, oName, oImageUrl
