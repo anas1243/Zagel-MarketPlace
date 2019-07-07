@@ -59,9 +59,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseUser user;
     private ValueEventListener mValueEventListener;
     private Users currentUser;
-    private TextView userName, userPhone, userEmail, userDate, userType, userLocation;
+    private TextView userName, userPhone, userEmail, userDate, userType, userLocation, userVerification;
     private ImageView userImage;
-    private ImageView editUserImageIcon, editUserName, editUserEmail, editUserPhone, editUserLocation, editUserBirthdate, editUserType;
+    private ImageView editUserImageIcon, editUserName, editUserEmail, editUserPhone, editUserLocation, editUserBirthdate, editUserType, editUserVerification;
     private EditText newEmail;
     private View emailLineSeparator;
     private Spinner newLocation, newType;
@@ -73,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private UploadTask uploadTask;
     private Uri filePath = null;
     private String userPhotoUrlVar;
+    private boolean userVerificationStatus;
 
     Bitmap bmp;
 
@@ -92,6 +93,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 + "ProfilePic-->" + user.getUid());
 
         userName = findViewById(R.id.user_name);
+        userVerification = findViewById(R.id.user_verification);
         userPhone = findViewById(R.id.user_mobile);
         userEmail = findViewById(R.id.user_email);
         userDate = findViewById(R.id.user_birthDate);
@@ -101,6 +103,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         editUserImageIcon = findViewById(R.id.edit_profile_image);
 
         editUserName = findViewById(R.id.name_edit);
+        editUserVerification = findViewById(R.id.verification_edit);
         editUserEmail = findViewById(R.id.email_edit);
         editUserPhone = findViewById(R.id.phone_edit);
         editUserLocation = findViewById(R.id.location_edit);
@@ -128,6 +131,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         editUserType.setOnClickListener(this);
         saveButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
+        editUserVerification.setOnClickListener(this);
 
         mValueEventListener = new ValueEventListener() {
             @Override
@@ -135,6 +139,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                 currentUser = dataSnapshot.getValue(Users.class);
                 userName.setText(currentUser.getName());
+                if (currentUser.isVerified()) {
+                    userVerification.setText("Verified! Thank you");
+                    userVerificationStatus = true;
+                } else {
+                    userVerification.setText("Not verified!\nPlease verify your account");
+                    userVerificationStatus = false;
+                }
                 userPhone.setText(currentUser.getMobileNumber());
                 userEmail.setText(currentUser.getEmail());
                 String date = currentUser.getBirthDate().toString();
@@ -247,6 +258,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 Intent i = new Intent(ProfileActivity.this, OrdersActivity.class);
                 startActivity(i);
                 break;
+            case R.id.verification_edit:
+                if (userVerificationStatus) {
+                    snackbar = Snackbar
+                            .make(findViewById(R.id.scroll_view), "you are already verified thank you!", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                } else {
+                    snackbar = Snackbar
+                            .make(findViewById(R.id.scroll_view), "Please Complete the progress bar to be a verified user", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
 
         }
     }
@@ -412,7 +433,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void changeTripsDelegatesURL() {
-       tripsDatabaseReference.addValueEventListener(new ValueEventListener() {
+        tripsDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot item_snapshot : dataSnapshot.getChildren()) {

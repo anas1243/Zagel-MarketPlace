@@ -67,11 +67,6 @@ public class DashboardActivity extends AppCompatActivity {
         mListView = findViewById(R.id.main_list);
 
 
-        Snackbar snackbar = Snackbar
-                .make(findViewById(R.id.main_main_layout), "الشحنات الخاصة بك !", Snackbar.LENGTH_LONG);
-        snackbar.show();
-
-
 
         if (user != null) {
 
@@ -90,6 +85,9 @@ public class DashboardActivity extends AppCompatActivity {
                     Log.e("testtttttttttt", "onDataChange: "+userType+"  merchant el mafrod" );
 
                     if(userType.equals("Merchant")){
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(R.id.main_main_layout), "الشحنات الخاصة بك !", Snackbar.LENGTH_LONG);
+                        snackbar.show();
                         final List<Orders> ordersList = new ArrayList<>();
                         mOrdersAdapter = new DashboardOrdersAdapter(DashboardActivity.this
                                 , R.layout.order_list_dashboard, ordersList);
@@ -115,6 +113,9 @@ public class DashboardActivity extends AppCompatActivity {
                         });
                     }
                     else{
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(R.id.main_main_layout), "الرحلات الخاصة بك !", Snackbar.LENGTH_LONG);
+                        snackbar.show();
 
                         final List<Trips> TripsList = new ArrayList<>();
                         mTripsAdapter = new DashboardTipsAdapter(DashboardActivity.this

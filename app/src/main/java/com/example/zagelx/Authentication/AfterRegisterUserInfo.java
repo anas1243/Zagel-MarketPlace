@@ -400,7 +400,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                             String location = userLocation.getSelectedItem().toString();
                             Users currentUser = new Users(uId, uName, gender, uMobile,
                                     userPhotoUrlVar, new BirthDate(userDate.getYear(),
-                                    userDate.getMonth()+1, userDate.getDayOfMonth()),type, uEmail, location, false);
+                                    userDate.getMonth()+1, userDate.getDayOfMonth()),type, uEmail, location, false, false);
 
                             usersDatabaseReference.child(uId).setValue(currentUser);
 

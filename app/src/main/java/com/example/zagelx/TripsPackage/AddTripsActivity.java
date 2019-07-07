@@ -71,7 +71,7 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
     private String delegateId, delegateName, delegateImageURL, TPrice, maxNoOrders, oMaxPrice, tVehicle, tNotes;
 
     private boolean isPrePaid = false;
-    private Boolean isBreakable = false;
+    private boolean isBreakable = false;
     private BirthDate dDate;
     private LocationInfo currentLocationInfo;
 

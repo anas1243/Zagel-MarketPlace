@@ -19,7 +19,6 @@ import android.widget.ListView;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
-import com.example.zagelx.OrdersPackage.TestAddress;
 import com.example.zagelx.R;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
@@ -80,16 +79,6 @@ public class TripsActivity extends AppCompatActivity {
         addTrip_cButton = findViewById(R.id.add_trip_cbutton);
         //progressBar = findViewById(R.id.progressbar);
 
-        addTrip_cButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Create a new intent to open the {@link AddOrdersActivity}
-
-                    Intent i = new Intent(TripsActivity.this, AddTripsActivity.class);
-                    startActivity(i);
-
-            }
-        });
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.main_main_layout), "خطوط مندوبي الشحن !", Snackbar.LENGTH_LONG);
         snackbar.show();
@@ -132,6 +121,14 @@ public class TripsActivity extends AppCompatActivity {
                     drawer = new DrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(),currentUser.getProfilePictureURL());
                     drawer.getDrawer(TripsActivity.this, toolbar);
+
+                    if (!currentUser.getMode().equals("Delivery Delegate")) {
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(R.id.main_main_layout), "انت لست مندوب توصيل, يرجي التواصل مع فريق عمل زاجل لتغير نوع الحساب!", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    } else {
+                        setAddTripButtonListener();
+                    }
                 }
 
                 @Override
@@ -178,6 +175,19 @@ public class TripsActivity extends AppCompatActivity {
             AuthUI.getInstance().signOut(this);
 
         }
+    }
+
+    private void setAddTripButtonListener(){
+        addTrip_cButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Create a new intent to open the {@link AddOrdersActivity}
+
+                Intent i = new Intent(TripsActivity.this, AddTripsActivity.class);
+                startActivity(i);
+
+            }
+        });
     }
 
     private void isGPSopened() {

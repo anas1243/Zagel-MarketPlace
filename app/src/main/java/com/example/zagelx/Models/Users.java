@@ -16,6 +16,7 @@ public class Users {
     private String government = ""; // living government
     private int rate = 0;
     private boolean firstTimeLogIn = true;
+    private boolean verified = false;
     //date with format year month day
     private BirthDate birthDate = null;
 
@@ -24,7 +25,7 @@ public class Users {
     }
 
     public Users(String ID, String name, String gender, String mobileNumber,
-                 String profilePictureURL, BirthDate birthDate, String mode,String email,String government, boolean firstTimeLogIn) {
+                 String profilePictureURL, BirthDate birthDate, String mode,String email,String government, boolean firstTimeLogIn, boolean verified) {
         this.name = name;
         this.email = email;
         this.gender = gender;
@@ -36,6 +37,7 @@ public class Users {
         this.firstTimeLogIn = firstTimeLogIn;
         this.mode = mode;
         this.government = government;
+        this.verified = verified;
     }
 
     public String getName() {
@@ -100,5 +102,9 @@ public class Users {
 
     public String getEmail() {
         return email;
+    }
+
+    public boolean isVerified() {
+        return verified;
     }
 }

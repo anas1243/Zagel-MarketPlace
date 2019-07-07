@@ -14,17 +14,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.zagelx.Authentication.MainActivity;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.TripsPackage.AddTripsMapActivity;
 import com.example.zagelx.TripsPackage.TripsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
@@ -82,13 +77,130 @@ public class OrdersActivity extends AppCompatActivity {
         mOrdersListView = findViewById(R.id.main_list);
         ordersButton = findViewById(R.id.orders_button);
         tripsButton = findViewById(R.id.trips_button);
-        addOrderCButton= findViewById(R.id.add_order_cbutton);
+        addOrderCButton = findViewById(R.id.add_order_cbutton);
         //progressBar = findViewById(R.id.progressbar);
 
+
+        ordersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Create a new intent to open the {@link AddOrdersActivity}
+//                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//
+//                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//                    Intent i = new Intent(OrdersActivity.thiselectedImageUri.getLastPathSegment()s, AddOrdersMapActivity.class);
+//                    startActivity(i);
+//                } else {
+//                    isGPSopened();
+//                }
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.main_main_layout), "Already there!", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+
+            }
+        });
+        tripsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Create a new intent to open the {@link AddTripsActivity}
+
+                Intent i = new Intent(OrdersActivity.this, TripsActivity.class);
+                startActivity(i);
+            }
+        });
+
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.main_main_layout), "الشحنات !", Snackbar.LENGTH_LONG);
+        snackbar.show();
+
+        // Initialize message ListView and its adapter
+        final List<Orders> ordersList = new ArrayList<>();
+        mOrdersAdapter = new OrdersAdapter(OrdersActivity.this, R.layout.order_item, ordersList);
+        mOrdersListView.setAdapter(mOrdersAdapter);
+
+
+        if (user != null) {
+
+            mUserEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    currentUser = dataSnapshot.getValue(Users.class);
+
+                    ButterKnife.bind(OrdersActivity.this);
+                    setSupportActionBar(toolbar);
+
+                    drawer = new DrawerUtil(currentUser.getName()
+                            , currentUser.getMobileNumber(), currentUser.getProfilePictureURL());
+                    drawer.getDrawer(OrdersActivity.this, toolbar);
+                    if (!currentUser.getMode().equals("Merchant")) {
+                        setAddOrderButtonListenerInActive();
+                    } else {
+                        setAddOrderButtonListenerActive();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            };
+
+            mUserDatabaseReference.child(user.getUid())
+                    .addListenerForSingleValueEvent(mUserEventListener);
+
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    Orders orders = dataSnapshot.getValue(Orders.class);
+                    Log.e("test orders", "onChildAdded: " + orders);
+                    mOrdersAdapter.add(orders);
+
+                    //progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            };
+            mOrdersDatabaseReference.addChildEventListener(mChildEventListener);
+
+        } else {
+            AuthUI.getInstance().signOut(this);
+
+        }
+    }
+
+    private void setAddOrderButtonListenerInActive(){
         addOrderCButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.main_main_layout), "انت لست تاجر,   \nيمكنل التواصل مع فريق عمل زاجل لتغير نوع الحساب", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
+    }
 
+    private void setAddOrderButtonListenerActive() {
+        addOrderCButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrdersActivity.this);
@@ -129,105 +241,6 @@ public class OrdersActivity extends AppCompatActivity {
 
             }
         });
-
-        ordersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Create a new intent to open the {@link AddOrdersActivity}
-//                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-//
-//                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//                    Intent i = new Intent(OrdersActivity.thiselectedImageUri.getLastPathSegment()s, AddOrdersMapActivity.class);
-//                    startActivity(i);
-//                } else {
-//                    isGPSopened();
-//                }
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.main_main_layout), "Already there!", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-
-            }
-        });
-        tripsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Create a new intent to open the {@link AddTripsActivity}
-
-                    Intent i = new Intent(OrdersActivity.this, TripsActivity.class);
-                    startActivity(i);
-            }
-        });
-
-        Snackbar snackbar = Snackbar
-                .make(findViewById(R.id.main_main_layout), "الشحنات !", Snackbar.LENGTH_LONG);
-        snackbar.show();
-
-        // Initialize message ListView and its adapter
-        final List<Orders> ordersList = new ArrayList<>();
-        mOrdersAdapter = new OrdersAdapter(OrdersActivity.this, R.layout.order_item, ordersList);
-        mOrdersListView.setAdapter(mOrdersAdapter);
-
-
-        if (user != null) {
-
-            mUserEventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    currentUser = dataSnapshot.getValue(Users.class);
-
-                    ButterKnife.bind(OrdersActivity.this);
-                    setSupportActionBar(toolbar);
-
-                    drawer = new DrawerUtil(currentUser.getName()
-                            , currentUser.getMobileNumber(),currentUser.getProfilePictureURL());
-                    drawer.getDrawer(OrdersActivity.this, toolbar);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            };
-
-            mUserDatabaseReference.child(user.getUid())
-                    .addListenerForSingleValueEvent(mUserEventListener);
-
-            mChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Orders orders = dataSnapshot.getValue(Orders.class);
-                    Log.e("test orders", "onChildAdded: " +orders );
-                    mOrdersAdapter.add(orders);
-
-                    //progressBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            };
-            mOrdersDatabaseReference.addChildEventListener(mChildEventListener);
-
-        } else {
-            AuthUI.getInstance().signOut(this);
-
-        }
     }
 
     private void isGPSopened() {

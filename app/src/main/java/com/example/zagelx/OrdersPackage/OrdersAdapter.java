@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
@@ -53,31 +52,34 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
         TextView sourceTV = convertView.findViewById(R.id.source_txt_view);
         TextView destinationTV = convertView.findViewById(R.id.destination_txt_view);
         ImageView vehicleImageIV = convertView.findViewById(R.id.vehicle_image);
+        ImageView verificationIcon = convertView.findViewById(R.id.verification_icon);
 
 
-        final Orders CurrentOrder = getItem(position);
-        BirthDate oDate = CurrentOrder.getDeliveryDate();
+        final Orders currentOrder = getItem(position);
+        BirthDate oDate = currentOrder.getDeliveryDate();
 
 
         Glide.with(userImageIV.getContext())
-                .load(CurrentOrder.getMerchantImageURL())
+                .load(currentOrder.getMerchantImageURL())
                 .into(userImageIV);
-        userNameTV.setText(CurrentOrder.getMerchantName());
+        userNameTV.setText(currentOrder.getMerchantName());
 
         Glide.with(packageImageIV.getContext())
-                .load(CurrentOrder.getPackageImageURL())
+                .load(currentOrder.getPackageImageURL())
                 .into(packageImageIV);
+        if (currentOrder.isVerifiedUser())
+        verificationIcon.setVisibility(View.VISIBLE);
 
-        Log.e("OrdersAdapter", "getView: " + CurrentOrder.getPackageImageURL());
-        packageNameTV.setText(CurrentOrder.getPackageName());
+        Log.e("OrdersAdapter", "getView: " + currentOrder.getPackageImageURL());
+        packageNameTV.setText(currentOrder.getPackageName());
         final String orderDate = oDate.getYear() + "-" + oDate.getMonth() + "-" + oDate.getDay();
         deliveryDateTV.setText(orderDate);
-        String price = CurrentOrder.getDeliveryPrice() + " egp";
+        String price = currentOrder.getDeliveryPrice() + " egp";
         deliveryPriceTV.setText(price);
 
-        sourceTV.setText(CurrentOrder.getCurrentOrderLocationInfo().getsAdminArea());
-        destinationTV.setText(CurrentOrder.getCurrentOrderLocationInfo().getdAdminArea());
-        switch (CurrentOrder.getVehicle()) {
+        sourceTV.setText(currentOrder.getCurrentOrderLocationInfo().getsAdminArea());
+        destinationTV.setText(currentOrder.getCurrentOrderLocationInfo().getdAdminArea());
+        switch (currentOrder.getVehicle()) {
             case "Car":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);
                 break;
@@ -103,8 +105,8 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
             public void onClick(View view) {
 
                 Intent i = new Intent(context, OrderDetails.class);
-                Log.e("zero one test test", "onClick: "+ CurrentOrder.isPrePaid() );
-                i.putExtra("Package_ID", CurrentOrder);
+                Log.e("zero one test test", "onClick: "+ currentOrder.isPrePaid() );
+                i.putExtra("Package_ID", currentOrder);
                 context.startActivity(i);
             }
         });

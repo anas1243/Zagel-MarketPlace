@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfo;
 import com.example.zagelx.Models.Orders;
+import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.UserInfo.DashboardActivity;
@@ -107,8 +108,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
     private LocationInfo currentLocationInfo;
 
-    private Boolean isPrePaid;
-    private Boolean isBreakable;
+    private boolean isBreakable, merchantVerification, isPrePaid;
     private BirthDate dDate;
 
     double destenationLatlng[];
@@ -570,6 +570,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 merchantImageURL = dataSnapshot.getValue(Users.class).getProfilePictureURL();
                 getMerchantName = dataSnapshot.getValue(Users.class).getName();
+                merchantVerification = dataSnapshot.getValue(Users.class).isVerified();
             }
 
             @Override
@@ -840,14 +841,15 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                                 currentLocationInfo.setdAdminArea(packageDLocation.getSelectedItem().toString());
                                 currentLocationInfo.setdSubAdmin(packageDAreaName.getSelectedItem().toString());
                             }
+                            String orderId = System.currentTimeMillis() + merchantId;
 
-                            Orders order = new Orders(merchantId, merchantImageURL, getMerchantName, oName, oImageUrl
+                            Orders order = new Orders(orderId, merchantId, merchantImageURL, getMerchantName, oName, oImageUrl
                                     , oDescription, oPrice
-                                    , isPrePaid, isBreakable, dDate,
+                                    , isPrePaid, isBreakable,merchantVerification, dDate,
                                     dPrice, oVehicle, RMobile
                                     , currentLocationInfo, "New");
 
-                            mOrdersDatabaseReference.child(System.currentTimeMillis() + merchantId).setValue(order);
+                            mOrdersDatabaseReference.child(orderId).setValue(order);
 
                             Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(AddOrdersActivity.this, DashboardActivity.class);
