@@ -17,11 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.Utilities.DrawerUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,13 +41,14 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
             , packageDate, packagePrice, deliveryFees
             , packageBreakablility, packageVehicle, packageStatus;
     private EditText packageNotes;
-    private ImageView merchantImage, packageImage, packageVihicleIcon, infoDelivery, verificationIcon;
+    private ImageView merchantImage, packageImage, packageVehicleIcon, infoDelivery, verificationIcon;
 
     private Button  deliveryRequest;
     private Orders currentOrder;
     private String priceOffer;
     private FirebaseUser user;
     private Users currentUser;
+    private int userNumberOfNotifications;
 
     @Override
     public void onClick(View v) {
@@ -87,11 +88,17 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                         priceOffer = input.getText().toString();
                         RequestInfo currentRequestInfo = new RequestInfo(user.getUid(), currentUser.getName(), currentUser.getProfilePictureURL()
                                 ,currentUser.getRate(), priceOffer,currentUser.isVerified());
+                        MerchantsNotifications merchantsNotifications = new MerchantsNotifications(
+                            currentOrder.getPackageName(),currentOrder.getOrderId(),currentRequestInfo
+                        );
 
 
                         mRequestInfoDatabaseReference.child(System.currentTimeMillis() + user.getUid()).setValue(currentRequestInfo);
                         int currentNumberOfRequests = currentOrder.getNumberOfRequests();
                         mOrdersDatabaseReference.child("numberOfRequests").setValue(currentNumberOfRequests+1);
+                        userNumberOfNotifications +=1;
+                        mUserDatabaseReference.child(currentOrder.getMerchantId()).child("numberOfNotifications").setValue(userNumberOfNotifications);
+                        mUserDatabaseReference.child(currentOrder.getMerchantId()).child("Notifications").push().setValue(merchantsNotifications);
 
                     }
                 });
@@ -141,7 +148,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
 
         merchantImage = findViewById(R.id.user_image);
         packageImage = findViewById(R.id.package_image);
-        packageVihicleIcon = findViewById(R.id.vehicle_icon);
+        packageVehicleIcon = findViewById(R.id.vehicle_icon);
         infoDelivery = findViewById(R.id.info_delivery_fees);
         verificationIcon = findViewById(R.id.verification_icon);
         if(currentOrder.isVerifiedUser())
@@ -177,22 +184,22 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
             packageBreakablility.setText("Is Not Breakable");
         switch (currentOrder.getVehicle()) {
             case "Car":
-                packageVihicleIcon.setImageResource(R.drawable.vehicle_car_yellow);
+                packageVehicleIcon.setImageResource(R.drawable.vehicle_car_yellow);
                 break;
             case "Train":
-                packageVihicleIcon.setImageResource(R.drawable.vehicle_train_yellow);
+                packageVehicleIcon.setImageResource(R.drawable.vehicle_train_yellow);
                 break;
             case "MotorCycle":
-                packageVihicleIcon.setImageResource(R.drawable.vehicle_motorcycle_yellow);
+                packageVehicleIcon.setImageResource(R.drawable.vehicle_motorcycle_yellow);
                 break;
             case "Metro":
-                packageVihicleIcon.setImageResource(R.drawable.vehicle_metro_yellow);
+                packageVehicleIcon.setImageResource(R.drawable.vehicle_metro_yellow);
                 break;
             case "Nos Na2l":
-                packageVihicleIcon.setImageResource(R.drawable.vehicle_nos_na2l_yellow);
+                packageVehicleIcon.setImageResource(R.drawable.vehicle_nos_na2l_yellow);
                 break;
             case "Bus":
-                packageVihicleIcon.setImageResource(R.drawable.vehicle_bus_yellow);
+                packageVehicleIcon.setImageResource(R.drawable.vehicle_bus_yellow);
                 break;
         }
         infoDelivery.setOnClickListener(OrderDetails.this);
@@ -204,7 +211,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
-
+                    userNumberOfNotifications = currentUser.getNumberOfNotifications();
 
                 }
 

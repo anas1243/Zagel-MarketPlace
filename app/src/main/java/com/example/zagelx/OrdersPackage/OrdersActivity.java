@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,9 @@ public class OrdersActivity extends AppCompatActivity {
     private Users currentUser;
 
 
+    private NotificationBadge mBadge;
+
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     DrawerUtil drawer;
@@ -78,6 +82,8 @@ public class OrdersActivity extends AppCompatActivity {
         ordersButton = findViewById(R.id.orders_button);
         tripsButton = findViewById(R.id.trips_button);
         addOrderCButton = findViewById(R.id.add_order_cbutton);
+
+        mBadge = findViewById(R.id.badge);
         //progressBar = findViewById(R.id.progressbar);
 
 
@@ -128,6 +134,7 @@ public class OrdersActivity extends AppCompatActivity {
 
                     ButterKnife.bind(OrdersActivity.this);
                     setSupportActionBar(toolbar);
+                    mBadge.setNumber(currentUser.getNumberOfNotifications());
 
                     drawer = new DrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL());

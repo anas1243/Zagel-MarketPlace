@@ -3,9 +3,9 @@ package com.example.zagelx.Models;
 import java.io.Serializable;
 
 public class RequestInfo implements Serializable {
-    private String delegateID;
-    private String delegateName;
-    private String delegateImageURL;
+    private String userID;
+    private String userName;
+    private String userImageURL;
     private int rating;
     private String offerPrice;
     private boolean verified;
@@ -19,31 +19,31 @@ public class RequestInfo implements Serializable {
         return offerPrice;
     }
 
-    public String getDelegateName() {
-        return delegateName;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getDelegateImageURL() {
-        return delegateImageURL;
+    public String getUserImageURL() {
+        return userImageURL;
     }
 
     public int getRating() {
         return rating;
     }
 
-    public String getDelegateID() {
-        return delegateID;
+    public String getUserID() {
+        return userID;
     }
 
     public boolean isVerified() {
         return verified;
     }
 
-    public RequestInfo(String delegateID, String delegateName, String delegateImageURL
+    public RequestInfo(String userID, String userName, String userImageURL
             , int rating, String offerPrice, boolean verified) {
-        this.delegateID = delegateID;
-        this.delegateName = delegateName;
-        this.delegateImageURL = delegateImageURL;
+        this.userID = userID;
+        this.userName = userName;
+        this.userImageURL = userImageURL;
         this.rating = rating;
         this.offerPrice = offerPrice;
         this.verified = verified;

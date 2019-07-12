@@ -19,6 +19,8 @@ public class Users {
     private boolean verified = false;
     //date with format year month day
     private BirthDate birthDate = null;
+    private MerchantsNotifications Notifications;
+    private int numberOfNotifications=0;
 
 
     public Users() {
@@ -106,5 +108,13 @@ public class Users {
 
     public boolean isVerified() {
         return verified;
+    }
+
+    public MerchantsNotifications getNotifications() {
+        return Notifications;
+    }
+
+    public int getNumberOfNotifications() {
+        return numberOfNotifications;
     }
 }

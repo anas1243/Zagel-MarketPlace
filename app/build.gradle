@@ -71,7 +71,10 @@ dependencies {
     //circle
     implementation 'com.github.FlyingPumba:SimpleRatingBar:v0.1.5'
     implementation 'jp.wasabeef:blurry:2.1.1'
-    implementation "com.android.support:customtabs:28.0.0"
+    implementation 'com.android.support:customtabs:28.0.0'
+
+    //badge notification for imageViews
+    implementation 'com.nex3z:notification-badge:1.0.2'
 
     implementation('com.mikepenz:materialdrawer:5.9.5@aar') {
         transitive = true
