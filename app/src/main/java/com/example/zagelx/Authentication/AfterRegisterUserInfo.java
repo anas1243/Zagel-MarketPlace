@@ -37,6 +37,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -71,10 +73,12 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
 
     private FirebaseUser user;
 
-    String uName, uEmail, uId;
+    private String uName, uEmail, uId;
     private String userPhotoUrlVar;
 
-    Bitmap bmp;
+    private String newToken;
+
+    private Bitmap bmp;
 
 
     ArrayAdapter<CharSequence> adapter;
@@ -102,6 +106,15 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
         userLocation = findViewById(R.id.user_location);
         userAreaName = findViewById(R.id.area_name);
         registerButton = findViewById(R.id.button_register);
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( AfterRegisterUserInfo.this,  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                 newToken = instanceIdResult.getToken();
+                Log.e("newToken",newToken);
+
+            }
+        });
 
         userLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -400,7 +413,8 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                             String location = userLocation.getSelectedItem().toString();
                             Users currentUser = new Users(uId, uName, gender, uMobile,
                                     userPhotoUrlVar, new BirthDate(userDate.getYear(),
-                                    userDate.getMonth()+1, userDate.getDayOfMonth()),type, uEmail, location, false, false);
+                                    userDate.getMonth()+1, userDate.getDayOfMonth()),
+                                    type, uEmail, location, false, false, newToken);
 
                             usersDatabaseReference.child(uId).setValue(currentUser);
 

@@ -21,13 +21,16 @@ public class Users {
     private BirthDate birthDate = null;
     private MerchantsNotifications Notifications;
     private int numberOfNotifications=0;
+    private String userToken;
 
 
     public Users() {
     }
 
     public Users(String ID, String name, String gender, String mobileNumber,
-                 String profilePictureURL, BirthDate birthDate, String mode,String email,String government, boolean firstTimeLogIn, boolean verified) {
+                 String profilePictureURL, BirthDate birthDate, String mode,
+                 String email,String government, boolean firstTimeLogIn, boolean verified,
+                 String userToken) {
         this.name = name;
         this.email = email;
         this.gender = gender;
@@ -40,6 +43,7 @@ public class Users {
         this.mode = mode;
         this.government = government;
         this.verified = verified;
+        this.userToken = userToken;
     }
 
     public String getName() {
@@ -116,5 +120,9 @@ public class Users {
 
     public int getNumberOfNotifications() {
         return numberOfNotifications;
+    }
+
+    public String getUserToken() {
+        return userToken;
     }
 }
