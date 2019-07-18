@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.zagelx">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -93,6 +92,10 @@
         <activity
             android:name=".UserInfo.Notifications"
             android:parentActivityName=".OrdersPackage.OrdersActivity">
+            <intent-filter>
+                <action android:name=".UserInfo.Notifications" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

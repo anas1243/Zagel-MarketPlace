@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
 
 
+
+
     }
 
     @Override

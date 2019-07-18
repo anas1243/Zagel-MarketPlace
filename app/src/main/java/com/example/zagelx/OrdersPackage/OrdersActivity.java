@@ -17,12 +17,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.zagelx.Authentication.AfterRegisterUserInfo;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.TripsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -31,6 +33,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
@@ -131,7 +135,7 @@ public class OrdersActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
-
+                    final String[] newToken = new String[1];
                     ButterKnife.bind(OrdersActivity.this);
                     setSupportActionBar(toolbar);
                     mBadge.setNumber(currentUser.getNumberOfNotifications());
@@ -144,6 +148,20 @@ public class OrdersActivity extends AppCompatActivity {
                     } else {
                         setAddOrderButtonListenerActive();
                     }
+
+                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( OrdersActivity.this,  new OnSuccessListener<InstanceIdResult>() {
+                            @Override
+                            public void onSuccess(InstanceIdResult instanceIdResult) {
+                                newToken[0] = instanceIdResult.getToken();
+                                if(!currentUser.getUserToken().equals(newToken[0])){
+                                    mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
+
+                                }
+                                Log.e("newToken", newToken[0]);
+
+                            }
+                        });
+
                 }
 
                 @Override

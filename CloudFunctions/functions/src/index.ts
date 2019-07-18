@@ -43,26 +43,29 @@ export const sendNotificationToMerchant = functions.database
         notification: {
           title: `New delivery request from ${delegateName}`,
           body: `${delegateName} want to deliver ${orderName} for ${delegateOffer} `,
-          icon: DelegateURL
+          sound: "default",
+          icon: DelegateURL,
+          priority : "high",
+          click_action : ".UserInfo.Notifications"
         }
       }; 
 
-      const options = { priority: "high" };
 
 
       console.log(`token is ${tokensSnapshot.val()} payload is ${payload}`)
 
       // Send notifications to all tokens.
-      const response = await admin.messaging().sendToDevice(tokensSnapshot.val(), payload, options);
+      const response = await admin.messaging().sendToDevice(tokensSnapshot.val(), payload);
       // For each message check if there was an error.
       const tokensToRemove:any[] = [];
-      response.results.forEach((result, index) => {
+      response.results.forEach(async (result, index) => {
         const error = result.error;
         if (error) {
           console.error('Failure sending notification to', tokensSnapshot.val()[index], error);
           // Cleanup the tokens who are not registered anymore.
           if (error.code === 'messaging/invalid-registration-token' ||
               error.code === 'messaging/registration-token-not-registered') {
+                await admin.database().ref(`Users/${merchantId}/userToken`).remove()
             tokensToRemove.push(tokensSnapshot.ref.child(tokensSnapshot.val()).remove());
           }
         }
