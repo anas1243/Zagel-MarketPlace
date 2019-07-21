@@ -13,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.zagelx.Authentication.AfterRegisterUserInfo;
@@ -22,6 +24,7 @@ import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.TripsActivity;
+import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,6 +53,7 @@ public class OrdersActivity extends AppCompatActivity {
     private Button ordersButton;
     private Button tripsButton;
     private Button addOrderCButton;
+    private ImageButton notificaitonsButton;
 //    private ProgressBar progressBar;
 
 
@@ -86,6 +90,15 @@ public class OrdersActivity extends AppCompatActivity {
         ordersButton = findViewById(R.id.orders_button);
         tripsButton = findViewById(R.id.trips_button);
         addOrderCButton = findViewById(R.id.add_order_cbutton);
+
+        notificaitonsButton = findViewById(R.id.ic_notification_toolbar);
+        notificaitonsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(OrdersActivity.this, NotificationsActivity.class);
+                startActivity(i);
+            }
+        });
 
         mBadge = findViewById(R.id.badge);
         //progressBar = findViewById(R.id.progressbar);
@@ -333,5 +346,37 @@ public class OrdersActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Exit Application?");
+            alertDialogBuilder
+                    .setMessage("Click yes to exit!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    moveTaskToBack(true);
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    System.exit(1);
+                                }
+                            })
+
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

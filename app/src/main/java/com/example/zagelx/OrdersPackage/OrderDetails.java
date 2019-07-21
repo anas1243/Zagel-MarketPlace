@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.RequestInfo;
@@ -33,22 +34,24 @@ import com.google.firebase.database.ValueEventListener;
 public class OrderDetails extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mOrdersDatabaseReference, mUserDatabaseReference, mRequestInfoDatabaseReference;
-    private ValueEventListener mUserEventListener;
+    private DatabaseReference mOrdersDatabaseReference, mOrdersDatabase, mUserDatabaseReference, mRequestInfoDatabaseReference;
+    private ValueEventListener mUserEventListener, mOrderEventListener;
 
 
-    private TextView merchantName, packageName, packageSource, packageDestination
-            , packageDate, packagePrice, deliveryFees
-            , packageBreakablility, packageVehicle, packageStatus;
+    private TextView merchantName, packageName, packageSource, packageDestination, packageDate, packagePrice, deliveryFees, packageBreakablility, packageVehicle, packageStatus;
     private EditText packageNotes;
     private ImageView merchantImage, packageImage, packageVehicleIcon, infoDelivery, verificationIcon;
 
-    private Button  deliveryRequest;
+    private Button deliveryRequest, deleteOrder, showRequestOrder, refuseOffer, acceptOffer;
     private Orders currentOrder;
+    private DelegatesNotification currentNotification;
     private String priceOffer;
     private FirebaseUser user;
     private Users currentUser;
-    private int userNumberOfNotifications;
+    private int currentNumberOfNotifications;
+    private int currentNumberOfCurrentOrderRequests;
+
+    private LinearLayout ownerLayout, requestedDelegateLayout;
 
     @Override
     public void onClick(View v) {
@@ -62,18 +65,19 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                 confirmDeliveryFees();
         }
     }
-    private void confirmDeliveryFees(){
+
+    private void confirmDeliveryFees() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrderDetails.this);
         alertDialog.setCancelable(false);
         alertDialog.setTitle("Delivery fees Confirmation!");
-        alertDialog.setMessage("\nThis customer is willing to pay\n"+
-                currentOrder.getDeliveryPrice()+" EGP. \n\n Please agree or enter your offer");
+        alertDialog.setMessage("\nThis customer is willing to pay\n" +
+                currentOrder.getDeliveryPrice() + " EGP. \n\n Please agree or enter your offer");
 
         final EditText input = new EditText(OrderDetails.this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(16,16,16,16);
+        lp.setMargins(16, 16, 16, 16);
 
         input.setLayoutParams(lp);
         input.setText(currentOrder.getDeliveryPrice());
@@ -87,18 +91,22 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int which) {
                         priceOffer = input.getText().toString();
                         RequestInfo currentRequestInfo = new RequestInfo(user.getUid(), currentUser.getName(), currentUser.getProfilePictureURL()
-                                ,currentUser.getRate(), priceOffer,currentUser.isVerified());
+                                , currentUser.getRate(), priceOffer, currentUser.isVerified());
                         MerchantsNotifications merchantsNotifications = new MerchantsNotifications(
-                            currentOrder.getPackageName(),currentOrder.getOrderId(),currentRequestInfo
+                                currentOrder.getPackageName(), currentOrder.getOrderId(), currentRequestInfo
                         );
 
 
                         mRequestInfoDatabaseReference.child(System.currentTimeMillis() + user.getUid()).setValue(currentRequestInfo);
-                        int currentNumberOfRequests = currentOrder.getNumberOfRequests();
-                        mOrdersDatabaseReference.child("numberOfRequests").setValue(currentNumberOfRequests+1);
-                        userNumberOfNotifications +=1;
-                        mUserDatabaseReference.child(currentOrder.getMerchantId()).child("numberOfNotifications").setValue(userNumberOfNotifications);
+                        currentNumberOfNotifications += 1;
+                        currentNumberOfCurrentOrderRequests += 1;
+                        mOrdersDatabaseReference.child("numberOfRequests").setValue(currentNumberOfCurrentOrderRequests);
+                        mUserDatabaseReference.child(currentOrder.getMerchantId()).child("numberOfNotifications").setValue(currentNumberOfNotifications);
                         mUserDatabaseReference.child(currentOrder.getMerchantId()).child("Notifications").push().setValue(merchantsNotifications);
+                        dialog.cancel();
+                        Snackbar snackbar = Snackbar
+                                .make(findViewById(R.id.scroll_view), "لقد تمل ارسال طلبك للتاجر", Snackbar.LENGTH_LONG);
+                        snackbar.show();
 
                     }
                 });
@@ -115,24 +123,14 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details);
 
-        Intent i = getIntent();
-        currentOrder = (Orders) i.getSerializableExtra("Package_ID");
-        Log.e("hey now brownCow", "onCreate: "+ currentOrder );
-
-
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
-        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders").child(currentOrder.getOrderId());
-        mRequestInfoDatabaseReference = mOrdersDatabaseReference.child("currentRequestInfo");
-
 
         merchantName = findViewById(R.id.user_name);
         packageName = findViewById(R.id.package_name);
@@ -151,10 +149,107 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         packageVehicleIcon = findViewById(R.id.vehicle_icon);
         infoDelivery = findViewById(R.id.info_delivery_fees);
         verificationIcon = findViewById(R.id.verification_icon);
-        if(currentOrder.isVerifiedUser())
-            verificationIcon.setVisibility(View.VISIBLE);
 
         deliveryRequest = findViewById(R.id.button_delivery_request);
+        deleteOrder = findViewById(R.id.delete_request);
+        showRequestOrder = findViewById(R.id.show_requests);
+        refuseOffer = findViewById(R.id.refuse_request);
+        acceptOffer = findViewById(R.id.accept_request);
+
+        ownerLayout = findViewById(R.id.layout_owner);
+        requestedDelegateLayout = findViewById(R.id.layout_requested_delegate);
+
+
+        Intent i = getIntent();
+        String whichClass = i.getSerializableExtra("Package_ID").getClass().getName();
+        Log.e("test el ", "onCreate: " + whichClass);
+        if (whichClass.equals(Orders.class.getName())) {
+
+            if (user != null) {
+
+                mUserEventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        currentUser = dataSnapshot.getValue(Users.class);
+                        currentNumberOfNotifications = currentUser.getNumberOfNotifications();
+
+                        if (currentUser.getMode().equals("Merchant")) {
+                            if (currentOrder.getOrderId().contains(currentUser.getID())) {
+                                deliveryRequest.setVisibility(View.GONE);
+                                ownerLayout.setVisibility(View.VISIBLE);
+                                deleteOrder.setOnClickListener(OrderDetails.this);
+                                showRequestOrder.setOnClickListener(OrderDetails.this);
+
+                            } else {
+                                deliveryRequest.setVisibility(View.GONE);
+
+                            }
+
+                        } else {
+                            deliveryRequest.setVisibility(View.VISIBLE);
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                };
+
+                mUserDatabaseReference.child(user.getUid())
+                        .addListenerForSingleValueEvent(mUserEventListener);
+
+
+            }
+
+            currentOrder = (Orders) i.getSerializableExtra("Package_ID");
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
+                    .child(currentOrder.getOrderId());
+
+            fillViewsWithCorrectData();
+
+        } else if (whichClass.equals(DelegatesNotification.class.getName())) {
+            deliveryRequest.setVisibility(View.GONE);
+            requestedDelegateLayout.setVisibility(View.VISIBLE);
+            refuseOffer.setOnClickListener(this);
+            acceptOffer.setOnClickListener(this);
+            currentNotification = (DelegatesNotification) i.getSerializableExtra("Package_ID");
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
+                    .child(currentNotification.getOrderId());
+
+
+            mOrderEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    currentOrder = dataSnapshot.getValue(Orders.class);
+                    Log.e("test Orders", "onDataChange: " + currentOrder.getOrderId());
+                    fillViewsWithCorrectData();
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            };
+
+            mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
+        }
+
+
+    }
+
+    private void fillViewsWithCorrectData() {
+        mRequestInfoDatabaseReference = mOrdersDatabaseReference.child("currentRequestInfo");
+
+        currentNumberOfCurrentOrderRequests = currentOrder.getNumberOfRequests();
+        if (currentOrder.isVerifiedUser())
+            verificationIcon.setVisibility(View.VISIBLE);
+
+
         deliveryRequest.setOnClickListener(this);
 
         merchantName.setText(currentOrder.getMerchantName());
@@ -174,11 +269,12 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         packageDate.setText(currentOrder.getDeliveryDate().toString());
         deliveryFees.setText(currentOrder.getDeliveryPrice() + " EGP");
         packageVehicle.setText(currentOrder.getVehicle());
-        if(currentOrder.isPrePaid()){
-            packagePrice.setText(currentOrder.getPackagePrice()+ " EGP");}
-        else{
-            packagePrice.setText("0"+ " EGP");}
-        if(currentOrder.isBreakable())
+        if (currentOrder.isPrePaid()) {
+            packagePrice.setText(currentOrder.getPackagePrice() + " EGP");
+        } else {
+            packagePrice.setText("0" + " EGP");
+        }
+        if (currentOrder.isBreakable())
             packageBreakablility.setText("Breakable");
         else
             packageBreakablility.setText("Is Not Breakable");
@@ -205,29 +301,6 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         infoDelivery.setOnClickListener(OrderDetails.this);
         packageNotes.setHint(currentOrder.getPackageDescription());
 
-        if (user != null) {
-
-            mUserEventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    currentUser = dataSnapshot.getValue(Users.class);
-                    userNumberOfNotifications = currentUser.getNumberOfNotifications();
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            };
-
-            mUserDatabaseReference.child(user.getUid())
-                    .addListenerForSingleValueEvent(mUserEventListener);
-
-
-
 
     }
-
-}
 }

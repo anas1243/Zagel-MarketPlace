@@ -90,7 +90,7 @@
         </activity>
 
         <activity
-            android:name=".UserInfo.Notifications"
+            android:name=".UserInfo.NotificationsActivity"
             android:parentActivityName=".OrdersPackage.OrdersActivity">
             <intent-filter>
                 <action android:name=".UserInfo.Notifications" />
@@ -119,6 +119,7 @@
         </activity>
         <activity android:name=".OrdersPackage.OrderDetails" />
         <activity android:name=".TripsPackage.TripsDetails" />
+        <activity android:name=".OrdersPackage.OrdersRequestsActivity" />
 
         <service
             android:name=".Utilities.MyFirebaseMessagingService"

@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.zagelx.UserInfo.AboutUsActivity;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.UserInfo.DashboardActivity;
-import com.example.zagelx.UserInfo.Notifications;
+import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.UserInfo.ProfileActivity;
 import com.example.zagelx.R;
 import com.firebase.ui.auth.AuthUI;
@@ -131,8 +131,8 @@ public class DrawerUtil extends Activity {
                             Intent intent = new Intent(activity, DashboardActivity.class);
                             view.getContext().startActivity(intent);
 
-                        } else if (drawerItem.getIdentifier() == 4 && !(activity instanceof Notifications)) {
-                            Intent intent = new Intent(activity, Notifications.class);
+                        } else if (drawerItem.getIdentifier() == 4 && !(activity instanceof NotificationsActivity)) {
+                            Intent intent = new Intent(activity, NotificationsActivity.class);
                             view.getContext().startActivity(intent);
 
                         } else if (drawerItem.getIdentifier() == 5 && !(activity instanceof AboutUsActivity)) {

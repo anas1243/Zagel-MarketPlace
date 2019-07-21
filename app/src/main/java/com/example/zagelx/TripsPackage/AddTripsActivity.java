@@ -72,6 +72,7 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
     private boolean isPrePaid = false;
     private boolean isBreakable = false;
+    private boolean delegateVerification;
     private BirthDate dDate;
     private LocationInfo currentLocationInfo;
 
@@ -466,6 +467,7 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 delegateName = dataSnapshot.getValue(Users.class).getName();
                 delegateImageURL = dataSnapshot.getValue(Users.class).getProfilePictureURL();
+                delegateVerification = dataSnapshot.getValue(Users.class).isVerified();
             }
 
             @Override
@@ -612,15 +614,16 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void uploadTripAndProceed(){
-
-        Trips trip = new Trips(delegateImageURL ,delegateId , delegateName, dDate, TPrice
+        String tripId = System.currentTimeMillis() + delegateId;
+        Trips trip = new Trips(tripId, delegateImageURL ,delegateId , delegateName, dDate, TPrice
                 , tNotes, tVehicle, currentLocationInfo,
-                maxNoOrders , isPrePaid, isBreakable, oMaxPrice);
+                maxNoOrders , isPrePaid, isBreakable, oMaxPrice,delegateVerification);
 
-        mTripsDatabaseReference.child(System.currentTimeMillis() + delegateId).setValue(trip);
+        mTripsDatabaseReference.child(tripId).setValue(trip);
 
         Toast.makeText(AddTripsActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(AddTripsActivity.this, TripsActivity.class);
+        finish();
         startActivity(i);
     }
 

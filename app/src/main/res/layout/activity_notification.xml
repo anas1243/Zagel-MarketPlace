@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout
+    android:id="@+id/main_main_layout" xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <include layout="@layout/toolbar_navdrawer"></include>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/dashboard_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical">
+
+        <!--TODO progress bar is not appear -->
+        <!--<ProgressBar-->
+        <!--android:id="@+id/progressbar"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:indeterminate="true"-->
+        <!--/>-->
+
+
+        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/notifications_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:background="@color/colorAccent"
+            android:divider="@color/colorAccent"
+            android:dividerHeight="8dp"
+            android:orientation="vertical"
+            android:padding="8dp"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

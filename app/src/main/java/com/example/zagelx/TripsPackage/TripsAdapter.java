@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
         TextView sourceTV = convertView.findViewById(R.id.source_txt_view);
         TextView destinationTV = convertView.findViewById(R.id.destination_txt_view);
         ImageView vehicleImageIV = convertView.findViewById(R.id.vehicle_image);
+        ImageView verificationIcon = convertView.findViewById(R.id.verification_icon);
 
         final Trips currentTrip = getItem(position);
         BirthDate rDate = currentTrip.getRouteDate();
@@ -65,6 +67,8 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
         sourceTV.setText(currentTrip.getCurrentOrderLocationInfo().getsAdminArea());
         destinationTV.setText(currentTrip.getCurrentOrderLocationInfo().getdAdminArea());
 
+        if(!currentTrip.isVerifiedUser())
+            verificationIcon.setVisibility(View.GONE);
         switch (currentTrip.getVehicle()) {
             case "Car":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);

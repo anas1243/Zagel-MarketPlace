@@ -39,7 +39,6 @@ public class DashboardActivity extends AppCompatActivity {
     private DatabaseReference mOrdersDatabaseReference;
     private DatabaseReference mTripsDatabaseReference;
     private DatabaseReference mUserDatabaseReference;
-    private ChildEventListener mChildEventListener;
     private ValueEventListener mUserEventListener;
 
     private FirebaseUser user;
@@ -82,7 +81,6 @@ public class DashboardActivity extends AppCompatActivity {
                             , currentUser.getMobileNumber(),currentUser.getProfilePictureURL());
                     drawer.getDrawer(DashboardActivity.this, toolbar);
                     userType = currentUser.getMode();
-                    Log.e("testtttttttttt", "onDataChange: "+userType+"  merchant el mafrod" );
 
                     if(userType.equals("Merchant")){
                         Snackbar snackbar = Snackbar

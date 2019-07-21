@@ -42,8 +42,6 @@ public class DashboardTipsAdapter extends ArrayAdapter<Trips> {
                     , parent, false);
         }
 
-        View listItemView = convertView;
-
 
         CircleImageView packageImageIV = convertView.findViewById(R.id.delegate_image);
         TextView packageNameTV = convertView.findViewById(R.id.delegate_name);

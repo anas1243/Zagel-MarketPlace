@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 public class Trips implements Serializable {
-
+    private String tripId = "";
     private String delegateImageURL = "";
     private String delegateID = "";
     private String delegateName = "";
@@ -12,13 +12,16 @@ public class Trips implements Serializable {
     private BirthDate routeDate = null;
     private String routePrice = "";
     private String routeDescription = "";
+    private boolean verifiedUser = false;
+
+    private int numberOfRequests = 0;
 
     private String vehicle = "";
 
     private LocationInfo currentOrderLocationInfo = null;
 
     private String maxNoOrders = "";
-    private Map<String, String> routeOrders ;
+    private Map<String, String> routeOrders;
 
     private boolean prePaid = false;
     private boolean breakable = false;
@@ -27,10 +30,11 @@ public class Trips implements Serializable {
     public Trips() {
     }
 
-    public Trips(String delegateImageURL, String delegateID
+    public Trips(String tripId, String delegateImageURL, String delegateID
             , String delegateName, BirthDate routeDate, String routePrice
             , String routeDescription, String vehicle, LocationInfo currentOrderLocationInfo
-            , String maxNoOrders, boolean prePaid, boolean breakable, String maxPrePaidLimit) {
+            , String maxNoOrders, boolean prePaid, boolean breakable, String maxPrePaidLimit, boolean verifiedUser) {
+        this.tripId = tripId;
         this.delegateImageURL = delegateImageURL;
         this.delegateID = delegateID;
         this.delegateName = delegateName;
@@ -43,6 +47,11 @@ public class Trips implements Serializable {
         this.prePaid = prePaid;
         this.breakable = breakable;
         this.maxPrePaidLimit = maxPrePaidLimit;
+        this.verifiedUser = verifiedUser;
+    }
+
+    public String getTripId() {
+        return tripId;
     }
 
     public String getDelegateImageURL() {
@@ -95,5 +104,13 @@ public class Trips implements Serializable {
 
     public boolean isBreakable() {
         return breakable;
+    }
+
+    public boolean isVerifiedUser() {
+        return verifiedUser;
+    }
+
+    public int getNumberOfRequests() {
+        return numberOfRequests;
     }
 }

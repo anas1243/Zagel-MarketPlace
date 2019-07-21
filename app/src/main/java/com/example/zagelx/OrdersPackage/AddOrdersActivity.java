@@ -853,6 +853,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
                             Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(AddOrdersActivity.this, DashboardActivity.class);
+                            finish();
                             startActivity(i);
                         } else {
                             Toast.makeText(AddOrdersActivity.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();

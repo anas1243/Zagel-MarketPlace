@@ -461,31 +461,87 @@
 
                 </RelativeLayout>
 
-                <LinearLayout
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <RelativeLayout
+                    android:id="@+id/youOrders_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/yourOrders_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_dash_board" />
+
+
+                    <TextView
+                        android:id="@+id/yourOrders_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/yourOrders_icon"
+                        android:text="اختر شحنة من شحناتك تريد توصلها علي هذا الخط"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/yourOrders_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/yourOrders_icon"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/yourOrders_icon"
+
+                        />
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/button_delivery_request"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/button"
+                    android:text="delivery request"
+                    android:visibility="gone"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/layout_owner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    >
 
                     <Button
-                        android:id="@+id/button_bid_fees"
+                        android:id="@+id/delete_request"
                         style="@style/button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:layout_weight="1"
-                        android:background="@drawable/button_blue"
-                        android:text="change fees request"
-                        />
+                        android:background="@drawable/button_red"
+                        android:text="delete this order!" />
 
                     <Button
-                        android:id="@+id/button_route_request"
+                        android:id="@+id/edit_request"
                         style="@style/button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:layout_weight="1"
                         android:background="@drawable/button"
-                        android:text="Make a request" />
+                        android:text="edit data" />
 
                 </LinearLayout>
 

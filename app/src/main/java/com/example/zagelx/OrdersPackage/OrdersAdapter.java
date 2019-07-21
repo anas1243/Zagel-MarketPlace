@@ -67,8 +67,8 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
         Glide.with(packageImageIV.getContext())
                 .load(currentOrder.getPackageImageURL())
                 .into(packageImageIV);
-        if (currentOrder.isVerifiedUser())
-        verificationIcon.setVisibility(View.VISIBLE);
+        if (!currentOrder.isVerifiedUser())
+        verificationIcon.setVisibility(View.GONE);
 
         Log.e("OrdersAdapter", "getView: " + currentOrder.getPackageImageURL());
         packageNameTV.setText(currentOrder.getPackageName());

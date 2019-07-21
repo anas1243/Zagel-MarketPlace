@@ -14,12 +14,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
+import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,8 @@ public class TripsActivity extends AppCompatActivity {
     private TripsAdapter mTripsAdapter;
     private Button ordersButton;
     private Button tripsButton;
+    private ImageButton notificaitonsButton;
+    private NotificationBadge mBadge;
     private Button addTrip_cButton;
 //    private ProgressBar progressBar;
 
@@ -78,6 +83,17 @@ public class TripsActivity extends AppCompatActivity {
         tripsButton = findViewById(R.id.trips_button);
         addTrip_cButton = findViewById(R.id.add_trip_cbutton);
         //progressBar = findViewById(R.id.progressbar);
+
+        notificaitonsButton = findViewById(R.id.ic_notification_toolbar);
+        notificaitonsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TripsActivity.this, NotificationsActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mBadge = findViewById(R.id.badge);
 
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.main_main_layout), "خطوط مندوبي الشحن !", Snackbar.LENGTH_LONG);
@@ -121,6 +137,7 @@ public class TripsActivity extends AppCompatActivity {
                     drawer = new DrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(),currentUser.getProfilePictureURL());
                     drawer.getDrawer(TripsActivity.this, toolbar);
+                    mBadge.setNumber(currentUser.getNumberOfNotifications());
 
                     if (!currentUser.getMode().equals("Delivery Delegate")) {
                         Snackbar snackbar = Snackbar
