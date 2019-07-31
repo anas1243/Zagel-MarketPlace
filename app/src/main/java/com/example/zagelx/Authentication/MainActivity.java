@@ -120,7 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void registerateUser() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.PhoneBuilder().build());
+                new AuthUI.IdpConfig.PhoneBuilder().build(),
+                new AuthUI.IdpConfig.EmailBuilder().build());
 
         startActivityForResult(
                 AuthUI.getInstance()

@@ -25,11 +25,11 @@
             android:id="@+id/verification_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/delegate_name"
+            android:layout_toRightOf="@id/user_name"
             android:src="@drawable/ic_user_verification" />
 
         <TextView
-            android:id="@+id/delegate_name"
+            android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -43,7 +43,7 @@
             android:id="@+id/rb_rating_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/delegate_name"
+            android:layout_below="@id/user_name"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"

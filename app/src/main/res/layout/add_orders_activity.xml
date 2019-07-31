@@ -90,6 +90,19 @@
 
                 <EditText
 
+                    android:id="@+id/end_consumer_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ems="10"
+                    android:hint="Receiver Name"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAllCaps="true" />
+
+                <EditText
+
                     android:id="@+id/end_consumer_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -101,15 +114,7 @@
                     android:singleLine="true"
                     android:textAllCaps="true" />
 
-                <TextView
-                    android:id="@+id/user_Slocation_lable"
-                    style="@style/label_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:singleLine="true"
-                    android:text="Source Location"
-                    android:textColor="@color/colorSecondary" />
+
 
                 <Spinner
                     android:id="@+id/user_Slocation"

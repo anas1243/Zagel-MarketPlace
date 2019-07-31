@@ -32,7 +32,6 @@ import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfo;
 import com.example.zagelx.Models.Orders;
-import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.UserInfo.DashboardActivity;
@@ -71,7 +70,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private EditText packageNameET;
     private DatePicker deliveryDateDP;
     private EditText deliveryPriceET;
-    private EditText endConcumerMobile;
+    private EditText endConsumerMobile, endConsumerName;
     private SwitchCompat isPrePaidSwitch;
     private SwitchCompat isBreakableSwitch;
     private TextView vehicle;
@@ -103,8 +102,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private UploadTask uploadTask;
     private Uri selectedImageUri;
 
-    private String merchantId, merchantImageURL, getMerchantName, oImageUrl,
-            oName, dPrice, RMobile, oPrice, oVehicle, oDescription;
+    private String merchantId, merchantMobile, merchantImageURL, getMerchantName, oImageUrl,
+            oName, dPrice, RMobile, RName, oPrice, oVehicle, oDescription;
 
     private LocationInfo currentLocationInfo;
 
@@ -133,7 +132,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
         packageNameET = findViewById(R.id.package_name);
         deliveryPriceET = findViewById(R.id.delivery_price);
-        endConcumerMobile = findViewById(R.id.end_consumer_mobile);
+        endConsumerMobile = findViewById(R.id.end_consumer_mobile);
+        endConsumerName = findViewById(R.id.end_consumer_name);
 
 
         isPrePaidSwitch = findViewById(R.id.pre_paid_switch);
@@ -571,6 +571,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                 merchantImageURL = dataSnapshot.getValue(Users.class).getProfilePictureURL();
                 getMerchantName = dataSnapshot.getValue(Users.class).getName();
                 merchantVerification = dataSnapshot.getValue(Users.class).isVerified();
+                merchantMobile = dataSnapshot.getValue(Users.class).getMobileNumber();
             }
 
             @Override
@@ -745,7 +746,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         oName = packageNameET.getText().toString().trim();
         oPrice = packagePriceET.getText().toString().trim();
         dPrice = deliveryPriceET.getText().toString().trim();
-        RMobile = endConcumerMobile.getText().toString().trim();
+        RMobile = endConsumerMobile.getText().toString().trim();
+        RName = endConsumerName.getText().toString().trim();
         oVehicle = vehicle.getText().toString().trim();
         oDescription = packageDescriptionET.getText().toString().trim();
         dDate = new BirthDate(deliveryDateDP.getYear(),
@@ -843,10 +845,10 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                             }
                             String orderId = System.currentTimeMillis() + merchantId;
 
-                            Orders order = new Orders(orderId, merchantId, merchantImageURL, getMerchantName, oName, oImageUrl
+                            Orders order = new Orders(orderId, merchantId,merchantMobile, merchantImageURL, getMerchantName, oName, oImageUrl
                                     , oDescription, oPrice
                                     , isPrePaid, isBreakable,merchantVerification, dDate,
-                                    dPrice, oVehicle, RMobile
+                                    dPrice, oVehicle, RMobile, RName
                                     , currentLocationInfo, "New");
 
                             mOrdersDatabaseReference.child(orderId).setValue(order);

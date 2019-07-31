@@ -15,10 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.Models.BirthDate;
+import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.RequestInfo;
+import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
+
+import com.google.firebase.database.DatabaseReference;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 
 import java.util.List;
@@ -26,12 +29,26 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
-    Context context ;
-    String currentOrderName;
-    public OrderRequestsAdapter(Context context, int resource, List<RequestInfo> objects, String currentOrderName) {
+    private Context context ;
+    private String currentOrderName, currentRequestId;
+    private DatabaseReference mNotificationDatabaseReference, mRequestsDatabaseReference, mOrdersDatabaseReference;
+    private DelegatesNotification delegatesNotification;
+    private MerchantsNotifications currentNotification;
+    private Users currentRequestedDelegate;
+    public OrderRequestsAdapter(Context context, int resource, List<RequestInfo> objects
+            , Users currentRequestedDelegate, DatabaseReference mOrdersDatabaseReference, String currentOrderName, DelegatesNotification delegatesNotification
+            , DatabaseReference mNotificationDatabaseReference, MerchantsNotifications currentNotification
+            , DatabaseReference mRequestsDatabaseReference, String currentRequestId) {
         super(context, resource, objects);
         this.context = context;
         this.currentOrderName = currentOrderName;
+        this.mNotificationDatabaseReference = mNotificationDatabaseReference;
+        this.mRequestsDatabaseReference = mRequestsDatabaseReference;
+        this.delegatesNotification = delegatesNotification;
+        this.currentRequestId = currentRequestId;
+        this.currentNotification = currentNotification;
+        this.mOrdersDatabaseReference = mOrdersDatabaseReference;
+        this.currentRequestedDelegate = currentRequestedDelegate;
     }
 
 
@@ -54,7 +71,7 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
         CircleImageView delegateImageIV = convertView.findViewById(R.id.delegate_image);
         ImageView delegateVerificationIcon = convertView.findViewById(R.id.verification_icon);
         SimpleRatingBar delegateRating = convertView.findViewById(R.id.rb_rating_profile);
-        TextView delegateNameTV = convertView.findViewById(R.id.delegate_name);
+        TextView delegateNameTV = convertView.findViewById(R.id.user_name);
         TextView deliveryFeesTV = convertView.findViewById(R.id.delivery_offer);
 
 
@@ -79,9 +96,20 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 dialog.cancel();
-                                Snackbar snackbar = Snackbar
-                                        .make(parent.findViewById(R.id.requests_list), "سيتواصل معك المندوب في اقرب وقت ", Snackbar.LENGTH_LONG);
-                                snackbar.show();
+                                mRequestsDatabaseReference.child(currentRequestId).child("status").setValue(true);
+                                mOrdersDatabaseReference.child("acceptedDelegateID")
+                                        .setValue(delegatesNotification.getDelegateId());
+                                mOrdersDatabaseReference.child("acceptedDelegateName")
+                                        .setValue(currentNotification.getRequestInfo().getUserName());
+                                mOrdersDatabaseReference.child("acceptedDelegateMobile")
+                                        .setValue(currentNotification.getRequestInfo().getUserMobile());
+                                mOrdersDatabaseReference.child("packageState").setValue("Reserved");
+                                mNotificationDatabaseReference.setValue(delegatesNotification);
+
+                                Intent i = new Intent(context, OrderDetails.class);
+                                i.putExtra("Package_ID", currentNotification);
+                                ((OrdersRequestsActivity)context).finish();
+                                context.startActivity(i);
 
                             }
                         });

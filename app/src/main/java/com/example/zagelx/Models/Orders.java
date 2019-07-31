@@ -7,37 +7,39 @@ public class Orders implements Serializable {
     private String merchantId = "";
     private String merchantImageURL = "";
     private String merchantName = "";
+    private String merchantMobile = "";
 
+    private LocationInfo currentOrderLocationInfo;
     private String packageName = "";
     private String packageImageURL = "";
     private String packageDescription = "";
     private String packagePrice = "";
+    private BirthDate deliveryDate = null;
+    private String deliveryPrice = "";
     private boolean prePaid = false;
     private boolean breakable = false;
     private boolean verifiedUser = false;
-
-    private String acceptedDelegateID = "";
-    private BirthDate deliveryDate = null;
-    private String deliveryPrice = "";
-
     private String vehicle = "";
-    private String endConsumerMobile = "";
-
     private String packageState = "";
 
-    private LocationInfo currentOrderLocationInfo;
+
     private RequestInfo currentRequestInfo;
     private int numberOfRequests = 0;
 
+    private String acceptedDelegateID = "";
+    private String acceptedDelegateName = "";
+    private String acceptedDelegateMobile = "";
+    private String endConsumerMobile = "";
+    private String endConsumerName = "";
 
     public Orders() {
     }
 
 
-    public Orders(String orderId, String merchantId, String merchantImageURL, String merchantName, String packageName, String packageImageURL,
+    public Orders(String orderId, String merchantId, String merchantMobile, String merchantImageURL, String merchantName, String packageName, String packageImageURL,
                   String packageDescription, String packagePrice, boolean isPrePaid, boolean isBreakable, boolean verifiedUser,
                   BirthDate deliveryDate, String deliveryPrice, String vehicle,
-                  String endConsumerMobile, LocationInfo currentOrderLocationInfo, String packageState) {
+                  String endConsumerMobile, String endConsumerName, LocationInfo currentOrderLocationInfo, String packageState) {
         this.orderId = orderId;
         this.merchantId = merchantId;
         this.merchantImageURL = merchantImageURL;
@@ -56,6 +58,8 @@ public class Orders implements Serializable {
         this.currentOrderLocationInfo = currentOrderLocationInfo;
         this.packageState = packageState;
         this.verifiedUser = verifiedUser;
+        this.endConsumerName = endConsumerName;
+        this.merchantMobile = merchantMobile;
     }
 
     public String getMerchantId() {
@@ -154,22 +158,50 @@ public class Orders implements Serializable {
     @Override
     public String toString() {
         return "Orders{" +
-                "merchantId='" + merchantId + '\'' +
+                "orderId='" + orderId + '\'' +
+                ", merchantId='" + merchantId + '\'' +
                 ", merchantImageURL='" + merchantImageURL + '\'' +
                 ", merchantName='" + merchantName + '\'' +
+                ", merchantMobile='" + merchantMobile + '\'' +
+                ", currentOrderLocationInfo=" + currentOrderLocationInfo +
                 ", packageName='" + packageName + '\'' +
                 ", packageImageURL='" + packageImageURL + '\'' +
                 ", packageDescription='" + packageDescription + '\'' +
                 ", packagePrice='" + packagePrice + '\'' +
-                ", prePaid=" + prePaid +
-                ", breakable=" + breakable +
-                ", acceptedDelegateID='" + acceptedDelegateID + '\'' +
                 ", deliveryDate=" + deliveryDate +
                 ", deliveryPrice='" + deliveryPrice + '\'' +
+                ", prePaid=" + prePaid +
+                ", breakable=" + breakable +
+                ", verifiedUser=" + verifiedUser +
                 ", vehicle='" + vehicle + '\'' +
-                ", endConsumerMobile='" + endConsumerMobile + '\'' +
                 ", packageState='" + packageState + '\'' +
-                ", currentOrderLocationInfo=" + currentOrderLocationInfo +
+                ", currentRequestInfo=" + currentRequestInfo +
+                ", numberOfRequests=" + numberOfRequests +
+                ", acceptedDelegateID='" + acceptedDelegateID + '\'' +
+                ", acceptedDelegateName='" + acceptedDelegateName + '\'' +
+                ", acceptedDelegateMobile='" + acceptedDelegateMobile + '\'' +
+                ", endConsumerMobile='" + endConsumerMobile + '\'' +
+                ", endConsumerName='" + endConsumerName + '\'' +
                 '}';
+    }
+
+    public String getEndConsumerName() {
+        return endConsumerName;
+    }
+
+    public void setAcceptedDelegateID(String acceptedDelegateID) {
+        this.acceptedDelegateID = acceptedDelegateID;
+    }
+
+    public String getAcceptedDelegateName() {
+        return acceptedDelegateName;
+    }
+
+    public String getAcceptedDelegateMobile() {
+        return acceptedDelegateMobile;
+    }
+
+    public String getMerchantMobile() {
+        return merchantMobile;
     }
 }

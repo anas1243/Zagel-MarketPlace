@@ -112,17 +112,20 @@
                         android:layout_below="@id/package_name"
                         android:layout_marginLeft="16dp"
                         android:layout_toRightOf="@id/package_image"
-                        android:text="negotiable"
+                        android:text="Negotiable"
                         android:textColor="@color/colorAccent"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
-
+                <!--this relative view will change it's content depending on
+                whether it is for delegate of merchant-->
                 <RelativeLayout
+                    android:id="@+id/assigned_user_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    >
 
                     <ImageView
                         android:id="@+id/delegate_icon"
@@ -132,7 +135,7 @@
 
 
                     <TextView
-                        android:id="@+id/delegate_lable"
+                        android:id="@+id/user_lable"
                         style="@style/label_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -141,17 +144,17 @@
                         android:layout_toRightOf="@id/delegate_icon"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="delivery requests:"
+                        android:text="Your delegate:"
                         android:textColor="@color/colorSecondary"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/delegate_name"
+                        android:id="@+id/another_user_name"
                         style="@style/label_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
-                        android:layout_below="@id/delegate_lable"
+                        android:layout_below="@id/user_lable"
                         android:layout_marginLeft="8dp"
                         android:layout_marginBottom="3dp"
                         android:layout_toRightOf="@id/delegate_icon"
@@ -159,12 +162,12 @@
                         android:text="mohamed ahmed" />
 
                     <TextView
-                        android:id="@+id/delegate_mobile"
+                        android:id="@+id/another_user_mobile"
                         style="@style/label_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
-                        android:layout_below="@id/delegate_name"
+                        android:layout_below="@id/another_user_name"
                         android:layout_marginLeft="8dp"
                         android:layout_marginBottom="16dp"
                         android:layout_toRightOf="@id/delegate_icon"
@@ -172,7 +175,80 @@
                         android:text="01144254326" />
 
                     <ImageView
-                        android:id="@+id/call_delegate_icon"
+                        android:id="@+id/call_user_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_phone1" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/assigned_delegate_separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    android:visibility="gone"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/end_consumer_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    >
+
+                    <ImageView
+                        android:id="@+id/end_consumer_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_end_consumer" />
+
+
+                    <TextView
+                        android:id="@+id/end_consumer_lable"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/end_consumer_icon"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="End Consumer:"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/end_consumer_name"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/end_consumer_lable"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/end_consumer_icon"
+                        android:maxLines="3"
+                        android:text="dina abo khabar" />
+
+                    <TextView
+                        android:id="@+id/end_consumer_mobile"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@id/end_consumer_name"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/end_consumer_icon"
+                        android:maxLines="3"
+                        android:text="01020305015" />
+
+                    <ImageView
+                        android:id="@+id/call_end_consumer_icon"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_alignParentRight="true"
@@ -186,7 +262,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

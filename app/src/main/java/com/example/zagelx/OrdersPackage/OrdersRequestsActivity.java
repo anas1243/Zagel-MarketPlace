@@ -7,13 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ListView;
 
+import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,19 +38,24 @@ public class OrdersRequestsActivity extends AppCompatActivity {
     private OrderRequestsAdapter mRequestsAdapter;
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mRequestsDatabaseReference;
+    private DatabaseReference mRequestsDatabaseReference, mNotificationDatabaseReference, mOrdersDatabaseReference;
     private DatabaseReference mUserDatabaseReference;
     private ChildEventListener mChildEventListener;
     private ValueEventListener mUserEventListener;
 
     private FirebaseUser user;
     private Users currentUser;
-    private String currentOrderId, currentOrderName;
+    private MerchantsNotifications currentNotification;
+    private String currentOrderId, currentOrderName, currentRequestId;
 
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     DrawerUtil drawer;
+
+    private String delegateId;
+    private String notificationId;
+    private String requestId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,26 +63,30 @@ public class OrdersRequestsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_requests);
 
         Intent i = getIntent();
-        currentOrderId = (String) i.getSerializableExtra("Package_ID");
-        currentOrderName = (String) i.getSerializableExtra("Package_NAME");
-
+        currentNotification = (MerchantsNotifications) i.getSerializableExtra("currentNotification");
+        currentOrderId = currentNotification.getOrderId();
+        currentOrderName = currentNotification.getOrderName();
+        currentRequestId = currentNotification.getRequestInfo().getRequestId();
+        Log.e("testrequest Id", "onCreate: " + currentRequestId);
         user = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         mRequestsDatabaseReference = mFirebaseDatabase
-                .getReference().child("Orders/"+currentOrderId+"/currentRequestInfo");
+                .getReference().child("Orders/" + currentOrderId + "/currentRequestInfo");
+
+        mOrdersDatabaseReference = mFirebaseDatabase.getReference("Orders/"+currentOrderId);
+
+        delegateId = currentNotification.getRequestInfo().getUserID();
+         notificationId = System.currentTimeMillis() + delegateId;
+         requestId = System.currentTimeMillis() + currentNotification.getMerchantId();
+
+        mNotificationDatabaseReference = mFirebaseDatabase.getReference("Users/"
+                + delegateId + "/Notifications/" + notificationId);
 
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
         mListView = findViewById(R.id.requests_list);
 
-        final List<RequestInfo> requestsList = new ArrayList<>();
-        mRequestsAdapter = new OrderRequestsAdapter(OrdersRequestsActivity.this
-                , R.layout.request_item, requestsList, currentOrderName);
-        mListView.setAdapter(mRequestsAdapter);
 
-        Snackbar snackbar = Snackbar
-                .make(findViewById(R.id.main_main_layout), "Order Requests", Snackbar.LENGTH_SHORT);
-        snackbar.show();
 
         if (user != null) {
 
@@ -92,6 +102,31 @@ public class OrdersRequestsActivity extends AppCompatActivity {
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL());
                     drawer.getDrawer(OrdersRequestsActivity.this, toolbar);
 
+
+
+
+
+                    DelegatesNotification delegatesNotification = new DelegatesNotification(
+                            notificationId,"toDelegate", "acceptance", delegateId, "", "", currentOrderId
+                            , currentOrderName, new RequestInfo(requestId, user.getUid()
+                            , currentUser.getName(), currentUser.getProfilePictureURL(), currentUser.getMobileNumber(), currentUser.getRate()
+                            , currentNotification.getRequestInfo().getOfferPrice(), currentUser.isVerified() )
+                    );
+                    delegatesNotification.getRequestInfo().setRequestId(requestId);
+
+                    final List<RequestInfo> requestsList = new ArrayList<>();
+                    mRequestsAdapter = new OrderRequestsAdapter(OrdersRequestsActivity.this
+                            , R.layout.request_item, requestsList, currentUser, mOrdersDatabaseReference, currentOrderName
+                            , delegatesNotification, mNotificationDatabaseReference, currentNotification, mRequestsDatabaseReference, currentRequestId);
+                    mListView.setAdapter(mRequestsAdapter);
+
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(R.id.main_main_layout), "Order Requests", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+
+                    showAllRequests();
+
+
                 }
 
                 @Override
@@ -103,36 +138,6 @@ public class OrdersRequestsActivity extends AppCompatActivity {
             mUserDatabaseReference.child(user.getUid())
                     .addListenerForSingleValueEvent(mUserEventListener);
 
-            mChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    RequestInfo currentRequestInfo = dataSnapshot.getValue(RequestInfo.class);
-                    mRequestsAdapter.add(currentRequestInfo);
-
-                    //progressBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            };
-            mRequestsDatabaseReference.addChildEventListener(mChildEventListener);
 
 
 
@@ -141,6 +146,39 @@ public class OrdersRequestsActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void showAllRequests(){
+        mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                RequestInfo currentRequestInfo = dataSnapshot.getValue(RequestInfo.class);
+                mRequestsAdapter.add(currentRequestInfo);
+
+                //progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        mRequestsDatabaseReference.addChildEventListener(mChildEventListener);
     }
 
 //    @Override

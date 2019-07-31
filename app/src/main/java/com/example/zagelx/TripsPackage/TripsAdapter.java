@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,7 +41,7 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
         View listItemView = convertView;
 
         CircleImageView delegateImageIV = convertView.findViewById(R.id.delegate_image);
-        TextView delegateNameTV = convertView.findViewById(R.id.delegate_name);
+        TextView delegateNameTV = convertView.findViewById(R.id.user_name);
         TextView routeDateTV = convertView.findViewById(R.id.route_date);
         TextView routePriceTV = convertView.findViewById(R.id.route_price);
 

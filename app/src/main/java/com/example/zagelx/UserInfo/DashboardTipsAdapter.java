@@ -2,7 +2,6 @@ package com.example.zagelx.UserInfo;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Trips;
-import com.example.zagelx.OrdersPackage.OrderDetails;
 import com.example.zagelx.R;
 
 import java.util.List;
@@ -44,7 +42,7 @@ public class DashboardTipsAdapter extends ArrayAdapter<Trips> {
 
 
         CircleImageView packageImageIV = convertView.findViewById(R.id.delegate_image);
-        TextView packageNameTV = convertView.findViewById(R.id.delegate_name);
+        TextView packageNameTV = convertView.findViewById(R.id.user_name);
         TextView deliveryDateTV = convertView.findViewById(R.id.route_date);
         TextView deliveryPriceTV = convertView.findViewById(R.id.route_price);
 

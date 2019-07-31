@@ -332,6 +332,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         }
         intent = new Intent(ProfileActivity.this, ProfileActivity.class);
+        finish();
         startActivity(intent);
     }
 

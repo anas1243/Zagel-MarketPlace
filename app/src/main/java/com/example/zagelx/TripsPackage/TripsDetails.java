@@ -28,6 +28,7 @@ import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.OrdersPackage.OrderDetails;
+import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,7 +55,7 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
     private EditText routeNotes;
     private ImageView delegateImage, routeVihicleIcon, infoDelivery;
 
-    private Button deliveryRequest;
+    private Button deliveryRequest, deleteTrip, showRequests;
     private Spinner orderItems;
     private String selectedOrderItemID;
     private Trips currentTrip;
@@ -82,6 +83,12 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button_delivery_request:
                 confirmDeliveryFees();
+                break;
+            case R.id.delete_request:
+                //deleteTheCurrentTrip();
+            case R.id.show_requests:
+                //showAllPackagesInThisRoute();
+
         }
     }
 
@@ -121,6 +128,8 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
         orderItems =  findViewById(R.id.yourOrders_spinner);
         ownerLayout = findViewById(R.id.layout_owner);
         youOrdersLayout = findViewById(R.id.youOrders_layout);
+        deleteTrip = findViewById(R.id.delete_request);
+        showRequests = findViewById(R.id.show_requests);
 
 
 
@@ -204,6 +213,8 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                         if(currentTrip.getDelegateID().contains(currentUser.getID())){
                             deliveryRequest.setVisibility(View.GONE);
                             ownerLayout.setVisibility(View.VISIBLE);
+                            deleteTrip.setOnClickListener(TripsDetails.this);
+                            showRequests.setOnClickListener(TripsDetails.this);
 
                         }else{
                             deliveryRequest.setVisibility(View.GONE);
@@ -274,25 +285,31 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String priceOffer = input.getText().toString();
-                        RequestInfo currentRequestInfo = new RequestInfo(user.getUid(), currentUser.getName(), currentUser.getProfilePictureURL()
-                                , currentUser.getRate(), priceOffer, currentUser.isVerified());
+                        String requestId = System.currentTimeMillis() + user.getUid();
+                        String notificationId = System.currentTimeMillis() + currentTrip.getDelegateID();
+                        RequestInfo currentRequestInfo = new RequestInfo(requestId, user.getUid(), currentUser.getName(), currentUser.getProfilePictureURL()
+                                , currentUser.getMobileNumber(), currentUser.getRate(), priceOffer, currentUser.isVerified());
                         DelegatesNotification delegatesNotifications = new DelegatesNotification(
-                                 currentTrip.getTripId(), currentTrip.getRouteDate().toString()
+                                notificationId,"toDelegate", "request", currentTrip.getDelegateID(), currentTrip.getTripId(), currentTrip.getRouteDate().toString()
                                 , selectedOrderItemID, orderItems.getSelectedItem().toString()
                                 , currentRequestInfo
                         );
 
 
-                        mRequestInfoDatabaseReference.child(System.currentTimeMillis() + user.getUid()).setValue(currentRequestInfo);
+                        mRequestInfoDatabaseReference.child(requestId).setValue(currentRequestInfo);
                         currentNumberOfNotifications += 1;
                         currentNumberOfCurrentOrderRequests += 1;
                         mTripsDatabaseReference.child("numberOfRequests").setValue(currentNumberOfCurrentOrderRequests);
                         mUserDatabaseReference.child(currentTrip.getDelegateID()).child("numberOfNotifications").setValue(currentNumberOfNotifications);
-                        mUserDatabaseReference.child(currentTrip.getDelegateID()).child("Notifications").push().setValue(delegatesNotifications);
+                        mUserDatabaseReference.child(currentTrip.getDelegateID()).child("Notifications").child(notificationId).setValue(delegatesNotifications);
+                        mOrdersDatabaseReference.child(selectedOrderItemID).child("packageState").setValue("Negotiable");
                         dialog.cancel();
                         Snackbar snackbar = Snackbar
                                 .make(findViewById(R.id.scroll_view), "لقد تمل ارسال طلبك للمندوب", Snackbar.LENGTH_LONG);
                         snackbar.show();
+                        Intent i = new Intent(TripsDetails.this, OrdersActivity.class);
+                        finish();
+                        startActivity(i);
 
                     }
                 });
