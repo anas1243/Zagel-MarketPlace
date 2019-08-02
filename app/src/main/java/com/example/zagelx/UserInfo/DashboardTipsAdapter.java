@@ -2,6 +2,7 @@ package com.example.zagelx.UserInfo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Trips;
+import com.example.zagelx.OrdersPackage.OrderDetails;
 import com.example.zagelx.R;
+import com.example.zagelx.TripsPackage.TripsDetails;
 
 import java.util.List;
 
@@ -39,6 +42,8 @@ public class DashboardTipsAdapter extends ArrayAdapter<Trips> {
             convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.trip_item
                     , parent, false);
         }
+
+        View listItemView = convertView;
 
 
         CircleImageView packageImageIV = convertView.findViewById(R.id.delegate_image);
@@ -90,6 +95,17 @@ public class DashboardTipsAdapter extends ArrayAdapter<Trips> {
                 vehicleImageIV.setImageResource(R.drawable.vehicle_bus_yellow);
                 break;
         }
+
+        listItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(context, TripsDetails.class);
+                Log.e("zero one test test", "onClick: "+ CurrentTrip.isPrePaid() );
+                i.putExtra("Route_ID", CurrentTrip);
+                context.startActivity(i);
+            }
+        });
 
 
 

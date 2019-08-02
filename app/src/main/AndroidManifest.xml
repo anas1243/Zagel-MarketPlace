@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
 
     <application
@@ -117,7 +118,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TripsPackage.TripsActivity" />
         </activity>
-        <activity android:name=".OrdersPackage.OrderDetails" />
+        <activity android:name=".OrdersPackage.OrderDetails" >
+            <intent-filter>
+                <action android:name=".OrdersPackage.OrderDetails" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>>
         <activity android:name=".TripsPackage.TripsDetails" />
         <activity android:name=".OrdersPackage.OrdersRequestsActivity" />
 

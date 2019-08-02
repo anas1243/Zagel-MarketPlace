@@ -242,8 +242,11 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot order : dataSnapshot.getChildren()) {
                         Orders currentOrder = order.getValue(Orders.class);
+                        if(currentOrder.getPackageState().equals("New")
+                                || currentOrder.getPackageState().equals("Negotiable")){
                         ordersNameArray.add(currentOrder.getPackageName());
                         ordersIDArray.add(currentOrder.getOrderId());
+                        }
                     }
                     ArrayAdapter<String> OrderSpinnerAdapter = new ArrayAdapter<>(
                             TripsDetails.this, android.R.layout.simple_spinner_item, ordersNameArray);

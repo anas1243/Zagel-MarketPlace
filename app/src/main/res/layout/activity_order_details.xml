@@ -721,6 +721,28 @@
 
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/button_picked_order"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/button"
+                    android:text="استلمت الشحنة؟"
+                    android:visibility="gone"
+                    />
+
+                <Button
+                    android:id="@+id/button_delivered_order"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/button"
+                    android:text="استلم العميل شحنته بنجاح؟"
+                    android:visibility="gone"
+                    />
+
 
             </LinearLayout>
 

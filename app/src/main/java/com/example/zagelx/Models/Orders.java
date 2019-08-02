@@ -19,6 +19,13 @@ public class Orders implements Serializable {
     private boolean prePaid = false;
     private boolean breakable = false;
     private boolean verifiedUser = false;
+
+    //triggers a cloud function that says to M that the D picked the order
+    private boolean delivered = false;
+
+    //triggers a cloud function that says to D delivered the order successfully
+    private boolean picked = false;
+
     private String vehicle = "";
     private String packageState = "";
 
@@ -173,6 +180,8 @@ public class Orders implements Serializable {
                 ", prePaid=" + prePaid +
                 ", breakable=" + breakable +
                 ", verifiedUser=" + verifiedUser +
+                ", delivered=" + delivered +
+                ", picked=" + picked +
                 ", vehicle='" + vehicle + '\'' +
                 ", packageState='" + packageState + '\'' +
                 ", currentRequestInfo=" + currentRequestInfo +
@@ -203,5 +212,13 @@ public class Orders implements Serializable {
 
     public String getMerchantMobile() {
         return merchantMobile;
+    }
+
+    public boolean isDelivered() {
+        return delivered;
+    }
+
+    public boolean isPicked() {
+        return picked;
     }
 }

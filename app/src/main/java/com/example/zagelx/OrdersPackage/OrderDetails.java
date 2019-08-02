@@ -2,6 +2,7 @@ package com.example.zagelx.OrdersPackage;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -24,6 +25,7 @@ import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,7 +45,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
     private EditText packageNotes;
     private ImageView merchantImage, packageImage, packageVehicleIcon, infoDelivery, verificationIcon;
 
-    private Button deliveryRequest, deleteOrder, showRequestOrder, refuseOffer, acceptOffer;
+    private Button deliveryRequest, deleteOrder, showRequestOrder, refuseOffer, acceptOffer, orderPicked, orderDelivered;
     private Orders currentOrder;
     private DelegatesNotification currentDelegateNotification = null;
     private MerchantsNotifications currentMerchantNotification = null;
@@ -61,6 +63,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
     private String purpose;
 
     private TextView anotherUserName, anotherUserMobile, endConsumerName, endConsumerMobile, userLable;
+    private boolean isPickedOrDelivered=false;
 
     @Override
     public void onClick(View v) {
@@ -78,7 +81,85 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
             case R.id.accept_request:
                 acceptMerchantOffer();
                 break;
+            case R.id.button_delivered_order:
+                markOrderDelivered();
+                break;
+            case R.id.button_picked_order:
+                markOrderPicked();
+                break;
+            case R.id.call_end_consumer_icon:
+                callUser(currentOrder.getEndConsumerMobile());
+                break;
+            case  R.id.call_user_icon:
+                if (userLable.getText().toString().equals("Your Merchant"))
+                    callUser(currentOrder.getMerchantMobile());
+                else
+                    callUser(currentOrder.getAcceptedDelegateMobile());
+                break;
         }
+    }
+    private void callUser(String userMobileNumber){
+        Intent myIntent = new Intent(Intent.ACTION_DIAL);
+        String phNum = "tel:" + userMobileNumber;
+        myIntent.setData(Uri.parse(phNum));
+        startActivity( myIntent ) ;
+    }
+    private void markOrderPicked(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrderDetails.this);
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Picking "+currentOrder.getPackageName()+ " Confirmation!");
+        alertDialog.setMessage("سيتم ارسال اشعار للتاجر بانك قمت بضغت علي تم استلام الشحنة\n هل استلمت الشحنة بالفعل؟");
+        alertDialog.setIcon(R.drawable.ic_delegates_requested);
+        alertDialog.setPositiveButton("نعم",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                        mOrdersDatabaseReference.child("packageState").setValue("Picked");
+                        mOrdersDatabaseReference.child("picked").setValue(true);
+
+
+
+                    }
+                });
+
+        alertDialog.setNegativeButton("لا",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
+    }
+    private void markOrderDelivered(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrderDetails.this);
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Delivering "+currentOrder.getPackageName()+ " Confirmation!");
+        alertDialog.setMessage("سيتم ارسال اشعار للمندوب بانك قمت بضغت علي تم توصيل الشحنة\n هل استلم عميلك الشحنة بالفعل؟");
+        alertDialog.setIcon(R.drawable.ic_delegates_requested);
+
+        alertDialog.setPositiveButton("نعم",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                        mOrdersDatabaseReference.child("packageState").setValue("Delivered");
+                        mOrdersDatabaseReference.child("delivered").setValue(true);
+
+
+
+                    }
+                });
+
+        alertDialog.setNegativeButton("لا",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
     }
 
     private void confirmDeliveryFees() {
@@ -297,74 +378,118 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         endConsumerName = findViewById(R.id.end_consumer_name);
         endConsumerMobile = findViewById(R.id.end_consumer_mobile);
 
+        orderPicked = findViewById(R.id.button_picked_order);
+        orderDelivered = findViewById(R.id.button_delivered_order);
 
 
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                 String value = getIntent().getExtras().getString(key);
+                Log.e("test notifications", "Key: " + key + " Value: " + value);
+                if(key.equals("orderId")){
+                    isPickedOrDelivered = true;
+                    Log.e("test value of FCM", "onCreate: "+ value );
+                    mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
+                            .child(value);
 
-        Intent i = getIntent();
-        String whichClass = i.getSerializableExtra("Package_ID").getClass().getName();
-        Log.e("test el ", "onCreate: " + whichClass);
-        if (whichClass.equals(Orders.class.getName())) {
-            currentOrder = (Orders) i.getSerializableExtra("Package_ID");
+
+                    mOrderEventListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            currentOrder = dataSnapshot.getValue(Orders.class);
+                            Log.e("test Orders", "onDataChange: " + currentOrder.toString()
+                                    + "from cloud functions test");
+
+                            fillViewsWithCorrectData();
 
 
-            fillViewsWithCorrectData();
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    };
+
+                    mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
+
+                }
+            }
         }
-        else if (whichClass.equals(DelegatesNotification.class.getName())) {
-             purpose = (String) i.getSerializableExtra("Purpose");
-            currentDelegateNotification = (DelegatesNotification) i.getSerializableExtra("Package_ID");
+        //if isPickedOrDelivered equal true there for cloud function is triggered to send picked or delivered acknowledge
+        if (isPickedOrDelivered)
+            return;
 
 
-            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
-                    .child(currentDelegateNotification.getOrderId());
+
+            Intent i = getIntent();
+            String whichClass = i.getSerializableExtra("Package_ID").getClass().getName();
+            Log.e("test el ", "onCreate: " + whichClass);
+            if (whichClass.equals(Orders.class.getName())) {
+                currentOrder = (Orders) i.getSerializableExtra("Package_ID");
 
 
-            mOrderEventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    currentOrder = dataSnapshot.getValue(Orders.class);
-                    Log.e("test Orders", "onDataChange: " + currentOrder.getOrderId());
+                fillViewsWithCorrectData();
+
+            }
+            else if (whichClass.equals(DelegatesNotification.class.getName())) {
+                purpose = (String) i.getSerializableExtra("Purpose");
+                currentDelegateNotification = (DelegatesNotification) i.getSerializableExtra("Package_ID");
+
+
+                mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
+                        .child(currentDelegateNotification.getOrderId());
+
+
+                mOrderEventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        currentOrder = dataSnapshot.getValue(Orders.class);
+                        Log.e("test Orders", "onDataChange: " + currentOrder.getOrderId());
 //
-                    fillViewsWithCorrectData();
+                        fillViewsWithCorrectData();
 
-                }
+                    }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            };
+                    }
+                };
 
-            mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
-        }
-        else if (whichClass.equals(MerchantsNotifications.class.getName())){
-            Snackbar snackbar = Snackbar
-                    .make(findViewById(R.id.scroll_view), "سيتواصل معك المندوب في اقرب وقت ", Snackbar.LENGTH_LONG);
-            snackbar.show();
-
-
-            currentMerchantNotification = (MerchantsNotifications) i.getSerializableExtra("Package_ID");
-            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
-                    .child(currentMerchantNotification.getOrderId());
+                mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
+            }
+            else if (whichClass.equals(MerchantsNotifications.class.getName())){
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.scroll_view), "سيتواصل معك المندوب في اقرب وقت ", Snackbar.LENGTH_LONG);
+                snackbar.show();
 
 
-            mOrderEventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    currentOrder = dataSnapshot.getValue(Orders.class);
+                currentMerchantNotification = (MerchantsNotifications) i.getSerializableExtra("Package_ID");
+                mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
+                        .child(currentMerchantNotification.getOrderId());
 
-                    fillViewsWithCorrectData();
 
-                }
+                mOrderEventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        currentOrder = dataSnapshot.getValue(Orders.class);
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                        fillViewsWithCorrectData();
 
-                }
-            };
+                    }
 
-            mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
-        }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                };
+
+                mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
+            }
+
+
+
 
     }
 
@@ -403,8 +528,13 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                             callUser.setOnClickListener(OrderDetails.this);
                             callEndConsumer.setOnClickListener(OrderDetails.this);
 
+
                             deliveryRequest.setVisibility(View.GONE);
                             ownerLayout.setVisibility(View.GONE);
+                            if (currentOrder.isPicked()){
+                                orderDelivered.setVisibility(View.VISIBLE);
+                                orderDelivered.setOnClickListener(OrderDetails.this);
+                            }
                         }else{
                             deliveryRequest.setVisibility(View.GONE);
                             assignedUserLayout.setVisibility(View.GONE);
@@ -429,6 +559,11 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                             endConsumerMobile.setText(currentOrder.getEndConsumerMobile());
                             callUser.setOnClickListener(OrderDetails.this);
                             callEndConsumer.setOnClickListener(OrderDetails.this);
+
+                            if (!currentOrder.isPicked()){
+                            orderPicked.setVisibility(View.VISIBLE);
+                            orderPicked.setOnClickListener(OrderDetails.this);
+                            }
 
                         }
                         else {
@@ -466,6 +601,9 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
             mUserDatabaseReference.child(user.getUid())
                     .addListenerForSingleValueEvent(mUserEventListener);
 
+
+        }else {
+            AuthUI.getInstance().signOut(this);
 
         }
 

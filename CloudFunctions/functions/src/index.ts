@@ -136,95 +136,115 @@ export const sendNotificationToUser = functions.database
 ////////////////////////////////////////////////////////////////////////////////  
 
 
-//     export const sendAcceptanceToDelegate = functions.database
-// .ref('Users/{UsersId}/Notifications/{NotificationsId}')
-// .onUpdate(async (change, contex) =>  {
-//     const before = change.before.val()
-//     const after = change.after.val()
-//     if(before.requestInfo.status === after.requestInfo.status){
-//       console.log("value did not change")
-//       return null
-//     }
-//     const merchantId = contex.params.UsersId
-//     const notificationsId = contex.params.NotificationsId
+    export const sendSatusAcknowledge = functions.database
+.ref('Orders/{OrdersId}')
+.onUpdate(async (change, contex) =>  {
+      const before = change.before.val()
+      const after = change.after.val()
+      if(before.picked === after.picked && before.delivered === after.delivered){
+        console.log("value did not change")
+        return null
+    }
+      const orderId = contex.params.OrdersId
   
     
-//     console.log(`merchantId is ${merchantId} notificationId is ${notificationsId}`);
+      console.log(`order id is ${orderId}`);
 
-//     const notificationData = after;
-//     const ordersId = notificationData.orderId
+      const orderData = after;
 
-//     let merchantName
-//      await admin.database().ref(`Users/${merchantId}`).child('name').once('value').then(result=>{
-//       merchantName = result.val();
-//                   }
-//                   )
-//                   .catch(error=>{
-//                       console.log('something goes wrong');
-                      
-//                     });
+      const merchantName = orderData.merchantName;
+      const delegateName = orderData.acceptedDelegateName;
 
-//       const orderName = notificationData.orderName;
-//       const delegateURL = notificationData.requestInfo.userImageURL;
+      const merchantId = orderData.merchantId;
+      const delegateId = orderData.acceptedDelegateID;
 
-//       //const delegateName = notificationData.requestInfo.userName;
-//       const delegateOffer = notificationData.requestInfo.offerPrice;
+      const orderName = orderData.packageName;
 
-//       console.log(`order name is ${orderName} delegateURL is ${delegateURL}`);
+      const orderURL = orderData.packageImageURL;
+
+      console.log(`order name is ${orderName} orderURL is ${orderURL}`);
+
+      let getDeviceTokensPromise: any;
+      let payload: any;
+
+      if (before.picked !== after.picked){
+            getDeviceTokensPromise = admin.database()
+      .ref(`Users/${merchantId}/userToken`).once('value');
+
+      }else if (before.delivered !== after.delivered){
+        getDeviceTokensPromise = admin.database()
+      .ref(`Users/${delegateId}/userToken`).once('value');
+
+      }
+ 
+
+      // The snapshot to the user's tokens.
+
+      // The array containing all the user's tokens.
+
+      const results = await Promise.all([getDeviceTokensPromise]);
+      const tokensSnapshot = results[0];
+
+      if (!tokensSnapshot.hasChildren()) {
+         console.log('There are no notification tokens to send to.');
+      }
+      console.log('There are', tokensSnapshot.numChildren(), 'tokens to send notifications to.');
       
+      if (before.picked !== after.picked){
+        //Notification details.
+       payload = {
+        notification: {
+          title: `${orderName} Picking acknowledge`,
+          body: `${delegateName} marked your order ${orderName} as Picked `,
+          sound: "default",
+          icon: orderURL,
+          priority : "high",
+          click_action : ".OrdersPackage.OrderDetails"
+        }
+        , data: {
+          "orderId" : orderId  
+        }
+      }; 
 
-//       const getDeviceTokensPromise = admin.database()
-//       .ref(`Users/${notificationData.requestInfo.userID}/userToken`).once('value');
+  }else if (before.delivered !== after.delivered){
+    //Notification details.
+    payload = {
+      notification: {
+        title: `${orderName} Delivering acknowledge`,
+        body: `${merchantName} marked your order ${orderName} as delivered `,
+        sound: "default",
+        icon: orderURL,
+        priority : "high",
+        click_action : ".OrdersPackage.OrderDetails"
+      }
+      , data: {
+        "orderId" : orderId
+      }
+    }; 
 
-//       // The snapshot to the user's tokens.
-
-//       // The array containing all the user's tokens.
-
-//       const results = await Promise.all([getDeviceTokensPromise]);
-//       const tokensSnapshot = results[0];
-
-//       if (!tokensSnapshot.hasChildren()) {
-//          console.log('There are no notification tokens to send to.');
-//       }
-//       console.log('There are', tokensSnapshot.numChildren(), 'tokens to send notifications to.');
-
-//       //Notification details.
-//       const payload = {
-//         notification: {
-//           title: `delivery acceptance for ${orderName}`,
-//           body: `${merchantName} accept your offer on ${orderName} for ${delegateOffer} EGP `,
-//           sound: "default",
-//           icon: delegateURL,
-//           priority : "high"
-//           //click_action : ".UserInfo.Notifications"
-//         }
-//         , data: {
-//           "orderId" : ordersId  
-//         }
-//       }; 
+  }
 
 
+      console.log(`token is ${tokensSnapshot.val()} payload is ${payload}`)
 
-//       console.log(`token is ${tokensSnapshot.val()} payload is ${payload}`)
-
-//       // Send notifications to all tokens.
-//       const response = await admin.messaging().sendToDevice(tokensSnapshot.val(), payload);
-//       // For each message check if there was an error.
-//       const tokensToRemove:any[] = [];
-//       response.results.forEach(async (result, index) => {
-//         const error = result.error;
-//         if (error) {
-//           console.error('Failure sending notification to', tokensSnapshot.val()[index], error);
-//           // Cleanup the tokens who are not registered anymore.
-//           if (error.code === 'messaging/invalid-registration-token' ||
-//               error.code === 'messaging/registration-token-not-registered') {
-//                 await admin.database().ref(`Users/${merchantId}/userToken`).remove()
-//             tokensToRemove.push(tokensSnapshot.ref.child(tokensSnapshot.val()).remove());
-//           }
-//         }
-//       });
-//        return Promise.all(tokensToRemove);
-//     });
+      // Send notifications to all tokens.
+      const response = await admin.messaging().sendToDevice(tokensSnapshot.val(), payload);
+      // For each message check if there was an error.
+      const tokensToRemove:any[] = [];
+      response.results.forEach(async (result, index) => {
+        const error = result.error;
+        if (error) {
+          console.error('Failure sending notification to', tokensSnapshot.val()[index], error);
+          // Cleanup the tokens who are not registered anymore.
+          if (error.code === 'messaging/invalid-registration-token' ||
+              error.code === 'messaging/registration-token-not-registered') {
+                await admin.database().ref(`Users/${merchantId}/userToken`).remove()
+            tokensToRemove.push(tokensSnapshot.ref.child(tokensSnapshot.val()).remove());
+          }
+        }
+      });
+       return Promise.all(tokensToRemove);
+    });
 
     
 

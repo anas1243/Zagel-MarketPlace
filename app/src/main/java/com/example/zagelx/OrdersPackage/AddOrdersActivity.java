@@ -122,10 +122,6 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
 
         currentLocationInfo = new LocationInfo();
-//        Intent i = getIntent();
-
-
-
 
         packageImage = findViewById(R.id.package_image);
         editPackageImage = findViewById(R.id.edit_package_image);

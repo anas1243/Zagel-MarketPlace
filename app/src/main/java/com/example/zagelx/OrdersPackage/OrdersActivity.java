@@ -191,6 +191,9 @@ public class OrdersActivity extends AppCompatActivity {
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Orders orders = dataSnapshot.getValue(Orders.class);
                     Log.e("test orders", "onChildAdded: " + orders);
+                    if(orders.getPackageState().equals("New")
+                    || orders.getPackageState().equals("Negotiable")
+                    )
                     mOrdersAdapter.add(orders);
 
                     //progressBar.setVisibility(View.GONE);
