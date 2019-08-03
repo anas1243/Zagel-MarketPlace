@@ -123,7 +123,7 @@
                 <action android:name=".OrdersPackage.OrderDetails" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>>
+        </activity>
         <activity android:name=".TripsPackage.TripsDetails" />
         <activity android:name=".OrdersPackage.OrdersRequestsActivity" />
 

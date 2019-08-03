@@ -77,10 +77,8 @@ dependencies {
     //badge notification for imageViews
     implementation 'com.nex3z:notification-badge:1.0.2'
 
-    implementation('com.mikepenz:materialdrawer:5.9.5@aar') {
+    implementation("com.mikepenz:materialdrawer:6.0.8@aar") {
         transitive = true
-        exclude group: 'com.android.support'
-        implementation 'com.hyman:flowlayout-lib:1.1.2'
     }
 
 }
