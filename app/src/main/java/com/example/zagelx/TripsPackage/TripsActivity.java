@@ -160,8 +160,9 @@ public class TripsActivity extends AppCompatActivity {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Trips trips = dataSnapshot.getValue(Trips.class);
-                    mTripsAdapter.add(trips);
+                    Trips currentTrip = dataSnapshot.getValue(Trips.class);
+                    if (!currentTrip.isFullRoute())
+                    mTripsAdapter.add(currentTrip);
 
                     //progressBar.setVisibility(View.GONE);
                 }

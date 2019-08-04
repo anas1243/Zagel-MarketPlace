@@ -18,8 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-
-import com.example.zagelx.Authentication.AfterRegisterUserInfo;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;

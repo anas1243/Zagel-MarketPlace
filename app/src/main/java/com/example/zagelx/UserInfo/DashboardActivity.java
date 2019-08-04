@@ -1,5 +1,6 @@
 package com.example.zagelx.UserInfo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -47,6 +48,7 @@ public class DashboardActivity extends AppCompatActivity {
     private Query queryOrders;
     private Query queryTrips;
     private String userType;
+    private String whichActivity;
 
 
     @BindView(R.id.toolbar)
@@ -65,8 +67,20 @@ public class DashboardActivity extends AppCompatActivity {
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
         mListView = findViewById(R.id.main_list);
 
-
-
+        Intent i = getIntent();
+         whichActivity = (String) i.getSerializableExtra("Which_Activity");
+        if (whichActivity.equals("OrderDetails")){
+            String pickedOrDelivered = (String) i.getSerializableExtra("PickedORDelivered");
+            if(pickedOrDelivered.equals("Picked")){
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.main_main_layout), "الرجاء السراع في توصيل الشحنة لتعزيز الثقة بينك و بين التطبيق", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }else if (pickedOrDelivered.equals("Delivered")){
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.main_main_layout), "نتمنا ان تكون قد استمتعت باستخدام التطبيق", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        }
         if (user != null) {
 
             mUserEventListener = new ValueEventListener() {
@@ -83,9 +97,10 @@ public class DashboardActivity extends AppCompatActivity {
                     userType = currentUser.getMode();
 
                     if(userType.equals("Merchant")){
+                        if(!whichActivity.equals("OrderDetails")){
                         Snackbar snackbar = Snackbar
                                 .make(findViewById(R.id.main_main_layout), "الشحنات الخاصة بك !", Snackbar.LENGTH_LONG);
-                        snackbar.show();
+                        snackbar.show();}
                         final List<Orders> ordersList = new ArrayList<>();
                         mOrdersAdapter = new DashboardOrdersAdapter(DashboardActivity.this
                                 , R.layout.order_list_dashboard, ordersList);
@@ -111,10 +126,11 @@ public class DashboardActivity extends AppCompatActivity {
                         });
                     }
                     else{
-                        Snackbar snackbar = Snackbar
-                                .make(findViewById(R.id.main_main_layout), "الرحلات الخاصة بك !", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-
+                        if(!whichActivity.equals("OrderDetails")) {
+                            Snackbar snackbar = Snackbar
+                                    .make(findViewById(R.id.main_main_layout), "الرحلات الخاصة بك !", Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
                         final List<Trips> TripsList = new ArrayList<>();
                         mTripsAdapter = new DashboardTipsAdapter(DashboardActivity.this
                                 , R.layout.trip_item, TripsList);

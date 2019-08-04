@@ -23,8 +23,10 @@ import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.RequestInfo;
+import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
+import com.example.zagelx.UserInfo.DashboardActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,19 +36,28 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class OrderDetails extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mOrdersDatabaseReference, mUserDatabaseReference, mRequestInfoDatabaseReference;
-    private ValueEventListener mUserEventListener, mOrderEventListener;
+    private DatabaseReference mOrdersDatabaseReference, mUserDatabaseReference
+            , mTripsDatabaseReference, mRequestInfoDatabaseReference;
+    private ValueEventListener mUserEventListener, mOrderEventListener, mTripEventListener;
 
 
-    private TextView merchantName, packageName, packageSource, packageDestination, packageDate, packagePrice, deliveryFees, packageBreakablility, packageVehicle, packageStatus;
+    private TextView merchantName, packageName, packageSource, packageDestination
+            , packageDate, packagePrice, deliveryFees, packageBreakablility
+            , packageVehicle, packageStatus, packageWeight;
     private EditText packageNotes;
     private ImageView merchantImage, packageImage, packageVehicleIcon, infoDelivery, verificationIcon;
 
     private Button deliveryRequest, deleteOrder, showRequestOrder, refuseOffer, acceptOffer, orderPicked, orderDelivered;
     private Orders currentOrder;
+    private Trips currentTrip;
     private DelegatesNotification currentDelegateNotification = null;
     private MerchantsNotifications currentMerchantNotification = null;
     private String priceOffer;
@@ -60,7 +71,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout assignedUserLayout, endConsumerLayout;
     private ImageView callUser, callEndConsumer;
 
-    private String purpose;
+    private String purpose, tripId;
 
     private TextView anotherUserName, anotherUserMobile, endConsumerName, endConsumerMobile, userLable;
     private boolean isPickedOrDelivered=false;
@@ -119,6 +130,12 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                         mOrdersDatabaseReference.child("picked").setValue(true);
 
 
+                        Intent i = new Intent(OrderDetails.this, DashboardActivity.class);
+                        i.putExtra("Which_Activity", "OrderDetails");
+                        i.putExtra("PickedORDelivered", "Picked");
+                        startActivity(i);
+
+
 
                     }
                 });
@@ -146,6 +163,12 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                         dialog.cancel();
                         mOrdersDatabaseReference.child("packageState").setValue("Delivered");
                         mOrdersDatabaseReference.child("delivered").setValue(true);
+
+
+                        Intent i = new Intent(OrderDetails.this, DashboardActivity.class);
+                        i.putExtra("Which_Activity", "OrderDetails");
+                        i.putExtra("PickedORDelivered", "Delivered");
+                        startActivity(i);
 
 
 
@@ -292,6 +315,40 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                     mOrdersDatabaseReference.child("acceptedDelegateMobile")
                                             .setValue(currentUser.getMobileNumber());
                                     mOrdersDatabaseReference.child("packageState").setValue("Reserved");
+                                    mTripsDatabaseReference = mFirebaseDatabase.getReference().child("Trips")
+                                            .child(tripId);
+
+                                    mTripEventListener = new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            currentTrip = dataSnapshot.getValue(Trips.class);
+                                            Map<String, String> ordersInThisRoute;
+                                            if (currentTrip.getRouteOrders()!= null){
+                                                 ordersInThisRoute = currentTrip.getRouteOrders();
+                                                ordersInThisRoute.put(currentOrder.getPackageName(), currentOrder.getOrderId());
+                                                mTripsDatabaseReference.child("routeOrders").setValue(ordersInThisRoute);
+                                            }else{
+                                                 ordersInThisRoute = new HashMap<String, String>(){{
+                                                    put(currentOrder.getPackageName(), currentOrder.getOrderId());
+                                                }};
+
+                                                mTripsDatabaseReference.child("routeOrders").setValue(ordersInThisRoute);
+
+                                            }
+                                            Log.e("OrderDetails", "onDataChange: route orders list sise is"+ ordersInThisRoute.size() );
+                                            if (ordersInThisRoute.size() == currentTrip.getMaxNoOrders())
+                                                mTripsDatabaseReference.child("fullRoute").setValue(true);
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    };
+
+                                    mTripsDatabaseReference.addListenerForSingleValueEvent(mTripEventListener);
 
                                     Intent i = new Intent(OrderDetails.this, OrderDetails.class);
                                     i.putExtra("Package_ID", currentDelegateNotification);
@@ -344,6 +401,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         packageStatus = findViewById(R.id.package_status);
         packageSource = findViewById(R.id.package_source);
         packageDestination = findViewById(R.id.package_destination);
+        packageWeight = findViewById(R.id.package_weight);
         packageDate = findViewById(R.id.package_date);
         packagePrice = findViewById(R.id.package_pre_paid_value);
         deliveryFees = findViewById(R.id.delivery_fees);
@@ -435,7 +493,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
             else if (whichClass.equals(DelegatesNotification.class.getName())) {
                 purpose = (String) i.getSerializableExtra("Purpose");
                 currentDelegateNotification = (DelegatesNotification) i.getSerializableExtra("Package_ID");
-
+                tripId = currentDelegateNotification.getTripId();
 
                 mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
                         .child(currentDelegateNotification.getOrderId());
@@ -633,6 +691,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
 
         packageSource.setText(currentOrder.getCurrentOrderLocationInfo().fullSourceLocation());
         packageDestination.setText(currentOrder.getCurrentOrderLocationInfo().fullDestinationLocation());
+        packageWeight.setText(currentOrder.getPackageWeight());
         packageDate.setText(currentOrder.getDeliveryDate().toString());
         deliveryFees.setText(currentOrder.getDeliveryPrice() + " EGP");
         packageVehicle.setText(currentOrder.getVehicle());

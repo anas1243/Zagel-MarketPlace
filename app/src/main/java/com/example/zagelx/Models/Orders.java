@@ -14,6 +14,7 @@ public class Orders implements Serializable {
     private String packageImageURL = "";
     private String packageDescription = "";
     private String packagePrice = "";
+    private String packageWeight = "";
     private BirthDate deliveryDate = null;
     private String deliveryPrice = "";
     private boolean prePaid = false;
@@ -43,10 +44,13 @@ public class Orders implements Serializable {
     }
 
 
-    public Orders(String orderId, String merchantId, String merchantMobile, String merchantImageURL, String merchantName, String packageName, String packageImageURL,
-                  String packageDescription, String packagePrice, boolean isPrePaid, boolean isBreakable, boolean verifiedUser,
-                  BirthDate deliveryDate, String deliveryPrice, String vehicle,
-                  String endConsumerMobile, String endConsumerName, LocationInfo currentOrderLocationInfo, String packageState) {
+    public Orders(String orderId, String merchantId, String merchantMobile
+            , String merchantImageURL, String merchantName, String packageName
+            , String packageWeight, String packageImageURL, String packageDescription
+            , String packagePrice, boolean isPrePaid, boolean isBreakable, boolean verifiedUser
+            , BirthDate deliveryDate, String deliveryPrice, String vehicle
+            , String endConsumerMobile, String endConsumerName
+            , LocationInfo currentOrderLocationInfo, String packageState) {
         this.orderId = orderId;
         this.merchantId = merchantId;
         this.merchantImageURL = merchantImageURL;
@@ -56,6 +60,7 @@ public class Orders implements Serializable {
         this.packageImageURL = packageImageURL;
         this.packageDescription = packageDescription;
         this.packagePrice = packagePrice;
+        this.packageWeight = packageWeight;
         this.prePaid = isPrePaid;
         this.breakable = isBreakable;
         this.deliveryDate = deliveryDate;
@@ -175,6 +180,7 @@ public class Orders implements Serializable {
                 ", packageImageURL='" + packageImageURL + '\'' +
                 ", packageDescription='" + packageDescription + '\'' +
                 ", packagePrice='" + packagePrice + '\'' +
+                ", packageWeight='" + packageWeight + '\'' +
                 ", deliveryDate=" + deliveryDate +
                 ", deliveryPrice='" + deliveryPrice + '\'' +
                 ", prePaid=" + prePaid +
@@ -220,5 +226,9 @@ public class Orders implements Serializable {
 
     public boolean isPicked() {
         return picked;
+    }
+
+    public String getPackageWeight() {
+        return packageWeight;
     }
 }

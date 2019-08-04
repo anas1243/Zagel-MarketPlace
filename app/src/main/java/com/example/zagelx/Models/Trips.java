@@ -1,6 +1,7 @@
 package com.example.zagelx.Models;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 public class Trips implements Serializable {
@@ -13,6 +14,7 @@ public class Trips implements Serializable {
     private String routePrice = "";
     private String routeDescription = "";
     private boolean verifiedUser = false;
+    private boolean fullRoute = false;
 
     private int numberOfRequests = 0;
 
@@ -20,8 +22,8 @@ public class Trips implements Serializable {
 
     private LocationInfo currentOrderLocationInfo = null;
 
-    private String maxNoOrders = "";
-    private Map<String, String> routeOrders;
+    private int maxNoOrders ;
+    private Map<String, String> routeOrders = null;
 
     private boolean prePaid = false;
     private boolean breakable = false;
@@ -33,7 +35,7 @@ public class Trips implements Serializable {
     public Trips(String tripId, String delegateImageURL, String delegateID
             , String delegateName, BirthDate routeDate, String routePrice
             , String routeDescription, String vehicle, LocationInfo currentOrderLocationInfo
-            , String maxNoOrders, boolean prePaid, boolean breakable, String maxPrePaidLimit, boolean verifiedUser) {
+            , int maxNoOrders, boolean prePaid, boolean breakable, String maxPrePaidLimit, boolean verifiedUser) {
         this.tripId = tripId;
         this.delegateImageURL = delegateImageURL;
         this.delegateID = delegateID;
@@ -90,7 +92,7 @@ public class Trips implements Serializable {
         return routeOrders;
     }
 
-    public String getMaxNoOrders() {
+    public int getMaxNoOrders() {
         return maxNoOrders;
     }
 
@@ -112,5 +114,9 @@ public class Trips implements Serializable {
 
     public int getNumberOfRequests() {
         return numberOfRequests;
+    }
+
+    public boolean isFullRoute() {
+        return fullRoute;
     }
 }

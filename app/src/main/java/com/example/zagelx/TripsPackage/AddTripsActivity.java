@@ -68,8 +68,8 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
     private FirebaseAuth mFirebaseAuth;
 
-    private String delegateId, delegateName, delegateImageURL, TPrice, maxNoOrders, oMaxPrice, tVehicle, tNotes;
-
+    private String delegateId, delegateName, delegateImageURL, TPrice, oMaxPrice, tVehicle, tNotes;
+    private int maxNoOrders;
     private boolean isPrePaid = false;
     private boolean isBreakable = false;
     private boolean delegateVerification;
@@ -516,7 +516,7 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         oMaxPrice = maxPrepaidPriceET.getText().toString().trim();
         TPrice = routePriceET.getText().toString().trim();
         tVehicle = vehicle.getText().toString().trim();
-        maxNoOrders = maxNoOrdersET.getText().toString().trim();
+        maxNoOrders = Integer.parseInt(maxNoOrdersET.getText().toString().trim());
         tNotes = routeNotesET.getText().toString().trim();
         dDate = new BirthDate(routeDateDP.getYear(),
                 routeDateDP.getMonth() + 1, routeDateDP.getDayOfMonth());

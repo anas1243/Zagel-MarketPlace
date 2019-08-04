@@ -129,6 +129,7 @@ public class DrawerUtil extends Activity {
                             view.getContext().startActivity(intent);
                         }else if (drawerItem.getIdentifier() == 3 && !(activity instanceof DashboardActivity)) {
                             Intent intent = new Intent(activity, DashboardActivity.class);
+                            intent.putExtra("Which_Activity", "SomethingElse");
                             view.getContext().startActivity(intent);
 
                         } else if (drawerItem.getIdentifier() == 4 && !(activity instanceof NotificationsActivity)) {

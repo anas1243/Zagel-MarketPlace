@@ -75,7 +75,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private SwitchCompat isBreakableSwitch;
     private TextView vehicle;
 
-    private Spinner packageSLocation, packageSAreaName, packageDLocation, packageDAreaName;
+    private Spinner packageSLocation, packageSAreaName, packageDLocation, packageDAreaName, packageWeight;
     ArrayAdapter<CharSequence> adapter;
     private TextView userSLocationLable, userSAreaNameLable, userDLocationLable, userDAreaNameLable;
 
@@ -103,7 +103,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private Uri selectedImageUri;
 
     private String merchantId, merchantMobile, merchantImageURL, getMerchantName, oImageUrl,
-            oName, dPrice, RMobile, RName, oPrice, oVehicle, oDescription;
+            oName, dPrice, RMobile, RName, oPrice, oVehicle, oDescription, oWeight;
 
     private LocationInfo currentLocationInfo;
 
@@ -143,6 +143,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
         packageDLocation = findViewById(R.id.user_Dlocation);
         packageDAreaName = findViewById(R.id.area_Dname);
+
+        packageWeight = findViewById(R.id.spinner_weight);
 
 
         userSLocationLable = findViewById(R.id.user_Slocation_lable);
@@ -746,6 +748,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         RName = endConsumerName.getText().toString().trim();
         oVehicle = vehicle.getText().toString().trim();
         oDescription = packageDescriptionET.getText().toString().trim();
+        oWeight = packageWeight.getSelectedItem().toString();
         dDate = new BirthDate(deliveryDateDP.getYear(),
                 deliveryDateDP.getMonth() + 1, deliveryDateDP.getDayOfMonth());
 //        if (uName.equals("")) {
@@ -841,7 +844,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                             }
                             String orderId = System.currentTimeMillis() + merchantId;
 
-                            Orders order = new Orders(orderId, merchantId,merchantMobile, merchantImageURL, getMerchantName, oName, oImageUrl
+                            Orders order = new Orders(orderId, merchantId,merchantMobile, merchantImageURL, getMerchantName, oName, oWeight, oImageUrl
                                     , oDescription, oPrice
                                     , isPrePaid, isBreakable,merchantVerification, dDate,
                                     dPrice, oVehicle, RMobile, RName
@@ -851,6 +854,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
                             Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(AddOrdersActivity.this, DashboardActivity.class);
+                            i.putExtra("Which_Activity", "OtherActivity");
                             finish();
                             startActivity(i);
                         } else {

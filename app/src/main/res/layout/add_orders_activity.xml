@@ -88,6 +88,8 @@
                     android:singleLine="true"
                     android:textAllCaps="true" />
 
+
+
                 <EditText
 
                     android:id="@+id/end_consumer_name"
@@ -113,6 +115,24 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/prompt_weight"
+                    android:textColor="@color/colorSecondary"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinner_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:elevation="5dp"
+                    android:entries="@array/weight_array"
+                    android:prompt="@string/prompt_weight"
+                    android:layout_marginBottom="8dp"/>
 
                 <TextView
                     android:id="@+id/user_Slocation_lable"
@@ -122,7 +142,8 @@
                     android:layout_marginTop="16dp"
                     android:singleLine="true"
                     android:text="Source Location"
-                    android:textColor="@color/colorSecondary" />
+                    android:textColor="@color/colorSecondary"
+                    android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/user_Slocation"
@@ -130,9 +151,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:elevation="24dp"
+                    android:elevation="5dp"
                     android:entries="@array/AR_location_array"
-                    android:prompt="@string/prompt_location" />
+                    android:prompt="@string/prompt_location"
+                    />
 
                 <TextView
                     android:id="@+id/area_Sname_lable"
@@ -142,8 +164,8 @@
                     android:layout_marginTop="16dp"
                     android:singleLine="true"
                     android:text="Source Area"
-                    android:textColor="@color/colorSecondary" />
-
+                    android:textColor="@color/colorSecondary"
+                    android:textStyle="bold" />
 
 
                 <Spinner
@@ -152,7 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:elevation="24dp"
+                    android:elevation="5dp"
                     android:entries="@array/الإسكندرية"
                     android:prompt="@string/prompt_location" />
 
@@ -164,7 +186,8 @@
                     android:layout_marginTop="16dp"
                     android:singleLine="true"
                     android:text="Destination Location"
-                    android:textColor="@color/colorSecondary" />
+                    android:textColor="@color/colorSecondary"
+                    android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/user_Dlocation"
@@ -172,7 +195,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:elevation="24dp"
+                    android:elevation="5dp"
                     android:entries="@array/AR_location_array"
                     android:prompt="@string/prompt_location" />
 
@@ -184,7 +207,8 @@
                     android:layout_marginTop="16dp"
                     android:singleLine="true"
                     android:text="Destination Area"
-                    android:textColor="@color/colorSecondary" />
+                    android:textColor="@color/colorSecondary"
+                    android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/area_Dname"
@@ -192,7 +216,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:elevation="24dp"
+                    android:elevation="5dp"
                     android:entries="@array/الإسكندرية"
                     android:prompt="@string/prompt_location" />
 
@@ -218,6 +242,7 @@
                         android:theme="@style/SCBSwitch" />
 
                 </RelativeLayout>
+
                 <EditText
                     android:id="@+id/package_price"
                     android:layout_width="match_parent"
@@ -227,7 +252,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -255,31 +280,30 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="7dp">
+                    android:layout_marginBottom="7dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/Vehicle_text"
-                    style="@style/label_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    <TextView
+                        android:id="@+id/Vehicle_text"
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Preferred Vehicle:"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
 
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="Preferred Vehicle:"
-                    android:textColor="@color/colorSecondary"
-                    android:textStyle="bold" />
                     <TextView
                         android:id="@+id/vehicle_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Car"
                         android:layout_marginLeft="10dp"
-                        android:textStyle="bold"
-                        android:textSize="24sp"
+                        android:text="Car"
                         android:textColor="@color/colorAccent"
-                        />
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -291,48 +315,49 @@
                     <ImageButton
                         android:id="@+id/ic_car"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="40dp"
+                        android:layout_weight="1"
                         android:background="@drawable/vehicle_car_yellow" />
 
                     <ImageButton
                         android:id="@+id/ic_bus"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="40dp"
-                        android:background="@drawable/ic_bus_selector"
-                        android:layout_marginLeft="15dp"/>
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_bus_selector" />
 
                     <ImageButton
                         android:id="@+id/ic_train"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="40dp"
-                        android:background="@drawable/ic_train_selector"
-                        android:layout_marginLeft="15dp"/>
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_train_selector" />
 
                     <ImageButton
                         android:id="@+id/ic_metro"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="40dp"
-                        android:background="@drawable/ic_metro_selector"
-                        android:layout_marginLeft="15dp"/>
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_metro_selector" />
 
                     <ImageButton
                         android:id="@+id/ic_motorcycle"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="40dp"
-                        android:background="@drawable/ic_motorcycle_selector"
-                        android:layout_marginLeft="15dp"/>
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_motorcycle_selector" />
+
                     <ImageButton
                         android:id="@+id/ic_nos_na2l"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="40dp"
-                        android:background="@drawable/ic_nos_na2l_selector"
-                        android:layout_marginLeft="15dp"/>
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_nos_na2l_selector" />
 
                 </LinearLayout>
 
@@ -370,8 +395,7 @@
                     android:hint="Package Description"
                     android:inputType="textMultiLine"
                     android:minHeight="100dp"
-                    android:padding="16dp"
-                     />
+                    android:padding="16dp" />
 
 
                 <Button

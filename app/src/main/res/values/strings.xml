@@ -29,12 +29,12 @@
 
    <!-- Add Trips labels -->
    <string name="trip_price">Trip Price</string>
-   <string name="max_no_orders">Maximum number of orders</string>
+   <string name="max_no_orders">اقصي عدد شحنات في هذه الرحلة</string>
    <string name="is_prepaid">Pre-Paid trip?</string>
    <string name="trip_vehicle_lable">Trip Vehicle:</string>
    <string name="trip_notes">Trips Notes</string>
    <string name="delivery_date_label">Delivery Date</string>
-   <string name="maximum_prepaid_price">Maximum pre-paid Price</string>
+   <string name="maximum_prepaid_price">الحد الاقصي للدفع المقدم للشحنة الواحدة</string>
 
 
 
@@ -268,9 +268,10 @@
 
 
    <string-array name="weight_array">
-       <item>Less Than 1 kilo</item>
-       <item>1-5 Kilos</item>
-       <item>More Than 5 kilos</item>
+       <item>اقل من كيلو</item>
+       <item>من 1 كيلو الي 5 كيلو</item>
+       <item>من 5 كيلو الي 20 كيلو</item>
+       <item>اكثر من 20 كيلو</item>
    </string-array>
    <string name="title_activity_settings">Settings</string>
 
