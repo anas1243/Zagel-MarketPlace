@@ -1,19 +1,18 @@
-package com.example.zagelx.DashboardPackage;
+package com.example.zagelx.MainPackage;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
 import com.example.zagelx.R;
 
-public class SimpleFragmentPagerAdapterForDelegate extends FragmentPagerAdapter {
+public class SimpleFragmentPagerAdapterForStart extends FragmentPagerAdapter {
     private Context mContext;
     private String userId;
     private Bundle bundle;
 
-    public SimpleFragmentPagerAdapterForDelegate(FragmentManager fm, Context context
+    public SimpleFragmentPagerAdapterForStart(FragmentManager fm, Context context
             , String userId) {
         super(fm);
         mContext = context;
@@ -25,15 +24,15 @@ public class SimpleFragmentPagerAdapterForDelegate extends FragmentPagerAdapter 
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            DelegateOrdersFragment fragObj = new DelegateOrdersFragment();
+            OrdersFragment fragObj = new OrdersFragment();
             fragObj.setArguments(bundle);
             return fragObj;
         } else{
-            DelegateTripsFragment fragObj = new DelegateTripsFragment();
+            TripsFragment fragObj = new TripsFragment();
             fragObj.setArguments(bundle);
             return fragObj;
 
-    }
+        }
     }
 
     @Override

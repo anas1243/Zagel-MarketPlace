@@ -1,4 +1,4 @@
-package com.example.zagelx;
+package com.example.zagelx.MainPackage;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.OrdersPackage.OrdersAdapter;
+import com.example.zagelx.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

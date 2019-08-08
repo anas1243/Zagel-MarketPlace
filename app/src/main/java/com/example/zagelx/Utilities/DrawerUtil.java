@@ -14,9 +14,8 @@ import com.bumptech.glide.Glide;
 
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
 import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.UserInfo.AboutUsActivity;
-import com.example.zagelx.OrdersPackage.OrdersActivity;
-import com.example.zagelx.DashboardPackage.DashboardActivity;
 import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.UserInfo.ProfileActivity;
 import com.example.zagelx.R;
@@ -121,10 +120,10 @@ public class DrawerUtil extends Activity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem.getIdentifier() == 1 && (!(activity instanceof OrdersActivity))) {
+                        if (drawerItem.getIdentifier() == 1 && (!(activity instanceof MainActivity))) {
                             // load home screen.
                             Intent intent;
-                                intent = new Intent(activity, OrdersActivity.class);
+                                intent = new Intent(activity, MainActivity.class);
                             view.getContext().startActivity(intent);
                         } else if (drawerItem.getIdentifier() == 2 && !(activity instanceof ProfileActivity)) {
                             // load profile/user screen.

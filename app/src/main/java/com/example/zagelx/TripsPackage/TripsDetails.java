@@ -22,14 +22,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.OrdersInTrip;
 import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
-import com.example.zagelx.OrdersPackage.OrdersActivity;
-import com.example.zagelx.OrdersPackage.OrdersAdapter;
 import com.example.zagelx.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -342,7 +341,7 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                         Snackbar snackbar = Snackbar
                                 .make(findViewById(R.id.main_list), "لقد تمل ارسال طلبك للمندوب", Snackbar.LENGTH_LONG);
                         snackbar.show();
-                        Intent i = new Intent(TripsDetails.this, OrdersActivity.class);
+                        Intent i = new Intent(TripsDetails.this, MainActivity.class);
                         finish();
                         startActivity(i);
 

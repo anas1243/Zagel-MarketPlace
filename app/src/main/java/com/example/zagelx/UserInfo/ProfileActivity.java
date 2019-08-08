@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
@@ -255,7 +256,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 break;
             case R.id.button_cancel_edit:
-                Intent i = new Intent(ProfileActivity.this, OrdersActivity.class);
+                Intent i = new Intent(ProfileActivity.this, MainActivity.class);
                 startActivity(i);
                 break;
             case R.id.verification_edit:

@@ -575,8 +575,8 @@
 
     <string name="google_maps_key">AIzaSyBe6jwWmCXjLUKc-s-2BZQUmA6ulv_Occk</string>
 
-    <string name="delegate_orders">الشحنات</string>
-    <string name="delegate_trips">الرحلات</string>
+    <string name="orders">الشحنات</string>
+    <string name="trips">الرحلات</string>
 
     <string name="new_orders">جديدة</string>
     <string name="negotiable_orders">قابلة للنقاش</string>

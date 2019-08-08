@@ -24,9 +24,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Users;
-import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -419,7 +419,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                             usersDatabaseReference.child(uId).setValue(currentUser);
 
                             Toast.makeText(AfterRegisterUserInfo.this, "Resgistered!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(AfterRegisterUserInfo.this, OrdersActivity.class);
+                            Intent i = new Intent(AfterRegisterUserInfo.this, MainActivity.class);
                             startActivity(i);
                         }else{
                             Toast.makeText(AfterRegisterUserInfo.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();

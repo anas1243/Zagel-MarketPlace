@@ -20,7 +20,7 @@ android:orientation="horizontal">
     android:layout_width="50dp"
     android:layout_height="50dp"
     android:layout_alignParentRight="true"
-    android:src="@drawable/ic_notifications_toolbar"
+    android:src="@drawable/ic_notifications_toolbar_white"
     android:background="@color/colorPrimary"
     />
     <com.nex3z.notificationbadge.NotificationBadge
@@ -35,27 +35,27 @@ android:orientation="horizontal">
         app:nbMaxTextLength="2"
         />
 
-    <View
-        android:id="@+id/first_separator"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_toLeftOf="@id/ic_notification_toolbar"/>
+    <!--<View-->
+        <!--android:id="@+id/first_separator"-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@color/white"-->
+        <!--android:layout_toLeftOf="@id/ic_notification_toolbar"/>-->
 
     <ImageButton
         android:id="@+id/ic_search_toolbar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"
-        android:src="@drawable/ic_search_toolbar"
-        android:layout_toLeftOf="@id/first_separator"/>
+        android:src="@drawable/ic_search_toolbar_white"
+        android:layout_toLeftOf="@id/ic_notification_toolbar"/>
 
-    <View
-        android:id="@+id/second_separator"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_toLeftOf="@id/ic_search_toolbar"/>
+    <!--<View-->
+        <!--android:id="@+id/second_separator"-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@color/white"-->
+        <!--android:layout_toLeftOf="@id/ic_search_toolbar"/>-->
 
 </RelativeLayout>
     </android.support.v7.widget.Toolbar>

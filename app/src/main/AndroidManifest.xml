@@ -135,6 +135,9 @@
         <activity android:name=".DashboardPackage.DelegateTripsActivity" />
         <activity android:name=".DashboardPackage.DelegateOrdersActivity" />
         <activity android:name=".DashboardPackage.DelegateDashboardActivity" />
+        <activity android:name=".MainPackage.MainActivity" />
+        <activity android:name=".MainPackage.MainTrips" />
+        <activity android:name=".MainPackage.MainOrders" />
 
         <service
             android:name=".Utilities.MyFirebaseMessagingService"

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
 import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Orders;
@@ -234,7 +235,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                         Snackbar snackbar = Snackbar
                                 .make(findViewById(R.id.scroll_view), "لقد تمل ارسال طلبك للتاجر", Snackbar.LENGTH_LONG);
                         snackbar.show();
-                        Intent i = new Intent(OrderDetails.this, OrdersActivity.class);
+                        Intent i = new Intent(OrderDetails.this, MainActivity.class);
                         startActivity(i);
 
 

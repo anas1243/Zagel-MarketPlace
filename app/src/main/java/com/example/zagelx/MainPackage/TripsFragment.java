@@ -1,4 +1,4 @@
-package com.example.zagelx;
+package com.example.zagelx.MainPackage;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.zagelx.Models.Trips;
+import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.TripsAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;

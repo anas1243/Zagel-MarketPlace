@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Users;
@@ -205,7 +206,7 @@ public class NotificationsActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(NotificationsActivity.this, OrdersActivity.class);
+        Intent i = new Intent(NotificationsActivity.this, MainActivity.class);
         finish();
         startActivity(i);
     }

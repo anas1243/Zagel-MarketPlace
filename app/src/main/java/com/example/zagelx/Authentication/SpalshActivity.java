@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.Users;
-import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -110,7 +110,7 @@ public class SpalshActivity extends AppCompatActivity {
 
     public void AnExistingUserlogin() {
         Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(SpalshActivity.this, OrdersActivity.class);
+        Intent i = new Intent(SpalshActivity.this, MainActivity.class);
         startActivity(i);
 
     }

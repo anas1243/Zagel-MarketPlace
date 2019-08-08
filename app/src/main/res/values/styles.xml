@@ -34,6 +34,10 @@
 
     </style>
 
+    <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">32sp</item>
+    </style>
+
     <style name="button">
         <item name="android:background">@color/colorSecondary</item>
         <item name="android:elevation">2dp</item>
