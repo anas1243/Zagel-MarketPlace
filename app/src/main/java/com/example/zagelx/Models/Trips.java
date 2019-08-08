@@ -23,7 +23,7 @@ public class Trips implements Serializable {
     private LocationInfo currentOrderLocationInfo = null;
 
     private int maxNoOrders ;
-    private Map<String, String> routeOrders = null;
+    private Map<String, Map<String, String>> routeOrders = null;
 
     private boolean prePaid = false;
     private boolean breakable = false;
@@ -88,7 +88,7 @@ public class Trips implements Serializable {
         return currentOrderLocationInfo;
     }
 
-    public Map<String, String> getRouteOrders() {
+    public Map<String, Map<String, String>> getRouteOrders() {
         return routeOrders;
     }
 

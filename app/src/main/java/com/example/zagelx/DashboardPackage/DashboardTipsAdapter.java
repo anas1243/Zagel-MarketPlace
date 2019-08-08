@@ -1,4 +1,4 @@
-package com.example.zagelx.UserInfo;
+package com.example.zagelx.DashboardPackage;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,67 +12,70 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
-import com.example.zagelx.Models.Orders;
+import com.example.zagelx.Models.Trips;
 import com.example.zagelx.OrdersPackage.OrderDetails;
 import com.example.zagelx.R;
+import com.example.zagelx.TripsPackage.TripsDetails;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DashboardOrdersAdapter extends ArrayAdapter<Orders> {
+public class DashboardTipsAdapter extends ArrayAdapter<Trips> {
+
     Context context ;
-    public DashboardOrdersAdapter(Context context, int resource, List<Orders> objects) {
+
+    public DashboardTipsAdapter( Context context, int resource,  List<Trips> objects) {
         super(context, resource, objects);
         this.context = context;
     }
 
 
     @Override
-    public Orders getItem(int position) {
+    public Trips getItem(int position) {
         return super.getItem(super.getCount() - position - 1);
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.order_list_dashboard
+            convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.trip_item
                     , parent, false);
         }
 
         View listItemView = convertView;
 
 
-        CircleImageView packageImageIV = convertView.findViewById(R.id.package_image);
-        TextView packageNameTV = convertView.findViewById(R.id.package_name);
-        TextView deliveryDateTV = convertView.findViewById(R.id.delivery_date);
-        TextView deliveryPriceTV = convertView.findViewById(R.id.delivery_price);
+        CircleImageView packageImageIV = convertView.findViewById(R.id.delegate_image);
+        TextView packageNameTV = convertView.findViewById(R.id.user_name);
+        TextView deliveryDateTV = convertView.findViewById(R.id.route_date);
+        TextView deliveryPriceTV = convertView.findViewById(R.id.route_price);
 
         TextView sourceTV = convertView.findViewById(R.id.source_txt_view);
         TextView destinationTV = convertView.findViewById(R.id.destination_txt_view);
         ImageView vehicleImageIV = convertView.findViewById(R.id.vehicle_image);
 
 
-        final Orders CurrentOrder = getItem(position);
-        BirthDate oDate = CurrentOrder.getDeliveryDate();
+        final Trips CurrentTrip = getItem(position);
+        BirthDate oDate = CurrentTrip.getRouteDate();
 
 
 
 
         Glide.with(packageImageIV.getContext())
-                .load(CurrentOrder.getPackageImageURL())
+                .load(CurrentTrip.getDelegateImageURL())
                 .into(packageImageIV);
 
-        Log.e("OrdersAdapter", "getView: " + CurrentOrder.getPackageImageURL());
-        packageNameTV.setText(CurrentOrder.getPackageName());
+        Log.e("OrdersAdapter", "getView: " + CurrentTrip.getDelegateImageURL());
+        packageNameTV.setText(CurrentTrip.getDelegateName());
         final String orderDate = oDate.getYear() + "-" + oDate.getMonth() + "-" + oDate.getDay();
         deliveryDateTV.setText(orderDate);
-        String price = CurrentOrder.getDeliveryPrice() + " egp";
+        String price = CurrentTrip.getRoutePrice() + " egp";
         deliveryPriceTV.setText(price);
 
-        sourceTV.setText(CurrentOrder.getCurrentOrderLocationInfo().getsAdminArea());
-        destinationTV.setText(CurrentOrder.getCurrentOrderLocationInfo().getdAdminArea());
-        switch (CurrentOrder.getVehicle()) {
+        sourceTV.setText(CurrentTrip.getCurrentOrderLocationInfo().getsAdminArea());
+        destinationTV.setText(CurrentTrip.getCurrentOrderLocationInfo().getdAdminArea());
+        switch (CurrentTrip.getVehicle()) {
             case "Car":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);
                 break;
@@ -97,12 +100,13 @@ public class DashboardOrdersAdapter extends ArrayAdapter<Orders> {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(context, OrderDetails.class);
-                Log.e("zero one test test", "onClick: "+ CurrentOrder.isPrePaid() );
-                i.putExtra("Package_ID", CurrentOrder);
+                Intent i = new Intent(context, TripsDetails.class);
+                Log.e("zero one test test", "onClick: "+ CurrentTrip.isPrePaid() );
+                i.putExtra("Route_ID", CurrentTrip);
                 context.startActivity(i);
             }
         });
+
 
 
         return convertView;

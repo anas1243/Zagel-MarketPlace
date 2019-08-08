@@ -1,10 +1,8 @@
 package com.example.zagelx.Authentication;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -22,9 +20,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class SpalshActivity extends AppCompatActivity {
 
 
     //the request code for
@@ -106,14 +103,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void addNewUser() {
         Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(MainActivity.this, AfterRegisterUserInfo.class);
+        Intent i = new Intent(SpalshActivity.this, AfterRegisterUserInfo.class);
         startActivity(i);
 
     }
 
     public void AnExistingUserlogin() {
         Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(MainActivity.this, OrdersActivity.class);
+        Intent i = new Intent(SpalshActivity.this, OrdersActivity.class);
         startActivity(i);
 
     }

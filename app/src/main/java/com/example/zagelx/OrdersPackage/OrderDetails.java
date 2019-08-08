@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Orders;
@@ -26,7 +28,7 @@ import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.UserInfo.DashboardActivity;
+import com.example.zagelx.DashboardPackage.DashboardActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,9 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class OrderDetails extends AppCompatActivity implements View.OnClickListener {
@@ -130,7 +130,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                         mOrdersDatabaseReference.child("picked").setValue(true);
 
 
-                        Intent i = new Intent(OrderDetails.this, DashboardActivity.class);
+                        Intent i = new Intent(OrderDetails.this, DelegateDashboardActivity.class);
                         i.putExtra("Which_Activity", "OrderDetails");
                         i.putExtra("PickedORDelivered", "Picked");
                         startActivity(i);
@@ -165,7 +165,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                         mOrdersDatabaseReference.child("delivered").setValue(true);
 
 
-                        Intent i = new Intent(OrderDetails.this, DashboardActivity.class);
+                        Intent i = new Intent(OrderDetails.this, MerchantDashboardActivity.class);
                         i.putExtra("Which_Activity", "OrderDetails");
                         i.putExtra("PickedORDelivered", "Delivered");
                         startActivity(i);
@@ -322,14 +322,20 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             currentTrip = dataSnapshot.getValue(Trips.class);
-                                            Map<String, String> ordersInThisRoute;
+                                            Map<String, Map<String, String>> ordersInThisRoute;
                                             if (currentTrip.getRouteOrders()!= null){
                                                  ordersInThisRoute = currentTrip.getRouteOrders();
-                                                ordersInThisRoute.put(currentOrder.getPackageName(), currentOrder.getOrderId());
+                                                ordersInThisRoute.put(currentOrder.getOrderId(), new HashMap<String, String>() {{
+                                                    put(currentOrder.getPackageName(),currentOrder.getPackageImageURL());
+                                                }
+                                                });
                                                 mTripsDatabaseReference.child("routeOrders").setValue(ordersInThisRoute);
                                             }else{
-                                                 ordersInThisRoute = new HashMap<String, String>(){{
-                                                    put(currentOrder.getPackageName(), currentOrder.getOrderId());
+                                                 ordersInThisRoute = new HashMap<String, Map<String, String>>(){{
+                                                    put(currentOrder.getOrderId(), new HashMap<String, String>() {{
+                                                        put(currentOrder.getPackageName(),currentOrder.getPackageImageURL());
+                                                    }
+                                                    });
                                                 }};
 
                                                 mTripsDatabaseReference.child("routeOrders").setValue(ordersInThisRoute);

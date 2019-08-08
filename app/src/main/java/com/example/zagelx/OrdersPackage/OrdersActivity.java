@@ -152,7 +152,7 @@ public class OrdersActivity extends AppCompatActivity {
                     mBadge.setNumber(currentUser.getNumberOfNotifications());
 
                     drawer = new DrawerUtil(currentUser.getName()
-                            , currentUser.getMobileNumber(), currentUser.getProfilePictureURL());
+                            , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(OrdersActivity.this, toolbar);
                     if (!currentUser.getMode().equals("Merchant")) {
                         setAddOrderButtonListenerInActive();

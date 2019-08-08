@@ -12,9 +12,11 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.UserInfo.AboutUsActivity;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
-import com.example.zagelx.UserInfo.DashboardActivity;
+import com.example.zagelx.DashboardPackage.DashboardActivity;
 import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.UserInfo.ProfileActivity;
 import com.example.zagelx.R;
@@ -38,12 +40,13 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 
 
 public class DrawerUtil extends Activity {
-    String userId, photoUrl, name, phone, uId;
+    String userId, photoUrl, name, phone, uId, mode;
 
-    public DrawerUtil(String name, String phone, String photoUrl) {
+    public DrawerUtil(String name, String phone, String photoUrl, String mode) {
         this.name = name;
         this.phone = phone;
         this.photoUrl = photoUrl;
+        this.mode = mode;
     }
 
     public void getDrawer(final Activity activity, Toolbar toolbar) {
@@ -58,7 +61,7 @@ public class DrawerUtil extends Activity {
             }
         });
         // Create the AccountHeader
-        DrawerUtil drawer = new DrawerUtil(name, phone,photoUrl);
+        DrawerUtil drawer = new DrawerUtil(name, phone,photoUrl, mode);
 
         PrimaryDrawerItem drawerItemHome = new PrimaryDrawerItem().withIdentifier(1)
                 .withName(R.string.nav_home).withIcon(R.drawable.ic_home);
@@ -127,10 +130,17 @@ public class DrawerUtil extends Activity {
                             // load profile/user screen.
                             Intent intent = new Intent(activity, ProfileActivity.class);
                             view.getContext().startActivity(intent);
-                        }else if (drawerItem.getIdentifier() == 3 && !(activity instanceof DashboardActivity)) {
-                            Intent intent = new Intent(activity, DashboardActivity.class);
-                            intent.putExtra("Which_Activity", "SomethingElse");
-                            view.getContext().startActivity(intent);
+                        }else if (drawerItem.getIdentifier() == 3 && (!(activity instanceof MerchantDashboardActivity)
+                                && !(activity instanceof DelegateDashboardActivity))){
+                            if (mode.equals("Merchant")){
+                                Intent intent = new Intent(activity, MerchantDashboardActivity.class);
+                                intent.putExtra("Which_Activity", "SomethingElse");
+                                view.getContext().startActivity(intent);
+                            }else{
+                                Intent intent = new Intent(activity, DelegateDashboardActivity.class);
+                                intent.putExtra("Which_Activity", "SomethingElse");
+                                view.getContext().startActivity(intent);
+                            }
 
                         } else if (drawerItem.getIdentifier() == 4 && !(activity instanceof NotificationsActivity)) {
                             Intent intent = new Intent(activity, NotificationsActivity.class);
@@ -144,6 +154,7 @@ public class DrawerUtil extends Activity {
                             AuthUI.getInstance().signOut(activity).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     // user is now signed out
+                                    android.os.Process.killProcess(android.os.Process.myPid());
 
                                 }
                             });

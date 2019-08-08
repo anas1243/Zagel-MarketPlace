@@ -99,7 +99,7 @@ public class OrdersRequestsActivity extends AppCompatActivity {
                     setSupportActionBar(toolbar);
 
                     drawer = new DrawerUtil(currentUser.getName()
-                            , currentUser.getMobileNumber(), currentUser.getProfilePictureURL());
+                            , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(OrdersRequestsActivity.this, toolbar);
 
 

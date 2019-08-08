@@ -16,19 +16,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.DelegatesNotification;
-import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Orders;
+import com.example.zagelx.Models.OrdersInTrip;
 import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
-import com.example.zagelx.OrdersPackage.OrderDetails;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
+import com.example.zagelx.OrdersPackage.OrdersAdapter;
 import com.example.zagelx.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,7 +41,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TripsDetails extends AppCompatActivity implements View.OnClickListener {
 
@@ -72,6 +75,11 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
 
     private int currentNumberOfNotifications;
     private int currentNumberOfCurrentOrderRequests;
+
+    private View ordersLayoutSeparator;
+
+    private ListView mOrdersInTripListView;
+    private OrdersInTripAdapter mOrdersInTripsAdapter;
 
     @Override
     public void onClick(View v) {
@@ -130,6 +138,8 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
         youOrdersLayout = findViewById(R.id.youOrders_layout);
         deleteTrip = findViewById(R.id.delete_request);
         showRequests = findViewById(R.id.show_requests);
+
+        ordersLayoutSeparator = findViewById(R.id.order_layout_of_trips_separator);
 
 
 
@@ -215,7 +225,29 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                             ownerLayout.setVisibility(View.VISIBLE);
                             deleteTrip.setOnClickListener(TripsDetails.this);
                             showRequests.setOnClickListener(TripsDetails.this);
+                            if (currentTrip.getRouteOrders() != null){
+                                ordersLayoutSeparator.setVisibility(View.VISIBLE);
 
+                                mOrdersInTripListView = findViewById(R.id.main_list);
+                                final List<OrdersInTrip> ordersList = new ArrayList<>();
+                                mOrdersInTripsAdapter = new OrdersInTripAdapter(TripsDetails.this, R.layout.orders_in_trip_item, ordersList);
+                                mOrdersInTripListView.setAdapter(mOrdersInTripsAdapter);
+                                OrdersInTrip ordersInTrip;
+
+
+                                for (Map.Entry<String, Map<String, String>> letterEntry : currentTrip.getRouteOrders().entrySet()) {
+                                    String orderId = letterEntry.getKey();
+                                    for (Map.Entry<String, String> nameEntry : letterEntry.getValue().entrySet()) {
+                                        String orderName = nameEntry.getKey();
+                                        String orderURL = nameEntry.getValue();
+                                        ordersInTrip = new OrdersInTrip(orderId, orderURL, orderName );
+                                        Log.e("TripsDetails", "onDataChange: "+ ordersInTrip.toString() );
+                                        mOrdersInTripsAdapter.add(ordersInTrip);
+                                    }
+                                }
+
+
+                            }
                         }else{
                             deliveryRequest.setVisibility(View.GONE);
                         }
@@ -308,7 +340,7 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                         mOrdersDatabaseReference.child(selectedOrderItemID).child("packageState").setValue("Negotiable");
                         dialog.cancel();
                         Snackbar snackbar = Snackbar
-                                .make(findViewById(R.id.scroll_view), "لقد تمل ارسال طلبك للمندوب", Snackbar.LENGTH_LONG);
+                                .make(findViewById(R.id.main_list), "لقد تمل ارسال طلبك للمندوب", Snackbar.LENGTH_LONG);
                         snackbar.show();
                         Intent i = new Intent(TripsDetails.this, OrdersActivity.class);
                         finish();

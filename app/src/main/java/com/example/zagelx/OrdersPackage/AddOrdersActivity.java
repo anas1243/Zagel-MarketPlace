@@ -29,12 +29,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfo;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.UserInfo.DashboardActivity;
+import com.example.zagelx.DashboardPackage.DashboardActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -853,7 +854,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                             mOrdersDatabaseReference.child(orderId).setValue(order);
 
                             Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(AddOrdersActivity.this, DashboardActivity.class);
+                            Intent i = new Intent(AddOrdersActivity.this, MerchantDashboardActivity.class);
                             i.putExtra("Which_Activity", "OtherActivity");
                             finish();
                             startActivity(i);
