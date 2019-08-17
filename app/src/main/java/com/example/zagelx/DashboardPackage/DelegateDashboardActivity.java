@@ -8,7 +8,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.Utilities.DrawerUtil;
@@ -45,8 +47,6 @@ public class DelegateDashboardActivity extends AppCompatActivity {
 
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_view_pager_main_dashboard);
-
-
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -112,8 +112,18 @@ public class DelegateDashboardActivity extends AppCompatActivity {
             AuthUI.getInstance().signOut(this);
 
         }
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(DelegateDashboardActivity.this, MainActivity.class);
+        startActivity(i);
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Intent i = new Intent(DelegateDashboardActivity.this, MainActivity.class);
+        startActivity(i);
 
-
+        return super.onKeyDown(keyCode, event);
     }
 }

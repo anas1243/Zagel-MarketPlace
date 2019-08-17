@@ -40,7 +40,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -167,8 +166,8 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
 
 
 
-        routeSource.setText(currentTrip.getCurrentOrderLocationInfo().fullSourceLocation());
-        routeDestination.setText(currentTrip.getCurrentOrderLocationInfo().fullDestinationLocation());
+        routeSource.setText(currentTrip.getLocationInfoForTrip().fullSourceLocation());
+        routeDestination.setText(currentTrip.getLocationInfoForTrip().fullDestinationLocation());
         routeDate.setText(currentTrip.getRouteDate().toString());
         deliveryFees.setText(currentTrip.getRoutePrice() + " EGP");
         routeVehicle.setText(currentTrip.getVehicle());

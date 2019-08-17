@@ -1,16 +1,22 @@
 package com.example.zagelx.DashboardPackage;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
+import com.example.zagelx.TripsPackage.AddTripsActivity;
+import com.example.zagelx.TripsPackage.TripsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -115,5 +121,18 @@ public class MerchantDashboardActivity extends AppCompatActivity {
 
 
 
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(MerchantDashboardActivity.this, MainActivity.class);
+        startActivity(i);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Intent i = new Intent(MerchantDashboardActivity.this, MainActivity.class);
+        startActivity(i);
+
+        return super.onKeyDown(keyCode, event);
     }
 }

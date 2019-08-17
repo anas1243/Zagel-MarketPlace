@@ -3,6 +3,7 @@
     package="com.example.zagelx">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -138,6 +139,7 @@
         <activity android:name=".MainPackage.MainActivity" />
         <activity android:name=".MainPackage.MainTrips" />
         <activity android:name=".MainPackage.MainOrders" />
+        <activity android:name=".UserInfo.SetAcurrateLocationActivity" />
 
         <service
             android:name=".Utilities.MyFirebaseMessagingService"

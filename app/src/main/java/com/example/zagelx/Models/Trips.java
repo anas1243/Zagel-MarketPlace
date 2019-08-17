@@ -1,7 +1,6 @@
 package com.example.zagelx.Models;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 public class Trips implements Serializable {
@@ -20,7 +19,7 @@ public class Trips implements Serializable {
 
     private String vehicle = "";
 
-    private LocationInfo currentOrderLocationInfo = null;
+    private LocationInfoForPackage locationInfoForTrip = null;
 
     private int maxNoOrders ;
     private Map<String, Map<String, String>> routeOrders = null;
@@ -34,7 +33,7 @@ public class Trips implements Serializable {
 
     public Trips(String tripId, String delegateImageURL, String delegateID
             , String delegateName, BirthDate routeDate, String routePrice
-            , String routeDescription, String vehicle, LocationInfo currentOrderLocationInfo
+            , String routeDescription, String vehicle, LocationInfoForPackage locationInfoForTrip
             , int maxNoOrders, boolean prePaid, boolean breakable, String maxPrePaidLimit, boolean verifiedUser) {
         this.tripId = tripId;
         this.delegateImageURL = delegateImageURL;
@@ -44,7 +43,7 @@ public class Trips implements Serializable {
         this.routePrice = routePrice;
         this.routeDescription = routeDescription;
         this.vehicle = vehicle;
-        this.currentOrderLocationInfo = currentOrderLocationInfo;
+        this.locationInfoForTrip = locationInfoForTrip;
         this.maxNoOrders = maxNoOrders;
         this.prePaid = prePaid;
         this.breakable = breakable;
@@ -84,8 +83,8 @@ public class Trips implements Serializable {
         return vehicle;
     }
 
-    public LocationInfo getCurrentOrderLocationInfo() {
-        return currentOrderLocationInfo;
+    public LocationInfoForPackage getLocationInfoForTrip() {
+        return locationInfoForTrip;
     }
 
     public Map<String, Map<String, String>> getRouteOrders() {

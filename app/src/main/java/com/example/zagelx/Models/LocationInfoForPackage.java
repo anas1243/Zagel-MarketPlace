@@ -4,21 +4,23 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 
-public class LocationInfo implements Serializable {
-    String sLat = "";
-    String sLng = "";
-    String sAdminArea = "";      //el mo7afza
-    String sSubAdmin = "";       //el markaz
-    String sLocality = "";       //el 7ay
-
-    String dLat = "";
-    String dLng = "";
-    String dAdminArea = "";      //el mo7afza
-    String dSubAdmin = "";       //el markaz
-    String dLocality = "";       //el 7ay
+public class LocationInfoForPackage implements Serializable {
+    private String sLat = "";
+    private String sLng = "";
+    private String sAdminArea = "";      //el mo7afza
+    private String sSubAdmin = "";       //el markaz
+    private String sLocality = "";      //el 7ay
 
 
-    public LocationInfo() {
+    private String dLat = "";
+    private String dLng = "";
+    private String dAdminArea = "";      //el mo7afza
+    private String dSubAdmin = "";       //el markaz
+    private String dLocality = "";       //el 7ay
+
+
+
+    public LocationInfoForPackage() {
     }
 
     public String getsLat() {
@@ -122,7 +124,7 @@ public class LocationInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "LocationInfo{" +
+        return "LocationInfoForPackage{" +
                 "sLat='" + sLat + '\'' +
                 ", sLng='" + sLng + '\'' +
                 ", sAdminArea='" + sAdminArea + '\'' +

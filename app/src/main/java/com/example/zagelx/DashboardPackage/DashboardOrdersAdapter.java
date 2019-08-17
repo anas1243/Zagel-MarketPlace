@@ -70,8 +70,8 @@ public class DashboardOrdersAdapter extends ArrayAdapter<Orders> {
         String price = CurrentOrder.getDeliveryPrice() + " egp";
         deliveryPriceTV.setText(price);
 
-        sourceTV.setText(CurrentOrder.getCurrentOrderLocationInfo().getsAdminArea());
-        destinationTV.setText(CurrentOrder.getCurrentOrderLocationInfo().getdAdminArea());
+        sourceTV.setText(CurrentOrder.getLocationInfoForPackage().getsAdminArea());
+        destinationTV.setText(CurrentOrder.getLocationInfoForPackage().getdAdminArea());
         switch (CurrentOrder.getVehicle()) {
             case "Car":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);

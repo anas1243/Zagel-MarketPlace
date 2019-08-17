@@ -29,7 +29,6 @@ import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.DashboardPackage.DashboardActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -696,8 +695,8 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         packageName.setText(currentOrder.getPackageName());
         packageStatus.setText(currentOrder.getPackageState());
 
-        packageSource.setText(currentOrder.getCurrentOrderLocationInfo().fullSourceLocation());
-        packageDestination.setText(currentOrder.getCurrentOrderLocationInfo().fullDestinationLocation());
+        packageSource.setText(currentOrder.getLocationInfoForPackage().fullSourceLocation());
+        packageDestination.setText(currentOrder.getLocationInfoForPackage().fullDestinationLocation());
         packageWeight.setText(currentOrder.getPackageWeight());
         packageDate.setText(currentOrder.getDeliveryDate().toString());
         deliveryFees.setText(currentOrder.getDeliveryPrice() + " EGP");

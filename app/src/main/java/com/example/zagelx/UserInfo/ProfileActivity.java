@@ -1,29 +1,40 @@
 package com.example.zagelx.UserInfo;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Authentication.AfterRegisterUserInfo;
 import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Users;
+import com.example.zagelx.OrdersPackage.AddOrdersActivity;
+import com.example.zagelx.OrdersPackage.AddOrdersMapActivity;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
 import com.google.android.gms.tasks.Continuation;
@@ -65,10 +76,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView editUserImageIcon, editUserName, editUserEmail, editUserPhone, editUserLocation, editUserBirthdate, editUserType, editUserVerification;
     private EditText newEmail;
     private View emailLineSeparator;
-    private Spinner newLocation, newType;
+    private Spinner newLocation, newType, newAdmin;
+    private ArrayAdapter<CharSequence> adapter;
     private DatePicker newDate;
-    private Button saveButton, cancelButton;
+    private Button saveButton, cancelButton, setAccurateLocation;
     private boolean editImageFlag = false;
+    private ProgressBar progressBar;
 
 
     private UploadTask uploadTask;
@@ -93,6 +106,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ProfileImageReference = storage.getReference().child("profile_images/"
                 + "ProfilePic-->" + user.getUid());
 
+        progressBar = findViewById(R.id.progressBar);
+
         userName = findViewById(R.id.user_name);
         userVerification = findViewById(R.id.user_verification);
         userPhone = findViewById(R.id.user_mobile);
@@ -108,12 +123,186 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         editUserEmail = findViewById(R.id.email_edit);
         editUserPhone = findViewById(R.id.phone_edit);
         editUserLocation = findViewById(R.id.location_edit);
+        setAccurateLocation = findViewById(R.id.set_current_location_on_map);
         editUserBirthdate = findViewById(R.id.date_edit);
         editUserType = findViewById(R.id.type_edit);
 
         newEmail = findViewById(R.id.new_email);
         emailLineSeparator = findViewById(R.id.email_line_separator);
         newLocation = findViewById(R.id.new_location);
+        newAdmin = findViewById(R.id.new_admin);
+
+        newLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id)
+            {
+                String AreaName = newLocation.getSelectedItem().toString();
+
+                switch (AreaName){
+                    case "الإسكندرية":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.الإسكندرية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "القاهرة":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.القاهرة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "الإسماعيلية":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.الإسماعيلية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "السويس":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.السويس, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "أسوان":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.أسوان, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "بورسعيد":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.بورسعيد, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "الشرقية":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.الشرقية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "كفر الشيخ":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.كفر_الشيخ, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "أسيوط":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.أسيوط, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "جنوب سيناء":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.جنوب_سيناء, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "مطروح":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.مطروح, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "الأقصر":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.الأقصر, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "الجيزة":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.الجيزة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "الغربية":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.الغربية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "المنوفية":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.المنوفية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "البحر الأحمر":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.البحر_الأحمر, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "الدقهلية":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.الدقهلية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "الفيوم":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.الفيوم, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "المنيا":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.المنيا, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "البحيرة":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.البحيرة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "دمياط":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.دمياط, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "الوادي الجديد":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.الوادي_الجديد, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "قنا":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.قنا, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "بني سويف":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.بني_سويف, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "سوهاج":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.سوهاج, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+                    case "القليوبية":
+                        adapter = ArrayAdapter.createFromResource(
+                                ProfileActivity.this, R.array.القليوبية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        newAdmin.setAdapter(adapter);
+                        break;
+
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0)
+            {
+            }
+        });
         newType = findViewById(R.id.new_type);
         newDate = findViewById(R.id.new_date);
         newDate.updateDate(1995, 0, 1);
@@ -122,12 +311,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         cancelButton = findViewById(R.id.button_cancel_edit);
 
 
+
+
         userImage.setOnClickListener(this);
         editUserImageIcon.setOnClickListener(this);
         editUserName.setOnClickListener(this);
         editUserEmail.setOnClickListener(this);
         editUserPhone.setOnClickListener(this);
         editUserLocation.setOnClickListener(this);
+        setAccurateLocation.setOnClickListener(this);
         editUserBirthdate.setOnClickListener(this);
         editUserType.setOnClickListener(this);
         saveButton.setOnClickListener(this);
@@ -139,6 +331,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 currentUser = dataSnapshot.getValue(Users.class);
+
+
                 userName.setText(currentUser.getName());
                 if (currentUser.isVerified()) {
                     userVerification.setText("Verified! Thank you");
@@ -147,12 +341,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     userVerification.setText("Not verified!\nPlease verify your account");
                     userVerificationStatus = false;
                 }
+                if (currentUser.isAccurateLocation())
+                    setAccurateLocation.setVisibility(View.GONE);
+                else
+                    setAccurateLocation.setVisibility(View.VISIBLE);
                 userPhone.setText(currentUser.getMobileNumber());
                 userEmail.setText(currentUser.getEmail());
                 String date = currentUser.getBirthDate().toString();
                 userDate.setText(date);
                 userType.setText(currentUser.getMode());
-                userLocation.setText(currentUser.getGovernment());
+                String fullLocation = currentUser.getLocationInfoForUser().getuAdminArea()+", "+currentUser.getLocationInfoForUser().getuSubAdmin();
+                userLocation.setText(fullLocation);
                 if (editImageFlag) {
                     Glide.with(userImage)
                             .load(filePath)
@@ -213,6 +412,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 editUserLocation.setVisibility(View.GONE);
                 userLocation.setVisibility(View.GONE);
                 newLocation.setVisibility(View.VISIBLE);
+                newAdmin.setVisibility(View.VISIBLE);
                 break;
             case R.id.edit_profile_image:
                 if (newEmail.getVisibility() == View.VISIBLE || newDate.getVisibility() == View.VISIBLE
@@ -269,8 +469,59 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             .make(findViewById(R.id.scroll_view), "Please Complete the progress bar to be a verified user", Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
+                break;
+            case R.id.set_current_location_on_map:
+                progressBar.setVisibility(View.VISIBLE);
+                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    Intent intent1 = new Intent(ProfileActivity.this, SetAcurrateLocationActivity.class);
+                    startActivity(intent1);
+                } else {
+                    isGPSopened();
+                }
+
 
         }
+    }
+    private void isGPSopened() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        try {
+            progressBar.setVisibility(View.GONE);
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+        }
+
+        if (!gps_enabled) {
+            showSettingsAlert();
+        }
+    }
+
+    public void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProfileActivity.this);
+
+        alertDialog.setTitle("GPS is settings");
+
+        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+        alertDialog.setPositiveButton("Open", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                ProfileActivity.this.startActivity(intent);
+            }
+        });
+
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialog.show();
     }
 
     public void editInfo() {
@@ -299,7 +550,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         }
         if (newLocation.getVisibility() == View.VISIBLE) {
-            usersDatabaseReference.child("government").setValue(newLocation.getSelectedItem().toString());
+            usersDatabaseReference.child("locationInfoForUser").child("uAdminArea").setValue(newLocation.getSelectedItem().toString());
+            usersDatabaseReference.child("locationInfoForUser").child("uSubAdmin").setValue(newAdmin.getSelectedItem().toString());
+            usersDatabaseReference.child("accurateLocation").setValue(false);
             snackbar = Snackbar
                     .make(findViewById(R.id.scroll_view), "your location has been changed!", Snackbar.LENGTH_LONG);
             snackbar.show();

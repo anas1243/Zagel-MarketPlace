@@ -9,7 +9,7 @@ public class Orders implements Serializable {
     private String merchantName = "";
     private String merchantMobile = "";
 
-    private LocationInfo currentOrderLocationInfo;
+    private LocationInfoForPackage locationInfoForPackage;
     private String packageName = "";
     private String packageImageURL = "";
     private String packageDescription = "";
@@ -50,7 +50,7 @@ public class Orders implements Serializable {
             , String packagePrice, boolean isPrePaid, boolean isBreakable, boolean verifiedUser
             , BirthDate deliveryDate, String deliveryPrice, String vehicle
             , String endConsumerMobile, String endConsumerName
-            , LocationInfo currentOrderLocationInfo, String packageState) {
+            , LocationInfoForPackage locationInfoForPackage, String packageState) {
         this.orderId = orderId;
         this.merchantId = merchantId;
         this.merchantImageURL = merchantImageURL;
@@ -67,7 +67,7 @@ public class Orders implements Serializable {
         this.deliveryPrice = deliveryPrice;
         this.vehicle = vehicle;
         this.endConsumerMobile = endConsumerMobile;
-        this.currentOrderLocationInfo = currentOrderLocationInfo;
+        this.locationInfoForPackage = locationInfoForPackage;
         this.packageState = packageState;
         this.verifiedUser = verifiedUser;
         this.endConsumerName = endConsumerName;
@@ -138,8 +138,8 @@ public class Orders implements Serializable {
         return verifiedUser;
     }
 
-    public LocationInfo getCurrentOrderLocationInfo() {
-        return currentOrderLocationInfo;
+    public LocationInfoForPackage getLocationInfoForPackage() {
+        return locationInfoForPackage;
     }
 
     public void setMerchantImageURL(String merchantImageURL) {
@@ -175,7 +175,7 @@ public class Orders implements Serializable {
                 ", merchantImageURL='" + merchantImageURL + '\'' +
                 ", merchantName='" + merchantName + '\'' +
                 ", merchantMobile='" + merchantMobile + '\'' +
-                ", currentOrderLocationInfo=" + currentOrderLocationInfo +
+                ", LocationInfoForPackage=" + locationInfoForPackage +
                 ", packageName='" + packageName + '\'' +
                 ", packageImageURL='" + packageImageURL + '\'' +
                 ", packageDescription='" + packageDescription + '\'' +

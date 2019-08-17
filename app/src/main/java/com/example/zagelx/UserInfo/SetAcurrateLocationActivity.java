@@ -1,4 +1,4 @@
-package com.example.zagelx.OrdersPackage;
+package com.example.zagelx.UserInfo;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -14,17 +14,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.zagelx.Models.LocationInfoForUsers;
 import com.example.zagelx.R;
-import com.example.anas.zagel.Adaptors.PlaceAutocompleteAdapter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompletePrediction;
@@ -38,14 +38,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 import java.util.Locale;
 
-public class AddOrdersMapActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
+public class SetAcurrateLocationActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
     private static final String TAG = "AddOrdersMapActivity";
     private static final int LOCATION_PERMESSION_REQUEST_CODE = 1234;
@@ -64,7 +69,7 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
     // location retrieved by the Fused Location Provider.
     private Location mLastKnownLocation;
 
-    private PlaceAutocompleteAdapter mPlaceAutoCompleteAdapter;
+    private com.example.anas.zagel.Adaptors.PlaceAutocompleteAdapter mPlaceAutoCompleteAdapter;
     //private GoogleApiClient mGoogleApiClient;
     private GeoDataClient mGeoDataClient;
 
@@ -74,24 +79,37 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
     );
 
 
-    private AutoCompleteTextView sourceAC, destinationAC;
+    private AutoCompleteTextView sourceAC;
     private ImageButton goCurrentLocationButton;
     private Button currentLocationIsSource;
     private Button nextButton;
     private boolean isCurrentisSource = false;
 
     double sourceLatlng[] = new double[2];
-    double destenationLatlng[] = new double[2];
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mUsersDatabaseReference;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
+
+    private ProgressBar progressBar;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_order_map);
+        setContentView(R.layout.activity_set_accurate_location_user);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        Log.e(TAG, "onCreate: user iddddddd issss " + user.getUid() );
+
+        progressBar = findViewById(R.id.progressBar);
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mUsersDatabaseReference = mFirebaseDatabase.getReference().child("Users").child(user.getUid());
 
         sourceAC = findViewById(R.id.source_autoComplete);
-        destinationAC = findViewById(R.id.destination_autoComplete);
         currentLocationIsSource = findViewById(R.id.currentLocation_is_source);
         goCurrentLocationButton = findViewById(R.id.go_current_location_button);
         nextButton = findViewById(R.id.btn_next);
@@ -101,19 +119,46 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
 
         mGeoDataClient = Places.getGeoDataClient(this);
 
-
         getLocationPermission();
 
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+
         mapFragment.getMapAsync(this);
+
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker arg0) {
+                // TODO Auto-generated method stub
+                Log.e("System out", "onMarkerDragStart..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onMarkerDragEnd(Marker arg0) {
+                // TODO Auto-generated method stub
+                Log.e("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+                sourceLatlng[0] = arg0.getPosition().latitude;
+                sourceLatlng[1] = arg0.getPosition().longitude;
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
+            }
+
+            @Override
+            public void onMarkerDrag(Marker arg0) {
+                // TODO Auto-generated method stub
+                Log.e("System out", "onMarkerDrag...");
+            }
+        });
 
         // Do other setup activities here too, as described elsewhere in this tutorial.
 
@@ -154,6 +199,7 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         }
@@ -247,24 +293,10 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
                 geoLocateById(placeId, "S");
             }
         });
-        destinationAC.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                hideSoftKeyboard();
-                final AutocompletePrediction item = mPlaceAutoCompleteAdapter.getItem(i);
 
-                final String placeId = item.getPlaceId();
-
-                Log.e(TAG, "onItemClick: you have clicked on this location" + placeId);
-
-                geoLocateById(placeId, "D");
-            }
-        });
-
-        mPlaceAutoCompleteAdapter = new PlaceAutocompleteAdapter(this, mGeoDataClient, LAT_LNG_BOUNDS, null);
+        mPlaceAutoCompleteAdapter = new com.example.anas.zagel.Adaptors.PlaceAutocompleteAdapter(this, mGeoDataClient, LAT_LNG_BOUNDS, null);
 
         sourceAC.setAdapter(mPlaceAutoCompleteAdapter);
-        destinationAC.setAdapter(mPlaceAutoCompleteAdapter);
 
         sourceAC.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -286,26 +318,6 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
-        destinationAC.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                        actionId == EditorInfo.IME_ACTION_DONE ||
-                        keyEvent.getKeyCode() == KeyEvent.ACTION_DOWN ||
-                        keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER
-                ) {
-                    //start searching ^^
-
-                    Log.e(TAG, "onEditorAction: the Selected item is " + mPlaceAutoCompleteAdapter.getmResultList().get(0).toString());
-                    destinationAC.dismissDropDown();
-                    destinationAC.setText(mPlaceAutoCompleteAdapter.getmResultList().get(0).getFullText(null));
-                    hideSoftKeyboard();
-                    geoLocateById(mPlaceAutoCompleteAdapter.getmResultList().get(0).getPlaceId(), "D");
-                }
-                return false;
-            }
-        });
-
 
     }
 
@@ -313,6 +325,7 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.currentLocation_is_source:
+                progressBar.setVisibility(View.VISIBLE);
                 isCurrentisSource = true;
                 getDeviceLocation(isCurrentisSource);
                 break;
@@ -328,25 +341,75 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
 
     private void validateLocationInfo() {
         String sourceAcString = sourceAC.getText().toString().trim();
-        String DestinationAcString = destinationAC.getText().toString().trim();
         if (sourceAcString.equals("")) {
-            sourceAC.setError("Write your package's source");
+            sourceAC.setError("Write your source");
             sourceAC.requestFocus();
-        } else if (DestinationAcString.equals("")) {
-            destinationAC.setError("Write end consumer location");
-            destinationAC.requestFocus();
         } else {
 
             Log.e(TAG, "sourceLatlngArray: " +sourceLatlng.toString());
-            Log.e(TAG, "destenationLatlngArray: " +destenationLatlng.toString());
-
-            Intent i = new Intent(AddOrdersMapActivity.this, AddOrdersActivity.class);
-            i.putExtra("FROM_ACTIVITY", "AddOrdersMapActivity");
-            i.putExtra("sourceLatlng", sourceLatlng);
-            i.putExtra("destenationLatlng", destenationLatlng);
+            mUsersDatabaseReference.child("locationInfoForUser").child("uLat").setValue(sourceLatlng[0]+"");
+            mUsersDatabaseReference.child("locationInfoForUser").child("uLng").setValue(sourceLatlng[1]+"");
+            mUsersDatabaseReference.child("accurateLocation").setValue(true);
+            Intent i = new Intent(SetAcurrateLocationActivity.this, ProfileActivity.class);
+            finish();
             startActivity(i);
         }
     }
+
+//    public void SetLocationInfo(double lat, double lng) {
+//
+//        Geocoder geocoder = new Geocoder(this);
+//        List<Address> list;
+//        try {
+//            list = geocoder.getFromLocation(lat, lng, 20);
+//
+//            // 20 is no of address you want to fetch near by the given lat-long
+//
+//            for (Address address : list) {
+//                if (address.getAdminArea() != null && address.getSubAdminArea() != null
+//                        && address.getLocality() != null) {
+//                        locationInfoForUser.setSLocationInfo(lat + "", lng + ""
+//                                , address.getAdminArea().replace("Governorate", "").trim()
+//                                , address.getSubAdminArea(), address.getLocality());
+//                        Log.e(TAG, "SetLocationInfo: " + address);
+//                    mUsersDatabaseReference.child("LocationInfo").setValue(locationInfoForUser);
+//                    mUsersDatabaseReference.child("accurateLocation").setValue(true);
+//                    Intent i = new Intent(SetAcurrateLocationActivity.this, ProfileActivity.class);
+//                    startActivity(i);
+//                        return;
+//                }
+//            }
+//
+//            for (Address address : list) {
+//                if (address.getAdminArea() != null && address.getSubAdminArea() != null) {
+//                        locationInfoForUser.setSLocationInfo(lat + "", lng + ""
+//                                , address.getAdminArea().replace("Governorate", "").trim()
+//                                , address.getSubAdminArea(), "");
+//                        Log.e(TAG, "SetLocationInfo: " + address);
+//                    mUsersDatabaseReference.child("LocationInfo").setValue(locationInfoForUser);
+//                    mUsersDatabaseReference.child("accurateLocation").setValue(true);
+//                    Intent i = new Intent(SetAcurrateLocationActivity.this, ProfileActivity.class);
+//                    startActivity(i);
+//                        return;
+//                }
+//            }
+//            for (Address address : list) {
+//                if (address.getAdminArea() != null) {
+//                        locationInfoForUser.setSLocationInfo(lat + "", lng + ""
+//                                , address.getAdminArea().replace("Governorate", "").trim()
+//                                , "", "");
+//                        Log.e(TAG, "SetLocationInfo: " + address);
+//                    mUsersDatabaseReference.child("LocationInfo").setValue(locationInfoForUser);
+//                    mUsersDatabaseReference.child("accurateLocation").setValue(true);
+//                    Intent i = new Intent(SetAcurrateLocationActivity.this, ProfileActivity.class);
+//                    startActivity(i);
+//                        return;
+//                }
+//            }
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void moveCamera(LatLng latlng, float zoom, String title) {
         Log.e(TAG, "moveCamera: moving the camera to Lat" + latlng.latitude + " ,Lng" + latlng.longitude);
@@ -354,8 +417,10 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoom));
 
         if (!title.equals("my location")) {
-            MarkerOptions options = new MarkerOptions().position(latlng).title(title);
+            mMap.clear();
+            MarkerOptions options = new MarkerOptions().position(latlng).title(title).draggable(true);
             mMap.addMarker(options);
+            progressBar.setVisibility(View.GONE);
         }
         hideSoftKeyboard();
 
@@ -373,7 +438,7 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
     @SuppressLint("LongLogTag")
     private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
         String strAdd = "";
-        Geocoder geocoder = new Geocoder(AddOrdersMapActivity.this, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(SetAcurrateLocationActivity.this, Locale.getDefault());
         Log.e(TAG, "getCompleteAddressString: " + LONGITUDE + " " + LATITUDE);
         try {
             List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
@@ -413,9 +478,6 @@ public class AddOrdersMapActivity extends AppCompatActivity implements OnMapRead
                     if (LocationToBeSavedInto.equals("S")) {
                         sourceLatlng[0] = myPlace.getLatLng().latitude;
                         sourceLatlng[1] = myPlace.getLatLng().longitude;
-                    }else if (LocationToBeSavedInto.equals("D")) {
-                        destenationLatlng[0] = myPlace.getLatLng().latitude;
-                        destenationLatlng[1] = myPlace.getLatLng().longitude;
                     }
                     moveCamera(myPlace.getLatLng(), DEFAULT_ZOOM, myPlace.getName().toString());
                     places.release();

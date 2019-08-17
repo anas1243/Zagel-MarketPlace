@@ -90,7 +90,7 @@
         <item>أسيوط</item>
         <item>الأقصر</item>
         <item>جنوب سيناء</item>
-        <item>شمال سيناء</item>
+        <!--<item>شمال سيناء</item>-->
     </string-array>
 
     <string-array name="En_location_array">

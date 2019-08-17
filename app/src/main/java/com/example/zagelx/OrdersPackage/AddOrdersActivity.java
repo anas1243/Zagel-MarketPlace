@@ -31,11 +31,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
-import com.example.zagelx.Models.LocationInfo;
+import com.example.zagelx.Models.LocationInfoForPackage;
+import com.example.zagelx.Models.LocationInfoForUsers;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.DashboardPackage.DashboardActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,8 +72,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private DatePicker deliveryDateDP;
     private EditText deliveryPriceET;
     private EditText endConsumerMobile, endConsumerName;
-    private SwitchCompat isPrePaidSwitch;
-    private SwitchCompat isBreakableSwitch;
+    private SwitchCompat isPrePaidSwitch, isSameSourceSwitch, isBreakableSwitch;
+
     private TextView vehicle;
 
     private Spinner packageSLocation, packageSAreaName, packageDLocation, packageDAreaName, packageWeight;
@@ -104,9 +104,9 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private Uri selectedImageUri;
 
     private String merchantId, merchantMobile, merchantImageURL, getMerchantName, oImageUrl,
-            oName, dPrice, RMobile, RName, oPrice, oVehicle, oDescription, oWeight;
+            oName, dPrice, RMobile, RName, oPrice, oVehicle, oDescription, oWeight, oSourceLocation, oSourceAdmin;
 
-    private LocationInfo currentLocationInfo;
+    private LocationInfoForPackage locationInfoForPackage;
 
     private boolean isBreakable, merchantVerification, isPrePaid;
     private BirthDate dDate;
@@ -122,7 +122,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.add_orders_activity);
 
 
-        currentLocationInfo = new LocationInfo();
+        locationInfoForPackage = new LocationInfoForPackage();
 
         packageImage = findViewById(R.id.package_image);
         editPackageImage = findViewById(R.id.edit_package_image);
@@ -135,6 +135,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
         isPrePaidSwitch = findViewById(R.id.pre_paid_switch);
         isBreakableSwitch = findViewById(R.id.breakable_switch);
+        isSameSourceSwitch = findViewById(R.id.is_same_source_switch);
         packagePriceET = findViewById(R.id.package_price);
         deliveryDateDP = findViewById(R.id.delivery_date);
         vehicle = findViewById(R.id.vehicle_name);
@@ -170,209 +171,61 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
         AddOrderButton = findViewById(R.id.button_yalla);
 
-        Intent i = getIntent();
-        String previousActivity = i.getStringExtra("FROM_ACTIVITY");
-        if (previousActivity.equals("AddOrdersMapActivity")) {
-            packageSLocation.setVisibility(View.GONE);
-            packageSAreaName.setVisibility(View.GONE);
-            packageDLocation.setVisibility(View.GONE);
-            packageDAreaName.setVisibility(View.GONE);
+        //this is there when MapsOrdersActivity was first
 
-            userSLocationLable.setVisibility(View.GONE);
-            userSAreaNameLable.setVisibility(View.GONE);
-            userDLocationLable.setVisibility(View.GONE);
-            userDAreaNameLable.setVisibility(View.GONE);
-
+//        Intent i = getIntent();
+//        String previousActivity = i.getStringExtra("FROM_ACTIVITY");
+//        if (previousActivity.equals("AddOrdersMapActivity")) {
+//            packageSLocation.setVisibility(View.GONE);
+//            packageSAreaName.setVisibility(View.GONE);
+//            packageDLocation.setVisibility(View.GONE);
+//            packageDAreaName.setVisibility(View.GONE);
+//
+//            userSLocationLable.setVisibility(View.GONE);
+//            userSAreaNameLable.setVisibility(View.GONE);
+//            userDLocationLable.setVisibility(View.GONE);
+//            userDAreaNameLable.setVisibility(View.GONE);
+//
+////            destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
+////            sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
+////            locationInfoForPackage.setsLat(sourceLatlng[0]+"");
+////            locationInfoForPackage.setsLng(sourceLatlng[1]+"");
+////            locationInfoForPackage.setdLat(destenationLatlng[0]+"");
+////            locationInfoForPackage.setdLng(destenationLatlng[1]+"");
+//
 //            destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
 //            sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
-//            currentLocationInfo.setsLat(sourceLatlng[0]+"");
-//            currentLocationInfo.setsLng(sourceLatlng[1]+"");
-//            currentLocationInfo.setdLat(destenationLatlng[0]+"");
-//            currentLocationInfo.setdLng(destenationLatlng[1]+"");
+//
+//            Log.e(TAG, "onCreate: " + latlngToAddress(sourceLatlng[0], sourceLatlng[1])
+//                    + latlngToAddress(destenationLatlng[0], destenationLatlng[1]));
+//
+//            SetLocationInfo(sourceLatlng[0], sourceLatlng[1], "S");
+//            SetLocationInfo(destenationLatlng[0], destenationLatlng[1], "D");
+//
+//
+//            Log.e(TAG, "onCreate: currentOrderLocation: source is " + new LatLng(sourceLatlng[0]
+//                    , sourceLatlng[1]) + " destination is " + new LatLng(destenationLatlng[0]
+//                    , destenationLatlng[1]));
+//
+//        }
 
-            destenationLatlng = (double[]) i.getSerializableExtra("destenationLatlng");
-            sourceLatlng = (double[]) i.getSerializableExtra("sourceLatlng");
+        isSameSourceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    packageSLocation.setVisibility(View.GONE);
+                    packageSAreaName.setVisibility(View.GONE);
+                    userSLocationLable.setVisibility(View.GONE);
+                    userSAreaNameLable.setVisibility(View.GONE);
 
-            Log.e(TAG, "onCreate: " + latlngToAddress(sourceLatlng[0], sourceLatlng[1])
-                    + latlngToAddress(destenationLatlng[0], destenationLatlng[1]));
-
-            SetLocationInfo(sourceLatlng[0], sourceLatlng[1], "S");
-            SetLocationInfo(destenationLatlng[0], destenationLatlng[1], "D");
-
-
-            Log.e(TAG, "onCreate: currentOrderLocation: source is " + new LatLng(sourceLatlng[0]
-                    , sourceLatlng[1]) + " destination is " + new LatLng(destenationLatlng[0]
-                    , destenationLatlng[1]));
-
-        }
-
-
-        packageSLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
-                String AreaName = packageSLocation.getSelectedItem().toString();
-
-                switch (AreaName) {
-                    case "الإسكندرية":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.الإسكندرية, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "القاهرة":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.القاهرة, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "الإسماعيلية":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.الإسماعيلية, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "السويس":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.السويس, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "أسوان":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.أسوان, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "بورسعيد":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.بورسعيد, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "الشرقية":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.الشرقية, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "كفر الشيخ":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.كفر_الشيخ, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "أسيوط":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.أسيوط, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "جنوب سيناء":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.جنوب_سيناء, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "مطروح":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.مطروح, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "الأقصر":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.الأقصر, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "الجيزة":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.الجيزة, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "الغربية":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.الغربية, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "المنوفية":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.المنوفية, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "البحر الأحمر":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.البحر_الأحمر, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "الدقهلية":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.الدقهلية, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "الفيوم":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.الفيوم, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "المنيا":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.المنيا, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "البحيرة":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.البحيرة, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "دمياط":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.دمياط, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "الوادي الجديد":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.الوادي_الجديد, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "قنا":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.قنا, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "بني سويف":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.بني_سويف, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "سوهاج":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.سوهاج, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
-                    case "القليوبية":
-                        adapter = ArrayAdapter.createFromResource(
-                                AddOrdersActivity.this, R.array.القليوبية, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        packageSAreaName.setAdapter(adapter);
-                        break;
+                } else {
+                    packageSLocation.setVisibility(View.VISIBLE);
+                    packageSAreaName.setVisibility(View.VISIBLE);
+                    userSLocationLable.setVisibility(View.VISIBLE);
+                    userSAreaNameLable.setVisibility(View.VISIBLE);
 
                 }
-            }
 
-            public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
 
@@ -545,6 +398,174 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+        packageSLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
+                String AreaName = packageSLocation.getSelectedItem().toString();
+
+                switch (AreaName) {
+                    case "الإسكندرية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.الإسكندرية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "القاهرة":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.القاهرة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "الإسماعيلية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.الإسماعيلية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "السويس":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.السويس, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "أسوان":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.أسوان, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "بورسعيد":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.بورسعيد, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "الشرقية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.الشرقية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "كفر الشيخ":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.كفر_الشيخ, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "أسيوط":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.أسيوط, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "جنوب سيناء":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.جنوب_سيناء, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "مطروح":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.مطروح, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "الأقصر":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.الأقصر, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "الجيزة":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.الجيزة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "الغربية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.الغربية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "المنوفية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.المنوفية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "البحر الأحمر":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.البحر_الأحمر, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "الدقهلية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.الدقهلية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "الفيوم":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.الفيوم, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "المنيا":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.المنيا, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "البحيرة":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.البحيرة, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "دمياط":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.دمياط, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "الوادي الجديد":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.الوادي_الجديد, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "قنا":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.قنا, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "بني سويف":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.بني_سويف, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "سوهاج":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.سوهاج, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+                    case "القليوبية":
+                        adapter = ArrayAdapter.createFromResource(
+                                AddOrdersActivity.this, R.array.القليوبية, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        packageSAreaName.setAdapter(adapter);
+                        break;
+
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -552,10 +573,6 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         merchantId = mFirebaseAuth.getCurrentUser().getUid();
-//        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date()).replaceAll(" ","")
-//                .replace(".","");
-//        Log.e(TAG, "onCreate: "+ currentDateTimeString );
-//        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders").child(merchantId+":"+currentDateTimeString);
 
         mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
 
@@ -571,6 +588,8 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                 getMerchantName = dataSnapshot.getValue(Users.class).getName();
                 merchantVerification = dataSnapshot.getValue(Users.class).isVerified();
                 merchantMobile = dataSnapshot.getValue(Users.class).getMobileNumber();
+                oSourceLocation = dataSnapshot.getValue(Users.class).getLocationInfoForUser().getuAdminArea();
+                oSourceAdmin = dataSnapshot.getValue(Users.class).getLocationInfoForUser().getuSubAdmin();
             }
 
             @Override
@@ -687,13 +706,13 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                 if (address.getAdminArea() != null && address.getSubAdminArea() != null
                         && address.getLocality() != null) {
                     if (whichLocation.equals("S")) {
-                        currentLocationInfo.setSLocationInfo(lat + "", lng + ""
+                        locationInfoForPackage.setSLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , address.getSubAdminArea(), address.getLocality());
                         Log.e(TAG, "SetLocationInfo: " + address);
                         return;
                     } else if (whichLocation.equals("D")) {
-                        currentLocationInfo.setdLocationInfo(lat + "", lng + ""
+                        locationInfoForPackage.setdLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , address.getSubAdminArea(), address.getLocality());
                         Log.e(TAG, "SetLocationInfo: " + address);
@@ -705,13 +724,13 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
             for (Address address : list) {
                 if (address.getAdminArea() != null && address.getSubAdminArea() != null) {
                     if (whichLocation.equals("S")) {
-                        currentLocationInfo.setSLocationInfo(lat + "", lng + ""
+                        locationInfoForPackage.setSLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , address.getSubAdminArea(), "");
                         Log.e(TAG, "SetLocationInfo: " + address);
                         return;
                     } else if (whichLocation.equals("D")) {
-                        currentLocationInfo.setdLocationInfo(lat + "", lng + ""
+                        locationInfoForPackage.setdLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , address.getSubAdminArea(), "");
                         Log.e(TAG, "SetLocationInfo: " + address);
@@ -722,13 +741,13 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
             for (Address address : list) {
                 if (address.getAdminArea() != null) {
                     if (whichLocation.equals("S")) {
-                        currentLocationInfo.setSLocationInfo(lat + "", lng + ""
+                        locationInfoForPackage.setSLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , "", "");
                         Log.e(TAG, "SetLocationInfo: " + address);
                         return;
                     } else if (whichLocation.equals("D")) {
-                        currentLocationInfo.setdLocationInfo(lat + "", lng + ""
+                        locationInfoForPackage.setdLocationInfo(lat + "", lng + ""
                                 , address.getAdminArea().replace("Governorate", "").trim()
                                 , "", "");
                         Log.e(TAG, "SetLocationInfo: " + address);
@@ -837,19 +856,25 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
                             if (packageSLocation.getVisibility() == View.VISIBLE) {
 
-                                currentLocationInfo.setsAdminArea(packageSLocation.getSelectedItem().toString());
-                                currentLocationInfo.setsSubAdmin(packageSAreaName.getSelectedItem().toString());
+                                locationInfoForPackage.setsAdminArea(packageSLocation.getSelectedItem().toString());
+                                locationInfoForPackage.setsSubAdmin(packageSAreaName.getSelectedItem().toString());
 
-                                currentLocationInfo.setdAdminArea(packageDLocation.getSelectedItem().toString());
-                                currentLocationInfo.setdSubAdmin(packageDAreaName.getSelectedItem().toString());
+                                locationInfoForPackage.setdAdminArea(packageDLocation.getSelectedItem().toString());
+                                locationInfoForPackage.setdSubAdmin(packageDAreaName.getSelectedItem().toString());
+                            }else if (packageSLocation.getVisibility() == View.GONE){
+                                locationInfoForPackage.setsAdminArea(oSourceLocation);
+                                locationInfoForPackage.setsSubAdmin(oSourceAdmin);
+
+                                locationInfoForPackage.setdAdminArea(packageDLocation.getSelectedItem().toString());
+                                locationInfoForPackage.setdSubAdmin(packageDAreaName.getSelectedItem().toString());
                             }
-                            String orderId = System.currentTimeMillis() + merchantId;
+                            String orderId = System.currentTimeMillis() + merchantId + RMobile;
 
                             Orders order = new Orders(orderId, merchantId,merchantMobile, merchantImageURL, getMerchantName, oName, oWeight, oImageUrl
                                     , oDescription, oPrice
                                     , isPrePaid, isBreakable,merchantVerification, dDate,
                                     dPrice, oVehicle, RMobile, RName
-                                    , currentLocationInfo, "New");
+                                    , locationInfoForPackage, "New");
 
                             mOrdersDatabaseReference.child(orderId).setValue(order);
 
@@ -948,7 +973,6 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
     public void clearVehicleOptionsColor() {
         editPackageImage.setOnClickListener(this);
-        AddOrderButton.setOnClickListener(this);
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             icBus.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_bus));
             icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car));

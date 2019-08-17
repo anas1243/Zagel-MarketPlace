@@ -1,16 +1,12 @@
 package com.example.zagelx.TripsPackage;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,11 +18,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.BirthDate;
-import com.example.zagelx.Models.LocationInfo;
+import com.example.zagelx.Models.LocationInfoForPackage;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
-import com.example.zagelx.OrdersPackage.AddOrdersActivity;
 import com.example.zagelx.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,8 +30,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import java.util.List;
-import java.util.Locale;
 
 public class AddTripsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -44,8 +38,7 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
     private DatePicker routeDateDP;
     private EditText routePriceET;
-    private SwitchCompat isPrePaidSwitch;
-    private SwitchCompat isBreakableSwitch;
+    private SwitchCompat isPrePaidSwitch, isBreakableSwitch, isSameSourceSwitch;
     private TextView vehicle;
 
     private EditText routeNotesET;
@@ -68,20 +61,24 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
     private FirebaseAuth mFirebaseAuth;
 
-    private String delegateId, delegateName, delegateImageURL, TPrice, oMaxPrice, tVehicle, tNotes;
+    private String delegateId, delegateName, delegateImageURL, TPrice, oMaxPrice, tVehicle, tNotes, delegateLocation, delegateAdmin;
     private int maxNoOrders;
     private boolean isPrePaid = false;
     private boolean isBreakable = false;
     private boolean delegateVerification;
     private BirthDate dDate;
-    private LocationInfo currentLocationInfo;
+    private LocationInfoForPackage locationInfoForTrip;
+    private TextView userSLocationLable, userSAreaNameLable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_trips_activity);
 
-        currentLocationInfo = new LocationInfo();
+        locationInfoForTrip = new LocationInfoForPackage();
+        userSLocationLable = findViewById(R.id.user_Slocation_lable);
+        userSAreaNameLable = findViewById(R.id.area_Sname_lable);
+
         routePriceET = findViewById(R.id.trip_price);
         isPrePaidSwitch = findViewById(R.id.pre_paid_switch);
         isBreakableSwitch = findViewById(R.id.breakable_switch);
@@ -109,6 +106,8 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         sourceET = findViewById(R.id.source_txt_view);
         destinationET = findViewById(R.id.destination_txt_view);
 
+        isSameSourceSwitch = findViewById(R.id.is_same_source_switch);
+
 
         AddTripButton = findViewById(R.id.button_yalla);
 
@@ -117,6 +116,26 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         delegateId = mFirebaseAuth.getCurrentUser().getUid();
+
+        isSameSourceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    routeSLocation.setVisibility(View.GONE);
+                    routeSAreaName.setVisibility(View.GONE);
+                    userSLocationLable.setVisibility(View.GONE);
+                    userSAreaNameLable.setVisibility(View.GONE);
+
+                } else {
+                    routeSLocation.setVisibility(View.VISIBLE);
+                    routeSAreaName.setVisibility(View.VISIBLE);
+                    userSLocationLable.setVisibility(View.VISIBLE);
+                    userSAreaNameLable.setVisibility(View.VISIBLE);
+
+                }
+
+            }
+        });
 
         routeSLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
@@ -468,6 +487,8 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
                 delegateName = dataSnapshot.getValue(Users.class).getName();
                 delegateImageURL = dataSnapshot.getValue(Users.class).getProfilePictureURL();
                 delegateVerification = dataSnapshot.getValue(Users.class).isVerified();
+                delegateLocation = dataSnapshot.getValue(Users.class).getLocationInfoForUser().getuAdminArea();
+                delegateAdmin = dataSnapshot.getValue(Users.class).getLocationInfoForUser().getuSubAdmin();
             }
 
             @Override
@@ -521,11 +542,19 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         dDate = new BirthDate(routeDateDP.getYear(),
                 routeDateDP.getMonth() + 1, routeDateDP.getDayOfMonth());
 
-        currentLocationInfo.setsAdminArea(routeSLocation.getSelectedItem().toString());
-        currentLocationInfo.setsSubAdmin(routeSAreaName.getSelectedItem().toString());
+        if (routeSLocation.getVisibility() == View.VISIBLE){
+            locationInfoForTrip.setsAdminArea(routeSLocation.getSelectedItem().toString());
+            locationInfoForTrip.setsSubAdmin(routeSAreaName.getSelectedItem().toString());
+        }
+        else if(routeSLocation.getVisibility() == View.GONE){
+            locationInfoForTrip.setsAdminArea(delegateLocation);
+            locationInfoForTrip.setsSubAdmin(delegateAdmin);
+        }
 
-        currentLocationInfo.setdAdminArea(routeDLocation.getSelectedItem().toString());
-        currentLocationInfo.setdSubAdmin(routeDAreaName.getSelectedItem().toString());
+
+
+        locationInfoForTrip.setdAdminArea(routeDLocation.getSelectedItem().toString());
+        locationInfoForTrip.setdSubAdmin(routeDAreaName.getSelectedItem().toString());
         uploadTripAndProceed();
     }
 
@@ -616,13 +645,13 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
     private void uploadTripAndProceed(){
         String tripId = System.currentTimeMillis() + delegateId;
         Trips trip = new Trips(tripId, delegateImageURL ,delegateId , delegateName, dDate, TPrice
-                , tNotes, tVehicle, currentLocationInfo,
+                , tNotes, tVehicle, locationInfoForTrip,
                 maxNoOrders , isPrePaid, isBreakable, oMaxPrice,delegateVerification);
 
         mTripsDatabaseReference.child(tripId).setValue(trip);
 
         Toast.makeText(AddTripsActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(AddTripsActivity.this, TripsActivity.class);
+        Intent i = new Intent(AddTripsActivity.this, MainActivity.class);
         finish();
         startActivity(i);
     }

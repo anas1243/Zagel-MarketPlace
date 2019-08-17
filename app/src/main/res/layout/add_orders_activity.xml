@@ -115,6 +115,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true" />
+
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
@@ -133,6 +134,29 @@
                     android:entries="@array/weight_array"
                     android:prompt="@string/prompt_weight"
                     android:layout_marginBottom="8dp"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        style="@style/label_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="هل الاستلام من نفس مصدر العمل؟"
+                        android:textColor="@color/colorSecondary"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/is_same_source_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:checked="false"
+                        android:theme="@style/SCBSwitch" />
+
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/user_Slocation_lable"

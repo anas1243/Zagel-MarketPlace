@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/map"
@@ -66,56 +67,6 @@
 
         </RelativeLayout>
 
-
-        <RelativeLayout
-
-            android:id="@+id/destinationRelLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/border">
-
-            <ImageView
-                android:id="@+id/ic_magnify2"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_magnify_yellow" />
-
-            <AutoCompleteTextView
-                android:id="@+id/destination_autoComplete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginBottom="8dp"
-                android:layout_toRightOf="@+id/ic_magnify2"
-                android:background="@null"
-                android:hint="Enter distention address , City or Zip code"
-                android:imeOptions="actionSearch"
-                android:inputType="textUri"
-                android:padding="4dp"
-                android:singleLine="true"
-                android:textColor="#000"
-                android:textSize="15dp" />
-
-            <ImageView
-                android:id="@+id/ic_gpsd"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_gps_yellow" />
-
-        </RelativeLayout>
-
     </LinearLayout>
     <Button
         android:id="@+id/btn_next"
@@ -124,7 +75,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:background="@drawable/button"
-        android:text="Next" />
+        android:text="Finish" />
 
     <ImageButton
         android:id="@+id/go_current_location_button"
@@ -139,11 +90,25 @@
         android:id="@+id/currentLocation_is_source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Current location is the source?"
+        android:text="Current location is the source of your business?"
         android:layout_below="@id/go_current_location_button"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="16dp"
         android:background="@drawable/button"
         android:padding="10dp"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/colorSecondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.85"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

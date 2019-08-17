@@ -63,8 +63,8 @@ public class TripsAdapter extends ArrayAdapter<Trips> {
         String price = currentTrip.getRoutePrice() + " egp";
         routePriceTV.setText(price);
 
-        sourceTV.setText(currentTrip.getCurrentOrderLocationInfo().getsAdminArea());
-        destinationTV.setText(currentTrip.getCurrentOrderLocationInfo().getdAdminArea());
+        sourceTV.setText(currentTrip.getLocationInfoForTrip().getsAdminArea());
+        destinationTV.setText(currentTrip.getLocationInfoForTrip().getdAdminArea());
 
         if(!currentTrip.isVerifiedUser())
             verificationIcon.setVisibility(View.GONE);

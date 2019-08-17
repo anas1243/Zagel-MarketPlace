@@ -77,8 +77,8 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
         String price = currentOrder.getDeliveryPrice() + " egp";
         deliveryPriceTV.setText(price);
 
-        sourceTV.setText(currentOrder.getCurrentOrderLocationInfo().getsAdminArea());
-        destinationTV.setText(currentOrder.getCurrentOrderLocationInfo().getdAdminArea());
+        sourceTV.setText(currentOrder.getLocationInfoForPackage().getsAdminArea());
+        destinationTV.setText(currentOrder.getLocationInfoForPackage().getdAdminArea());
         switch (currentOrder.getVehicle()) {
             case "Car":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);

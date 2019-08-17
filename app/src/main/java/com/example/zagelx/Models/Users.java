@@ -13,15 +13,16 @@ public class Users {
     private String profilePictureURL = "";
     private String nationalIdURL = "";
     private String electricityReceiptURL = "";
-    private String government = ""; // living government
     private int rate = 0;
     private boolean firstTimeLogIn = true;
     private boolean verified = false;
+    private boolean accurateLocation = false;
     //date with format year month day
     private BirthDate birthDate = null;
-    private MerchantsNotifications Notifications;
+    private MerchantsNotifications Notifications = null;
     private int numberOfNotifications=0;
     private String userToken;
+    private LocationInfoForUsers locationInfoForUser = null;
 
 
     public Users() {
@@ -29,7 +30,7 @@ public class Users {
 
     public Users(String ID, String name, String gender, String mobileNumber,
                  String profilePictureURL, BirthDate birthDate, String mode,
-                 String email,String government, boolean firstTimeLogIn, boolean verified,
+                 String email, LocationInfoForUsers locationInfoForUser, boolean firstTimeLogIn, boolean verified, boolean accurateLocation,
                  String userToken) {
         this.name = name;
         this.email = email;
@@ -41,9 +42,14 @@ public class Users {
         this.birthDate = birthDate;
         this.firstTimeLogIn = firstTimeLogIn;
         this.mode = mode;
-        this.government = government;
         this.verified = verified;
+        this.accurateLocation = accurateLocation;
         this.userToken = userToken;
+        this.locationInfoForUser = locationInfoForUser;
+    }
+
+    public LocationInfoForUsers getLocationInfoForUser() {
+        return locationInfoForUser;
     }
 
     public String getName() {
@@ -86,10 +92,6 @@ public class Users {
         return electricityReceiptURL;
     }
 
-    public String getGovernment() {
-        return government;
-    }
-
     public int getRate() {
         return rate;
     }
@@ -124,5 +126,9 @@ public class Users {
 
     public String getUserToken() {
         return userToken;
+    }
+
+    public boolean isAccurateLocation() {
+        return accurateLocation;
     }
 }

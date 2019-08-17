@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Trips;
-import com.example.zagelx.OrdersPackage.OrderDetails;
 import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.TripsDetails;
 
@@ -73,8 +72,8 @@ public class DashboardTipsAdapter extends ArrayAdapter<Trips> {
         String price = CurrentTrip.getRoutePrice() + " egp";
         deliveryPriceTV.setText(price);
 
-        sourceTV.setText(CurrentTrip.getCurrentOrderLocationInfo().getsAdminArea());
-        destinationTV.setText(CurrentTrip.getCurrentOrderLocationInfo().getdAdminArea());
+        sourceTV.setText(CurrentTrip.getLocationInfoForTrip().getsAdminArea());
+        destinationTV.setText(CurrentTrip.getLocationInfoForTrip().getdAdminArea());
         switch (CurrentTrip.getVehicle()) {
             case "Car":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);

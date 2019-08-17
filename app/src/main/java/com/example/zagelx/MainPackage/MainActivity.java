@@ -147,49 +147,47 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setAddOrderButtonListenerActive() {
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                    //this was here when AddOrderMapActivity was here
+//                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+//
+//                alertDialog.setTitle("Pin on Map?");
+//
+//                alertDialog.setMessage("do you want to set a pin on the map" +
+//                        " to make the process more easy and accurate");
+//
+//                alertDialog.setPositiveButton("Yes Open the Map", new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//
+//                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//                            Intent i = new Intent(MainActivity.this, AddOrdersMapActivity.class);
+//                            startActivity(i);
+//                        } else {
+//                            isGPSopened();
+//                        }
+//                    }
+//                });
+//
+//                alertDialog.setNegativeButton("i don't have the accurate location", new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        Intent i = new Intent(MainActivity.this, AddOrdersActivity.class);
+//                        i.putExtra("FROM_ACTIVITY", "MainActivity");
+//                        startActivity(i);
+//                    }
+//                });
+//
+//                alertDialog.show();
+
+        Intent i = new Intent(MainActivity.this, AddOrdersActivity.class);
+        //i.putExtra("FROM_ACTIVITY", "MainActivity");
+        startActivity(i);
 
 
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-
-                alertDialog.setTitle("Pin on Map?");
-
-                alertDialog.setMessage("do you want to set a pin on the map" +
-                        " to make the process more easy and accurate");
-
-                alertDialog.setPositiveButton("Yes Open the Map", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                            Intent i = new Intent(MainActivity.this, AddOrdersMapActivity.class);
-                            startActivity(i);
-                        } else {
-                            isGPSopened();
-                        }
-                    }
-                });
-
-                alertDialog.setNegativeButton("i don't have the accurate location", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Intent i = new Intent(MainActivity.this, AddOrdersActivity.class);
-                        i.putExtra("FROM_ACTIVITY", "OrdersActivity");
-                        startActivity(i);
-                    }
-                });
-
-                alertDialog.show();
-
-
-            }
-        });
     }
 
     private void isGPSopened() {
