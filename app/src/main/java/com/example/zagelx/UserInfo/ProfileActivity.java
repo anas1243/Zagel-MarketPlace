@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,13 +30,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.Authentication.AfterRegisterUserInfo;
-import com.example.zagelx.MainPackage.MainActivity;
+import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Users;
-import com.example.zagelx.OrdersPackage.AddOrdersActivity;
-import com.example.zagelx.OrdersPackage.AddOrdersMapActivity;
-import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -456,8 +454,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 break;
             case R.id.button_cancel_edit:
-                Intent i = new Intent(ProfileActivity.this, MainActivity.class);
-                startActivity(i);
+                if (currentUser.getMode().equals("Merchant")){
+                    Intent i = new Intent(ProfileActivity.this, MerchantDashboardActivity.class);
+                    i.putExtra("Which_Activity", "SomethingElse");
+                    startActivity(i);
+                }
+                else if (currentUser.getMode().equals("Delivery Delegate")){
+                    Intent i = new Intent(ProfileActivity.this, DelegateDashboardActivity.class);
+                    i.putExtra("Which_Activity", "SomethingElse");
+                    startActivity(i);
+                }
+
                 break;
             case R.id.verification_edit:
                 if (userVerificationStatus) {
@@ -718,5 +725,40 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             Glide.with(getApplicationContext()).load(filePath).into(userImage);
 
         }
+    }
+    @Override
+    public void onBackPressed() {
+        if (currentUser.getMode().equals("Merchant")){
+            Intent i = new Intent(ProfileActivity.this, MerchantDashboardActivity.class);
+            i.putExtra("Which_Activity", "SomethingElse");
+            finish();
+            startActivity(i);
+        }
+        else if (currentUser.getMode().equals("Delivery Delegate")){
+            Intent i = new Intent(ProfileActivity.this, DelegateDashboardActivity.class);
+            i.putExtra("Which_Activity", "SomethingElse");
+            finish();
+            startActivity(i);
+        }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (currentUser.getMode().equals("Merchant")){
+                Intent i = new Intent(ProfileActivity.this, MerchantDashboardActivity.class);
+                i.putExtra("Which_Activity", "SomethingElse");
+                finish();
+                startActivity(i);
+            }
+            else if (currentUser.getMode().equals("Delivery Delegate")){
+                Intent i = new Intent(ProfileActivity.this, DelegateDashboardActivity.class);
+                i.putExtra("Which_Activity", "SomethingElse");
+                finish();
+                startActivity(i);
+            }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

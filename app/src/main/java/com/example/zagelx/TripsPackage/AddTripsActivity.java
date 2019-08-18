@@ -18,7 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.zagelx.MainPackage.MainActivity;
+import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfoForPackage;
 import com.example.zagelx.Models.Trips;
@@ -651,7 +651,8 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         mTripsDatabaseReference.child(tripId).setValue(trip);
 
         Toast.makeText(AddTripsActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(AddTripsActivity.this, MainActivity.class);
+        Intent i = new Intent(AddTripsActivity.this, DelegateDashboardActivity.class);
+        i.putExtra("Which_Activity", "SomethingElse");
         finish();
         startActivity(i);
     }

@@ -1,16 +1,20 @@
 package com.example.zagelx.UserInfo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.ListView;
 
-import com.example.zagelx.MainPackage.MainActivity;
+import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Users;
@@ -206,8 +210,37 @@ public class NotificationsActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(NotificationsActivity.this, MainActivity.class);
-        finish();
-        startActivity(i);
+        if (currentUser.getMode().equals("Merchant")){
+            Intent i = new Intent(NotificationsActivity.this, MerchantDashboardActivity.class);
+            i.putExtra("Which_Activity", "SomethingElse");
+            finish();
+            startActivity(i);
+        }
+        else if (currentUser.getMode().equals("Delivery Delegate")){
+            Intent i = new Intent(NotificationsActivity.this, DelegateDashboardActivity.class);
+            i.putExtra("Which_Activity", "SomethingElse");
+            finish();
+            startActivity(i);
+        }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (currentUser.getMode().equals("Merchant")){
+                Intent i = new Intent(NotificationsActivity.this, MerchantDashboardActivity.class);
+                i.putExtra("Which_Activity", "SomethingElse");
+                finish();
+                startActivity(i);
+            }
+            else if (currentUser.getMode().equals("Delivery Delegate")){
+                Intent i = new Intent(NotificationsActivity.this, DelegateDashboardActivity.class);
+                i.putExtra("Which_Activity", "SomethingElse");
+                finish();
+                startActivity(i);
+            }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -18,6 +18,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+
+import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
@@ -48,9 +51,6 @@ public class OrdersActivity extends AppCompatActivity {
 
     private ListView mOrdersListView;
     private OrdersAdapter mOrdersAdapter;
-    private Button ordersButton;
-    private Button tripsButton;
-    private Button addOrderCButton;
     private ImageButton notificaitonsButton;
 //    private ProgressBar progressBar;
 
@@ -85,9 +85,6 @@ public class OrdersActivity extends AppCompatActivity {
 
 
         mOrdersListView = findViewById(R.id.main_list);
-        ordersButton = findViewById(R.id.orders_button);
-        tripsButton = findViewById(R.id.trips_button);
-        addOrderCButton = findViewById(R.id.add_order_cbutton);
 
         notificaitonsButton = findViewById(R.id.ic_notification_toolbar);
         notificaitonsButton.setOnClickListener(new View.OnClickListener() {
@@ -101,37 +98,8 @@ public class OrdersActivity extends AppCompatActivity {
         mBadge = findViewById(R.id.badge);
         //progressBar = findViewById(R.id.progressbar);
 
-
-        ordersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Create a new intent to open the {@link AddOrdersActivity}
-//                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-//
-//                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//                    Intent i = new Intent(OrdersActivity.thiselectedImageUri.getLastPathSegment()s, AddOrdersMapActivity.class);
-//                    startActivity(i);
-//                } else {
-//                    isGPSopened();
-//                }
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.main_main_layout), "Already there!", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-
-            }
-        });
-        tripsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Create a new intent to open the {@link AddTripsActivity}
-
-                Intent i = new Intent(OrdersActivity.this, TripsActivity.class);
-                startActivity(i);
-            }
-        });
-
         Snackbar snackbar = Snackbar
-                .make(findViewById(R.id.main_main_layout), "الشحنات !", Snackbar.LENGTH_LONG);
+                .make(findViewById(R.id.main_main_layout), "الشحنات المعروضة !", Snackbar.LENGTH_LONG);
         snackbar.show();
 
         // Initialize message ListView and its adapter
@@ -146,7 +114,7 @@ public class OrdersActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
-                    final String[] newToken = new String[1];
+
                     ButterKnife.bind(OrdersActivity.this);
                     setSupportActionBar(toolbar);
                     mBadge.setNumber(currentUser.getNumberOfNotifications());
@@ -154,24 +122,6 @@ public class OrdersActivity extends AppCompatActivity {
                     drawer = new DrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(OrdersActivity.this, toolbar);
-                    if (!currentUser.getMode().equals("Merchant")) {
-                        setAddOrderButtonListenerInActive();
-                    } else {
-                        setAddOrderButtonListenerActive();
-                    }
-
-                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( OrdersActivity.this,  new OnSuccessListener<InstanceIdResult>() {
-                            @Override
-                            public void onSuccess(InstanceIdResult instanceIdResult) {
-                                newToken[0] = instanceIdResult.getToken();
-                                if(!currentUser.getUserToken().equals(newToken[0])){
-                                    mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
-
-                                }
-                                Log.e("newToken", newToken[0]);
-
-                            }
-                        });
 
                 }
 
@@ -225,156 +175,22 @@ public class OrdersActivity extends AppCompatActivity {
         }
     }
 
-    private void setAddOrderButtonListenerInActive(){
-        addOrderCButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.main_main_layout), "انت لست تاجر,   \nيمكنل التواصل مع فريق عمل زاجل لتغير نوع الحساب", Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
-        });
-    }
-
-    private void setAddOrderButtonListenerActive() {
-        addOrderCButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrdersActivity.this);
-
-                alertDialog.setTitle("Pin on Map?");
-
-                alertDialog.setMessage("do you want to set a pin on the map" +
-                        " to make the process more easy and accurate");
-
-                alertDialog.setPositiveButton("Yes Open the Map", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-                        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                            Intent i = new Intent(OrdersActivity.this, AddOrdersMapActivity.class);
-                            startActivity(i);
-                        } else {
-                            isGPSopened();
-                        }
-                    }
-                });
-
-                alertDialog.setNegativeButton("i don't have the accurate location", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Intent i = new Intent(OrdersActivity.this, AddOrdersActivity.class);
-                        i.putExtra("FROM_ACTIVITY", "OrdersActivity");
-                        startActivity(i);
-                    }
-                });
-
-                alertDialog.show();
-
-
-            }
-        });
-    }
-
-    private void isGPSopened() {
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch (Exception ex) {
-        }
-
-        if (!gps_enabled) {
-            showSettingsAlert();
-        }
-    }
-
-    public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrdersActivity.this);
-
-        alertDialog.setTitle("GPS is settings");
-
-        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
-
-        alertDialog.setPositiveButton("Open", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                OrdersActivity.this.startActivity(intent);
-            }
-        });
-
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        alertDialog.show();
-    }
-
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Exit Application?");
-        alertDialogBuilder
-                .setMessage("Click yes to exit!")
-                .setCancelable(false)
-                .setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                moveTaskToBack(true);
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                                System.exit(1);
-                            }
-                        })
-
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        Intent i = new Intent(OrdersActivity.this, DelegateDashboardActivity.class);
+        i.putExtra("Which_Activity", "another_activity");
+        startActivity(i);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle("Exit Application?");
-            alertDialogBuilder
-                    .setMessage("Click yes to exit!")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    moveTaskToBack(true);
-                                    android.os.Process.killProcess(android.os.Process.myPid());
-                                    System.exit(1);
-                                }
-                            })
 
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                Intent i = new Intent(OrdersActivity.this, DelegateDashboardActivity.class);
+                i.putExtra("Which_Activity", "another_activity");
+                startActivity(i);
 
-                            dialog.cancel();
-                        }
-                    });
 
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
             return true;
         }
 

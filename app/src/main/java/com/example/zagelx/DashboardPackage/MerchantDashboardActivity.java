@@ -10,15 +10,23 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.Users;
+import com.example.zagelx.OrdersPackage.AddOrdersActivity;
 import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.AddTripsActivity;
-import com.example.zagelx.TripsPackage.TripsActivity;
+import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +34,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +51,9 @@ public class MerchantDashboardActivity extends AppCompatActivity {
     private Users currentUser;
 
     private String whichActivity;
+    private ImageButton notificaitonsButton;
+    private ImageView addButton;
+    private NotificationBadge mBadge;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -57,6 +71,18 @@ public class MerchantDashboardActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
+
+        addButton = findViewById(R.id.add_button);
+        notificaitonsButton = findViewById(R.id.ic_notification_toolbar);
+        notificaitonsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MerchantDashboardActivity.this, NotificationsActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mBadge = findViewById(R.id.badge);
 
         Intent i = getIntent();
         whichActivity = (String) i.getSerializableExtra("Which_Activity");
@@ -83,13 +109,14 @@ public class MerchantDashboardActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
-
+                    final String[] newToken = new String[1];
                     ButterKnife.bind(MerchantDashboardActivity.this);
                     setSupportActionBar(toolbar);
 
                     drawer = new DrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(MerchantDashboardActivity.this, toolbar);
+                    mBadge.setNumber(currentUser.getNumberOfNotifications());
                     // Find the view pager that will allow the user to swipe between fragments
                     ViewPager viewPager = findViewById(R.id.viewpager);
 
@@ -102,6 +129,33 @@ public class MerchantDashboardActivity extends AppCompatActivity {
                     viewPager.setAdapter(adapter);
                     TabLayout tabLayout = findViewById(R.id.tabMode);
                     tabLayout.setupWithViewPager(viewPager);
+
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MerchantDashboardActivity.this,  new OnSuccessListener<InstanceIdResult>() {
+                        @Override
+                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                            newToken[0] = instanceIdResult.getToken();
+                            if(!currentUser.getUserToken().equals(newToken[0])){
+                                mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
+
+                            }
+                            Log.e("newToken", newToken[0]);
+
+                        }
+                    });
+
+                    Animation ranim =  AnimationUtils.loadAnimation(MerchantDashboardActivity.this, R.anim.shake_add_button);
+                    addButton.startAnimation(ranim);
+
+                    addButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                                Intent i = new Intent(MerchantDashboardActivity.this, AddOrdersActivity.class);
+                                startActivity(i);
+
+
+                        }
+                    });
                 }
 
                 @Override
@@ -124,14 +178,59 @@ public class MerchantDashboardActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(MerchantDashboardActivity.this, MainActivity.class);
-        startActivity(i);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Exit Application?");
+        alertDialogBuilder
+                .setMessage("Click yes to exit!")
+                .setCancelable(false)
+                .setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                moveTaskToBack(true);
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                                System.exit(1);
+                            }
+                        })
+
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Intent i = new Intent(MerchantDashboardActivity.this, MainActivity.class);
-        startActivity(i);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Exit Application?");
+            alertDialogBuilder
+                    .setMessage("Click yes to exit!")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    moveTaskToBack(true);
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    System.exit(1);
+                                }
+                            })
+
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            return true;
+        }
 
         return super.onKeyDown(keyCode, event);
     }

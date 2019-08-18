@@ -14,7 +14,8 @@ import com.bumptech.glide.Glide;
 
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
 import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
-import com.example.zagelx.MainPackage.MainActivity;
+import com.example.zagelx.OrdersPackage.OrdersActivity;
+import com.example.zagelx.TripsPackage.TripsActivity;
 import com.example.zagelx.UserInfo.AboutUsActivity;
 import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.UserInfo.ProfileActivity;
@@ -61,9 +62,14 @@ public class DrawerUtil extends Activity {
         });
         // Create the AccountHeader
         DrawerUtil drawer = new DrawerUtil(name, phone,photoUrl, mode);
-
-        PrimaryDrawerItem drawerItemHome = new PrimaryDrawerItem().withIdentifier(1)
-                .withName(R.string.nav_home).withIcon(R.drawable.ic_home);
+        PrimaryDrawerItem drawerItemHome;
+        if (mode.equals("Merchant")){
+            drawerItemHome = new PrimaryDrawerItem().withIdentifier(1)
+                    .withName(R.string.nav_trips).withIcon(R.drawable.ic_home);
+        }else{
+            drawerItemHome = new PrimaryDrawerItem().withIdentifier(1)
+                    .withName(R.string.nav_orders).withIcon(R.drawable.ic_home);
+        }
 
         PrimaryDrawerItem drawerItemProfile = new PrimaryDrawerItem().withIdentifier(2)
                 .withName(R.string.nav_profile).withIcon(R.drawable.ic_profile);
@@ -120,11 +126,16 @@ public class DrawerUtil extends Activity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem.getIdentifier() == 1 && (!(activity instanceof MainActivity))) {
+                        if (drawerItem.getIdentifier() == 1 && (!(activity instanceof OrdersActivity)
+                                && !(activity instanceof TripsActivity))) {
                             // load home screen.
-                            Intent intent;
-                                intent = new Intent(activity, MainActivity.class);
-                            view.getContext().startActivity(intent);
+                            if (mode.equals("Merchant")){
+                                Intent intent = new Intent(activity, TripsActivity.class);
+                                view.getContext().startActivity(intent);
+                            }else{
+                                Intent intent = new Intent(activity, OrdersActivity.class);
+                                view.getContext().startActivity(intent);
+                            }
                         } else if (drawerItem.getIdentifier() == 2 && !(activity instanceof ProfileActivity)) {
                             // load profile/user screen.
                             Intent intent = new Intent(activity, ProfileActivity.class);

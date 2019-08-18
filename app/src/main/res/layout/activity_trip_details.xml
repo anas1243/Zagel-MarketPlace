@@ -467,9 +467,10 @@
                     android:background="@android:color/darker_gray" />
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:layout_marginTop="16dp"
-                    android:id="@+id/order_layout_of_trips">
+                    android:id="@+id/orders_layout_in_trip">
 
                     <ImageView
                         android:id="@+id/orders_icon"

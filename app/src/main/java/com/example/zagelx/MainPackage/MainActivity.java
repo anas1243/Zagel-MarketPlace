@@ -15,12 +15,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.OrdersPackage.AddOrdersActivity;
-import com.example.zagelx.OrdersPackage.AddOrdersMapActivity;
-import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.AddTripsActivity;
 import com.example.zagelx.UserInfo.NotificationsActivity;
@@ -87,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
+
+
+
+
                     mode = currentUser.getMode();
                     ButterKnife.bind(MainActivity.this);
                     setSupportActionBar(toolbar);
@@ -116,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
                     viewPager.setAdapter(adapter);
                     TabLayout tabLayout = findViewById(R.id.tabMode);
                     tabLayout.setupWithViewPager(viewPager);
+
+                    Animation ranim =  AnimationUtils.loadAnimation(MainActivity.this, R.anim.shake_add_button);
+                    addButton.startAnimation(ranim);
+
                     addButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -125,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                                 Intent i = new Intent(MainActivity.this, AddTripsActivity.class);
                                 startActivity(i);
                             }
+
                         }
                     });
                 }
@@ -184,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
 //                alertDialog.show();
 
         Intent i = new Intent(MainActivity.this, AddOrdersActivity.class);
-        //i.putExtra("FROM_ACTIVITY", "MainActivity");
         startActivity(i);
 
 

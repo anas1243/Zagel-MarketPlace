@@ -22,7 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.MainPackage.MainActivity;
+import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.OrdersInTrip;
@@ -52,7 +53,7 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
     private ValueEventListener mUserEventListener;
 
 
-    private TextView delegateName, routeSource, routeDestination, routeDate, routePrice, deliveryFees, routeBreakablility, routeVehicle;
+    private TextView delegateName, routeSource, routeDestination, routeDate, routePrice, deliveryFees, routeBreakablility, routeVehicle, ordersLable;
     private EditText routeNotes;
     private ImageView delegateImage, routeVihicleIcon, infoDelivery;
 
@@ -65,7 +66,7 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
     private String userType;
 
     private LinearLayout ownerLayout;
-    private RelativeLayout youOrdersLayout;
+    private RelativeLayout youOrdersLayout, ordersInTip;
 
     private Query queryOrders;
     final List<String> ordersNameArray =  new ArrayList<>();
@@ -132,6 +133,8 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
         routeVihicleIcon = findViewById(R.id.vehicle_icon);
         infoDelivery = findViewById(R.id.route_fees_icon);
         orderItems =  findViewById(R.id.yourOrders_spinner);
+        ordersLable = findViewById(R.id.orders_lable);
+        ordersInTip = findViewById(R.id.orders_layout_in_trip);
         ownerLayout = findViewById(R.id.layout_owner);
         youOrdersLayout = findViewById(R.id.youOrders_layout);
         deleteTrip = findViewById(R.id.delete_request);
@@ -215,6 +218,9 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                     currentNumberOfNotifications = currentUser.getNumberOfNotifications();
                     userType = currentUser.getMode();
                     if(userType.equals("Merchant")){
+                        ordersLable.setVisibility(View.GONE);
+                        ordersLayoutSeparator.setVisibility(View.GONE);
+                        ordersInTip.setVisibility(View.GONE);
                         makeHimChooseHisOrder();
                     }else {
                         youOrdersLayout.setVisibility(View.GONE);
@@ -340,9 +346,18 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                         Snackbar snackbar = Snackbar
                                 .make(findViewById(R.id.main_list), "لقد تمل ارسال طلبك للمندوب", Snackbar.LENGTH_LONG);
                         snackbar.show();
-                        Intent i = new Intent(TripsDetails.this, MainActivity.class);
-                        finish();
-                        startActivity(i);
+                        if (currentUser.getMode().equals("Merchant")){
+                            Intent i = new Intent(TripsDetails.this, MerchantDashboardActivity.class);
+                            i.putExtra("Which_Activity", "SomethingElse");
+                            finish();
+                            startActivity(i);
+                        }
+                        else if (currentUser.getMode().equals("Delivery Delegate")){
+                            Intent i = new Intent(TripsDetails.this, DelegateDashboardActivity.class);
+                            i.putExtra("Which_Activity", "SomethingElse");
+                            finish();
+                            startActivity(i);
+                        }
 
                     }
                 });

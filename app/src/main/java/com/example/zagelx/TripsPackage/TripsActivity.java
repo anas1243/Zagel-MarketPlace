@@ -12,14 +12,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
-import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.R;
 import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
@@ -44,11 +43,8 @@ public class TripsActivity extends AppCompatActivity {
 
     private ListView mTripsListView;
     private TripsAdapter mTripsAdapter;
-    private Button ordersButton;
-    private Button tripsButton;
     private ImageButton notificaitonsButton;
     private NotificationBadge mBadge;
-    private Button addTrip_cButton;
 //    private ProgressBar progressBar;
 
 
@@ -79,9 +75,6 @@ public class TripsActivity extends AppCompatActivity {
 
 
         mTripsListView = findViewById(R.id.main_list);
-        ordersButton = findViewById(R.id.orders_button);
-        tripsButton = findViewById(R.id.trips_button);
-        addTrip_cButton = findViewById(R.id.add_trip_cbutton);
         //progressBar = findViewById(R.id.progressbar);
 
         notificaitonsButton = findViewById(R.id.ic_notification_toolbar);
@@ -98,26 +91,6 @@ public class TripsActivity extends AppCompatActivity {
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.main_main_layout), "خطوط مندوبي الشحن !", Snackbar.LENGTH_LONG);
         snackbar.show();
-
-
-        ordersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Create a new intent to open the {@link AddOrdersActivity}
-
-                    Intent i = new Intent(TripsActivity.this, OrdersActivity.class);
-                    startActivity(i);
-
-            }
-        });
-        tripsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.main_main_layout), "Already there!", Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
-        });
 
         // Initialize message ListView and its adapter
         List<Trips> tripsList = new ArrayList<>();
@@ -139,13 +112,6 @@ public class TripsActivity extends AppCompatActivity {
                     drawer.getDrawer(TripsActivity.this, toolbar);
                     mBadge.setNumber(currentUser.getNumberOfNotifications());
 
-                    if (!currentUser.getMode().equals("Delivery Delegate")) {
-                        Snackbar snackbar = Snackbar
-                                .make(findViewById(R.id.main_main_layout), "انت لست مندوب توصيل, يرجي التواصل مع فريق عمل زاجل لتغير نوع الحساب!", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    } else {
-                        setAddTripButtonListener();
-                    }
                 }
 
                 @Override
@@ -195,83 +161,26 @@ public class TripsActivity extends AppCompatActivity {
         }
     }
 
-    private void setAddTripButtonListener(){
-        addTrip_cButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Create a new intent to open the {@link AddOrdersActivity}
+    @Override
+    public void onBackPressed() {
 
-                Intent i = new Intent(TripsActivity.this, AddTripsActivity.class);
-                startActivity(i);
+            Intent i = new Intent(TripsActivity.this, MerchantDashboardActivity.class);
+            i.putExtra("Which_Activity", "SomethingElse");
+            startActivity(i);
 
-            }
-        });
-    }
-
-    private void isGPSopened() {
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch (Exception ex) {
-        }
-
-        if (!gps_enabled) {
-            showSettingsAlert();
-        }
-    }
-
-    public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(TripsActivity.this);
-
-        alertDialog.setTitle("GPS is settings");
-
-        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
-
-        alertDialog.setPositiveButton("Open", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                TripsActivity.this.startActivity(intent);
-            }
-        });
-
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        alertDialog.show();
     }
 
     @Override
-    public void onBackPressed() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Exit Application?");
-        alertDialogBuilder
-                .setMessage("Click yes to exit!")
-                .setCancelable(false)
-                .setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                moveTaskToBack(true);
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                                System.exit(1);
-                            }
-                        })
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                Intent i = new Intent(TripsActivity.this, MerchantDashboardActivity.class);
+                i.putExtra("Which_Activity", "SomethingElse");
+                startActivity(i);
 
-                        dialog.cancel();
-                    }
-                });
+            return true;
+        }
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        return super.onKeyDown(keyCode, event);
     }
 }

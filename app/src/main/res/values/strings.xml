@@ -16,7 +16,8 @@
     <string name="unknown_error">Unknown Error</string>
 
     <!-- Navigation Drawer menu labels -->
-    <string name="nav_home">Home</string>
+    <string name="nav_orders">Orders</string>
+    <string name="nav_trips">Trips</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_listen">Notifications</string>
     <string name="nav_notify">Listening Now</string>

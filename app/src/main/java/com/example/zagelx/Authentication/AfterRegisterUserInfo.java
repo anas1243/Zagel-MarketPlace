@@ -24,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfoForUsers;
@@ -80,6 +82,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
     private String newToken;
 
     private Bitmap bmp;
+    private Users currentUser;
 
 
     ArrayAdapter<CharSequence> adapter;
@@ -414,7 +417,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                             String governorate = userLocation.getSelectedItem().toString();
                             String subAdmin = userAreaName.getSelectedItem().toString();
                             LocationInfoForUsers locationInfoForUser = new LocationInfoForUsers("", "", governorate, subAdmin, "");
-                            Users currentUser = new Users(uId, uName, gender, uMobile,
+                            currentUser = new Users(uId, uName, gender, uMobile,
                                     userPhotoUrlVar, new BirthDate(userDate.getYear(),
                                     userDate.getMonth()+1, userDate.getDayOfMonth()),
                                     type, uEmail,locationInfoForUser , false, false, false, newToken);
@@ -422,8 +425,17 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                             usersDatabaseReference.child(uId).setValue(currentUser);
 
                             Toast.makeText(AfterRegisterUserInfo.this, "Resgistered!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(AfterRegisterUserInfo.this, MainActivity.class);
-                            startActivity(i);
+                            if (currentUser.getMode().equals("Merchant")){
+                                Intent i = new Intent(AfterRegisterUserInfo.this, MerchantDashboardActivity.class);
+                                i.putExtra("Which_Activity", "SomethingElse");
+                                startActivity(i);
+                            }
+                            else if (currentUser.getMode().equals("Delivery Delegate")){
+                                Intent i = new Intent(AfterRegisterUserInfo.this, DelegateDashboardActivity.class);
+                                i.putExtra("Which_Activity", "SomethingElse");
+                                startActivity(i);
+                            }
+
                         }else{
                             Toast.makeText(AfterRegisterUserInfo.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();
 
