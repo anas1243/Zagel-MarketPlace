@@ -26,9 +26,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
 import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
-import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfoForUsers;
+import com.example.zagelx.Models.ZagelNumbers;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.google.android.gms.tasks.Continuation;
@@ -38,8 +38,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
@@ -49,9 +52,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.UUID;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AfterRegisterUserInfo extends AppCompatActivity {
@@ -60,7 +60,8 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
     public static String TAG = "AfterRegisterUserinfo";
 
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference usersDatabaseReference;
+    private DatabaseReference usersDatabaseReference, numbersDatabaseReference;
+    private ValueEventListener mNumbersEventListener;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage storage;
     private StorageReference ProfileImageReference;
@@ -83,6 +84,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
 
     private Bitmap bmp;
     private Users currentUser;
+    private ZagelNumbers zagelNumbers;
 
 
     ArrayAdapter<CharSequence> adapter;
@@ -98,6 +100,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         user = firebaseAuth.getCurrentUser();
         usersDatabaseReference = firebaseDatabase.getReference().child("Users");
+        numbersDatabaseReference = firebaseDatabase.getReference().child("ZagelNumbers");
         ProfileImageReference = storage.getReference().child("profile_images/" +"ProfilePic-->"+ user.getUid());
 
         userName = findViewById(R.id.user_name);
@@ -424,17 +427,40 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
 
                             usersDatabaseReference.child(uId).setValue(currentUser);
 
-                            Toast.makeText(AfterRegisterUserInfo.this, "Resgistered!", Toast.LENGTH_SHORT).show();
-                            if (currentUser.getMode().equals("Merchant")){
-                                Intent i = new Intent(AfterRegisterUserInfo.this, MerchantDashboardActivity.class);
-                                i.putExtra("Which_Activity", "SomethingElse");
-                                startActivity(i);
-                            }
-                            else if (currentUser.getMode().equals("Delivery Delegate")){
-                                Intent i = new Intent(AfterRegisterUserInfo.this, DelegateDashboardActivity.class);
-                                i.putExtra("Which_Activity", "SomethingElse");
-                                startActivity(i);
-                            }
+                            mNumbersEventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    zagelNumbers = dataSnapshot.getValue(ZagelNumbers.class);
+
+                                    Toast.makeText(AfterRegisterUserInfo.this, "Resgistered!", Toast.LENGTH_SHORT).show();
+                                    if (currentUser.getMode().equals("Merchant")){
+                                        numbersDatabaseReference.child("noOfMerchants")
+                                                .setValue(zagelNumbers.getNoOfMerchants()+1);
+                                        Intent i = new Intent(AfterRegisterUserInfo.this, MerchantDashboardActivity.class);
+
+                                        i.putExtra("Which_Activity", "SomethingElse");
+                                        startActivity(i);
+                                    }
+                                    else if (currentUser.getMode().equals("Delivery Delegate")){
+                                        numbersDatabaseReference.child("noOfDelegates")
+                                                .setValue(zagelNumbers.getNoOfDelegates()+1);
+                                        Intent i = new Intent(AfterRegisterUserInfo.this, DelegateDashboardActivity.class);
+                                        i.putExtra("Which_Activity", "SomethingElse");
+                                        startActivity(i);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            };
+
+                            numbersDatabaseReference
+                                    .addListenerForSingleValueEvent(mNumbersEventListener);
+
+
 
                         }else{
                             Toast.makeText(AfterRegisterUserInfo.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();

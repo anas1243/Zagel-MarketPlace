@@ -29,14 +29,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Authentication.AfterRegisterUserInfo;
+import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
 import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfoForPackage;
-import com.example.zagelx.Models.LocationInfoForUsers;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
+import com.example.zagelx.Models.ZagelNumbers;
 import com.example.zagelx.R;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -89,11 +90,14 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
     private Button AddOrderButton;
 
-    private ImageButton icCar, icBus, icTrain, icMetro, icMotorcycle, icNosNal;
+    private ImageButton icAny, icBus, icTrain, icCar, icMotorcycle, icNosNal;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
-    private DatabaseReference mUsersDatabaseReference;
+    private DatabaseReference mUsersDatabaseReference, numbersDatabaseReference;
+
+    private ValueEventListener mNumbersEventListener;
+    private ZagelNumbers zagelNumbers;
 
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mPackagePhotoStorageReference;
@@ -157,9 +161,9 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
 
         icBus = findViewById(R.id.ic_bus);
-        icCar = findViewById(R.id.ic_car);
+        icAny = findViewById(R.id.ic_any);
         icTrain = findViewById(R.id.ic_train);
-        icMetro = findViewById(R.id.ic_metro);
+        icCar = findViewById(R.id.ic_car);
         icMotorcycle = findViewById(R.id.ic_motorcycle);
         icNosNal = findViewById(R.id.ic_nos_na2l);
 
@@ -575,6 +579,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         merchantId = mFirebaseAuth.getCurrentUser().getUid();
 
         mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
+        numbersDatabaseReference = mFirebaseDatabase.getReference().child("ZagelNumbers");
 
         mPackagePhotoStorageReference = mFirebaseStorage.getReference().child("packages_photos");
 
@@ -599,10 +604,10 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         });
 
 
-        icCar.setOnClickListener(this);
+        icAny.setOnClickListener(this);
         icBus.setOnClickListener(this);
         icTrain.setOnClickListener(this);
-        icMetro.setOnClickListener(this);
+        icCar.setOnClickListener(this);
         icMotorcycle.setOnClickListener(this);
         icNosNal.setOnClickListener(this);
         packageImage.setOnClickListener(this);
@@ -878,11 +883,29 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
                             mOrdersDatabaseReference.child(orderId).setValue(order);
 
-                            Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(AddOrdersActivity.this, MerchantDashboardActivity.class);
-                            i.putExtra("Which_Activity", "OtherActivity");
-                            finish();
-                            startActivity(i);
+                            mNumbersEventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    zagelNumbers = dataSnapshot.getValue(ZagelNumbers.class);
+                                    numbersDatabaseReference.child("noOfOrders").setValue(zagelNumbers.getNoOfOrders()+1);
+                                    Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(AddOrdersActivity.this, MerchantDashboardActivity.class);
+                                    i.putExtra("Which_Activity", "OtherActivity");
+                                    finish();
+                                    startActivity(i);
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            };
+
+                            numbersDatabaseReference
+                                    .addListenerForSingleValueEvent(mNumbersEventListener);
+
+
                         } else {
                             Toast.makeText(AddOrdersActivity.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();
 
@@ -906,13 +929,13 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                     icBus.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_bus_yellow));
                 }
                 break;
-            case R.id.ic_car:
+            case R.id.ic_any:
                 clearVehicleOptionsColor();
-                vehicle.setText("Car");
+                vehicle.setText("Any");
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                    icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car_yellow));
+                    icAny.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_any_yellow));
                 } else {
-                    icCar.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_car_yellow));
+                    icAny.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_any_yellow));
                 }
                 break;
             case R.id.ic_train:
@@ -933,13 +956,13 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                     icMotorcycle.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_motorcycle_yellow));
                 }
                 break;
-            case R.id.ic_metro:
+            case R.id.ic_car:
                 clearVehicleOptionsColor();
-                vehicle.setText("Metro");
+                vehicle.setText("Car");
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                    icMetro.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_metro_yellow));
+                    icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car_yellow));
                 } else {
-                    icMetro.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_metro_yellow));
+                    icCar.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_car_yellow));
                 }
                 break;
             case R.id.ic_nos_na2l:
@@ -975,17 +998,17 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         editPackageImage.setOnClickListener(this);
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             icBus.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_bus));
-            icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car));
+            icAny.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_any));
             icTrain.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_train));
-            icMetro.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_metro));
+            icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car));
             icMotorcycle.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_motorcycle));
             icNosNal.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_nos_na2l));
 
         } else {
             icBus.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_bus));
-            icCar.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_car));
+            icAny.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_any));
             icTrain.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_train));
-            icMetro.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_metro));
+            icCar.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_car));
             icMotorcycle.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_motorcycle));
             icNosNal.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_nos_na2l));
 

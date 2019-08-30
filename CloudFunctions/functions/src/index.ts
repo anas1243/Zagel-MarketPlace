@@ -141,7 +141,8 @@ export const sendNotificationToUser = functions.database
 .onUpdate(async (change, contex) =>  {
       const before = change.before.val()
       const after = change.after.val()
-      if(before.picked === after.picked && before.delivered === after.delivered){
+      if(before.delegatePicked === after.delegatePicked && before.merchantDelivered === after.merchantDelivered
+        && before.merchantPicked === after.merchantPicked && before.delegateDelivered === after.delegateDelivered){
         console.log("value did not change")
         return null
     }
@@ -167,11 +168,11 @@ export const sendNotificationToUser = functions.database
       let getDeviceTokensPromise: any;
       let payload: any;
 
-      if (before.picked !== after.picked){
+      if (before.delegatePicked !== after.delegatePicked || before.delegateDelivered !== after.delegateDelivered){
             getDeviceTokensPromise = admin.database()
       .ref(`Users/${merchantId}/userToken`).once('value');
 
-      }else if (before.delivered !== after.delivered){
+      }else if (before.merchantDelivered !== after.merchantDelivered || before.merchantPicked !== after.merchantPicked){
         getDeviceTokensPromise = admin.database()
       .ref(`Users/${delegateId}/userToken`).once('value');
 
@@ -190,7 +191,7 @@ export const sendNotificationToUser = functions.database
       }
       console.log('There are', tokensSnapshot.numChildren(), 'tokens to send notifications to.');
       
-      if (before.picked !== after.picked){
+      if (before.delegatePicked !== after.delegatePicked){
         //Notification details.
        payload = {
         notification: {
@@ -206,12 +207,12 @@ export const sendNotificationToUser = functions.database
         }
       }; 
 
-  }else if (before.delivered !== after.delivered){
+  }else if (before.merchantDelivered !== after.merchantDelivered){
     //Notification details.
     payload = {
       notification: {
         title: `${orderName} Delivering acknowledge`,
-        body: `${merchantName} marked your order ${orderName} as delivered `,
+        body: `${merchantName} marked order named ${orderName} as Delivered `,
         sound: "default",
         icon: orderURL,
         priority : "high",
@@ -222,7 +223,39 @@ export const sendNotificationToUser = functions.database
       }
     }; 
 
+  } else if (before.merchantPicked !== after.merchantPicked){
+    //Notification details.
+   payload = {
+    notification: {
+      title: `${orderName} Picking acknowledge`,
+      body: `${merchantName} marked order named ${orderName} as Picked `,
+      sound: "default",
+      icon: orderURL,
+      priority : "high",
+      click_action : ".OrdersPackage.OrderDetails"
+    }
+    , data: {
+      "orderId" : orderId  
+    }
+  }; 
+
+}else if (before.delegateDelivered !== after.delegateDelivered){
+//Notification details.
+payload = {
+  notification: {
+    title: `${orderName} Delivering acknowledge`,
+    body: `${delegateName} marked your order ${orderName} as Delivered `,
+    sound: "default",
+    icon: orderURL,
+    priority : "high",
+    click_action : ".OrdersPackage.OrderDetails"
   }
+  , data: {
+    "orderId" : orderId
+  }
+}; 
+
+}
 
 
       console.log(`token is ${tokensSnapshot.val()} payload is ${payload}`)

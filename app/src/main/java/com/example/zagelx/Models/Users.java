@@ -19,7 +19,6 @@ public class Users {
     private boolean accurateLocation = false;
     //date with format year month day
     private BirthDate birthDate = null;
-    private MerchantsNotifications Notifications = null;
     private int numberOfNotifications=0;
     private String userToken;
     private LocationInfoForUsers locationInfoForUser = null;
@@ -114,10 +113,6 @@ public class Users {
 
     public boolean isVerified() {
         return verified;
-    }
-
-    public MerchantsNotifications getNotifications() {
-        return Notifications;
     }
 
     public int getNumberOfNotifications() {

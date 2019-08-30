@@ -184,8 +184,8 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
         else
             routeBreakablility.setText("are not allowed");
         switch (currentTrip.getVehicle()) {
-            case "Car":
-                routeVihicleIcon.setImageResource(R.drawable.vehicle_car_yellow);
+            case "Any":
+                routeVihicleIcon.setImageResource(R.drawable.vehicle_any_yellow);
                 break;
             case "Train":
                 routeVihicleIcon.setImageResource(R.drawable.vehicle_train_yellow);
@@ -193,8 +193,8 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
             case "MotorCycle":
                 routeVihicleIcon.setImageResource(R.drawable.vehicle_motorcycle_yellow);
                 break;
-            case "Metro":
-                routeVihicleIcon.setImageResource(R.drawable.vehicle_metro_yellow);
+            case "Car":
+                routeVihicleIcon.setImageResource(R.drawable.vehicle_car_yellow);
                 break;
             case "Nos Na2l":
                 routeVihicleIcon.setImageResource(R.drawable.vehicle_nos_na2l_yellow);

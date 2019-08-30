@@ -73,8 +73,8 @@ public class DashboardOrdersAdapter extends ArrayAdapter<Orders> {
         sourceTV.setText(CurrentOrder.getLocationInfoForPackage().getsAdminArea());
         destinationTV.setText(CurrentOrder.getLocationInfoForPackage().getdAdminArea());
         switch (CurrentOrder.getVehicle()) {
-            case "Car":
-                vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);
+            case "Any":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_any_yellow);
                 break;
             case "Train":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_train_yellow);
@@ -82,8 +82,8 @@ public class DashboardOrdersAdapter extends ArrayAdapter<Orders> {
             case "MotorCycle":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_motorcycle_yellow);
                 break;
-            case "Metro":
-                vehicleImageIV.setImageResource(R.drawable.vehicle_metro_yellow);
+            case "Car":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);
                 break;
             case "Nos Na2l":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_nos_na2l_yellow);

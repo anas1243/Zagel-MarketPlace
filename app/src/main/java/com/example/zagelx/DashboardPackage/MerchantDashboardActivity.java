@@ -90,7 +90,7 @@ public class MerchantDashboardActivity extends AppCompatActivity {
             String pickedOrDelivered = (String) i.getSerializableExtra("PickedORDelivered");
             if (pickedOrDelivered.equals("Picked")) {
                 Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.main_main_layout), "الرجاء السراع في توصيل الشحنة لتعزيز الثقة بينك و بين التطبيق", Snackbar.LENGTH_LONG);
+                        .make(findViewById(R.id.main_main_layout), "تيتم ارسال لك اشعار عند توصيل الشحنة", Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else if (pickedOrDelivered.equals("Delivered")) {
                 Snackbar snackbar = Snackbar
@@ -107,7 +107,7 @@ public class MerchantDashboardActivity extends AppCompatActivity {
 
             mUserEventListener = new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
                     final String[] newToken = new String[1];
                     ButterKnife.bind(MerchantDashboardActivity.this);
@@ -134,14 +134,20 @@ public class MerchantDashboardActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(InstanceIdResult instanceIdResult) {
                             newToken[0] = instanceIdResult.getToken();
-                            if(!currentUser.getUserToken().equals(newToken[0])){
+                            Log.e("newToken", newToken[0]);
+                            if (dataSnapshot.hasChild("userToken")){
+                                if(!currentUser.getUserToken().equals(newToken[0]))
+                                    mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
+
+                            }
+                            else{
                                 mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
 
                             }
-                            Log.e("newToken", newToken[0]);
-
                         }
                     });
+
+
 
                     Animation ranim =  AnimationUtils.loadAnimation(MerchantDashboardActivity.this, R.anim.shake_add_button);
                     addButton.startAnimation(ranim);

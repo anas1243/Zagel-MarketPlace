@@ -21,11 +21,13 @@ public class Orders implements Serializable {
     private boolean breakable = false;
     private boolean verifiedUser = false;
 
-    //triggers a cloud function that says to M that the D picked the order
-    private boolean delivered = false;
+    //triggers a cloud function that says to M that the D delegatePicked the order
+    private boolean merchantDelivered = false;
+    private boolean delegateDelivered = false;
 
-    //triggers a cloud function that says to D delivered the order successfully
-    private boolean picked = false;
+    //triggers a cloud function that says to D merchantDelivered the order successfully
+    private boolean delegatePicked = false;
+    private boolean merchantPicked = false;
 
     private String vehicle = "";
     private String packageState = "";
@@ -72,6 +74,34 @@ public class Orders implements Serializable {
         this.verifiedUser = verifiedUser;
         this.endConsumerName = endConsumerName;
         this.merchantMobile = merchantMobile;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setDelegatePicked(boolean delegatePicked) {
+        this.delegatePicked = delegatePicked;
+    }
+
+    public void setMerchantPicked(boolean merchantPicked) {
+        this.merchantPicked = merchantPicked;
+    }
+
+    public void setMerchantDelivered(boolean merchantDelivered) {
+        this.merchantDelivered = merchantDelivered;
+    }
+
+    public void setDelegateDelivered(boolean delegateDelivered) {
+        this.delegateDelivered = delegateDelivered;
+    }
+
+    public boolean isDelegateDelivered() {
+        return delegateDelivered;
+    }
+
+    public boolean isMerchantPicked() {
+        return merchantPicked;
     }
 
     public String getMerchantId() {
@@ -186,8 +216,8 @@ public class Orders implements Serializable {
                 ", prePaid=" + prePaid +
                 ", breakable=" + breakable +
                 ", verifiedUser=" + verifiedUser +
-                ", delivered=" + delivered +
-                ", picked=" + picked +
+                ", merchantDelivered=" + merchantDelivered +
+                ", delegatePicked=" + delegatePicked +
                 ", vehicle='" + vehicle + '\'' +
                 ", packageState='" + packageState + '\'' +
                 ", currentRequestInfo=" + currentRequestInfo +
@@ -220,12 +250,12 @@ public class Orders implements Serializable {
         return merchantMobile;
     }
 
-    public boolean isDelivered() {
-        return delivered;
+    public boolean isMerchantDelivered() {
+        return merchantDelivered;
     }
 
-    public boolean isPicked() {
-        return picked;
+    public boolean isDelegatePicked() {
+        return delegatePicked;
     }
 
     public String getPackageWeight() {

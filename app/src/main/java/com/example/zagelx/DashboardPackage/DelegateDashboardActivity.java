@@ -17,12 +17,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-
-import com.example.zagelx.MainPackage.MainActivity;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.AddTripsActivity;
-import com.example.zagelx.TripsPackage.TripsActivity;
 import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
@@ -106,7 +103,7 @@ public class DelegateDashboardActivity extends AppCompatActivity {
 
             mUserEventListener = new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
                     final String[] newToken = new String[1];
                     ButterKnife.bind(DelegateDashboardActivity.this);
@@ -133,14 +130,22 @@ public class DelegateDashboardActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(InstanceIdResult instanceIdResult) {
                             newToken[0] = instanceIdResult.getToken();
-                            if(!currentUser.getUserToken().equals(newToken[0])){
+                            Log.e("newToken", newToken[0]);
+
+                            if (dataSnapshot.hasChild("userToken")){
+                                if(!currentUser.getUserToken().equals(newToken[0]))
+                                    mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
+
+                            }
+                            else{
                                 mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
 
                             }
-                            Log.e("newToken", newToken[0]);
 
                         }
                     });
+
+
 
                     Animation ranim =  AnimationUtils.loadAnimation(DelegateDashboardActivity.this, R.anim.shake_add_button);
                     addButton.startAnimation(ranim);

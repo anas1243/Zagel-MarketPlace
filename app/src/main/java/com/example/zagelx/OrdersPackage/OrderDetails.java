@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
 import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
@@ -27,6 +26,7 @@ import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
+import com.example.zagelx.Models.ZagelNumbers;
 import com.example.zagelx.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,13 +44,11 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference, mUserDatabaseReference
-            , mTripsDatabaseReference, mRequestInfoDatabaseReference;
-    private ValueEventListener mUserEventListener, mOrderEventListener, mTripEventListener;
+            , mTripsDatabaseReference, mRequestInfoDatabaseReference, numbersDatabaseReference;
+    private ValueEventListener mUserEventListener, mOrderEventListener, mTripEventListener, mNumbersEventListener;
+    private ZagelNumbers zagelNumbers;
 
-
-    private TextView merchantName, packageName, packageSource, packageDestination
-            , packageDate, packagePrice, deliveryFees, packageBreakablility
-            , packageVehicle, packageStatus, packageWeight;
+    private TextView merchantName, packageName, packageSource, packageDestination, packageDate, packagePrice, deliveryFees, packageBreakablility, packageVehicle, packageStatus, packageWeight;
     private EditText packageNotes;
     private ImageView merchantImage, packageImage, packageVehicleIcon, infoDelivery, verificationIcon;
 
@@ -73,7 +71,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
     private String purpose, tripId;
 
     private TextView anotherUserName, anotherUserMobile, endConsumerName, endConsumerMobile, userLable;
-    private boolean isPickedOrDelivered=false;
+    private boolean isPickedOrDelivered = false;
 
     @Override
     public void onClick(View v) {
@@ -92,48 +90,83 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                 acceptMerchantOffer();
                 break;
             case R.id.button_delivered_order:
-                markOrderDelivered();
+                markOrderDelivered(currentUser.getMode());
                 break;
             case R.id.button_picked_order:
-                markOrderPicked();
+                markOrderPicked(currentUser.getMode());
                 break;
             case R.id.call_end_consumer_icon:
                 callUser(currentOrder.getEndConsumerMobile());
                 break;
-            case  R.id.call_user_icon:
+            case R.id.call_user_icon:
                 if (userLable.getText().toString().equals("Your Merchant"))
                     callUser(currentOrder.getMerchantMobile());
                 else
                     callUser(currentOrder.getAcceptedDelegateMobile());
                 break;
+            case R.id.show_requests:
+                showOrderRequests();
+                break;
+            case R.id.delete_request:
+                deleteThisOrder();
+                break;
         }
     }
-    private void callUser(String userMobileNumber){
+
+    public void showOrderRequests(){
+       Intent i = new Intent(OrderDetails.this, OrdersRequestsActivity.class);
+        i.putExtra("Which_Activity", "OrderDetails");
+        i.putExtra("PickedORDelivered", "Picked");
+        startActivity(i);
+
+    }
+
+    public void deleteThisOrder(){
+
+    }
+    private void callUser(String userMobileNumber) {
         Intent myIntent = new Intent(Intent.ACTION_DIAL);
         String phNum = "tel:" + userMobileNumber;
         myIntent.setData(Uri.parse(phNum));
-        startActivity( myIntent ) ;
+        startActivity(myIntent);
     }
-    private void markOrderPicked(){
+
+    private void markOrderPicked(final String mode) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrderDetails.this);
         alertDialog.setCancelable(false);
-        alertDialog.setTitle("Picking "+currentOrder.getPackageName()+ " Confirmation!");
-        alertDialog.setMessage("سيتم ارسال اشعار للتاجر بانك قمت بضغت علي تم استلام الشحنة\n هل استلمت الشحنة بالفعل؟");
+        alertDialog.setTitle("Picking " + currentOrder.getPackageName() + " Confirmation!");
+        if (mode.equals("Merchant"))
+            alertDialog.setMessage("سيتم ارسال اشعار للمندوب بانك قمت بضغت علي تم تسليم الشحنة\n هل سلمت الشحنة بالفعل؟");
+        else
+            alertDialog.setMessage("سيتم ارسال اشعار للتاجر بانك قمت بضغت علي تم استلام الشحنة\n هل استلمت الشحنة بالفعل؟");
+
         alertDialog.setIcon(R.drawable.ic_delegates_requested);
         alertDialog.setPositiveButton("نعم",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                         dialog.cancel();
+                        if (mode.equals("Merchant"))
+                            currentOrder.setMerchantPicked(true);
+                        else
+                            currentOrder.setDelegatePicked(true);
+
+                        if (currentOrder.isDelegatePicked() && currentOrder.isMerchantPicked())
                         mOrdersDatabaseReference.child("packageState").setValue("Picked");
-                        mOrdersDatabaseReference.child("picked").setValue(true);
 
+                        if (mode.equals("Merchant"))
+                            mOrdersDatabaseReference.child("merchantPicked").setValue(true);
+                        else
+                            mOrdersDatabaseReference.child("delegatePicked").setValue(true);
 
-                        Intent i = new Intent(OrderDetails.this, DelegateDashboardActivity.class);
+                        Intent i;
+                        if (mode.equals("Merchant"))
+                            i = new Intent(OrderDetails.this, MerchantDashboardActivity.class);
+                        else
+                            i = new Intent(OrderDetails.this, DelegateDashboardActivity.class);
                         i.putExtra("Which_Activity", "OrderDetails");
                         i.putExtra("PickedORDelivered", "Picked");
                         startActivity(i);
-
 
 
                     }
@@ -148,11 +181,15 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
 
         alertDialog.show();
     }
-    private void markOrderDelivered(){
+
+    private void markOrderDelivered(final String mode) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrderDetails.this);
         alertDialog.setCancelable(false);
-        alertDialog.setTitle("Delivering "+currentOrder.getPackageName()+ " Confirmation!");
-        alertDialog.setMessage("سيتم ارسال اشعار للمندوب بانك قمت بضغت علي تم توصيل الشحنة\n هل استلم عميلك الشحنة بالفعل؟");
+        alertDialog.setTitle("Delivering " + currentOrder.getPackageName() + " Confirmation!");
+        if (mode.equals("Merchant"))
+            alertDialog.setMessage("سيتم ارسال اشعار للمندوب بانك قمت بضغت علي تم توصيل الشحنة\n هل استلم عميلك الشحنة بالفعل؟");
+        else
+            alertDialog.setMessage("سيتم ارسال اشعار للتاجر بانك قمت بضغت علي تم توصيل الشحنة\n هل استلم عميلك الشحنة بالفعل؟");
         alertDialog.setIcon(R.drawable.ic_delegates_requested);
 
         alertDialog.setPositiveButton("نعم",
@@ -160,15 +197,50 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int which) {
 
                         dialog.cancel();
-                        mOrdersDatabaseReference.child("packageState").setValue("Delivered");
-                        mOrdersDatabaseReference.child("delivered").setValue(true);
+                        if (mode.equals("Merchant"))
+                            currentOrder.setMerchantDelivered(true);
+                        else
+                            currentOrder.setDelegateDelivered(true);
 
 
-                        Intent i = new Intent(OrderDetails.this, MerchantDashboardActivity.class);
+                        if (currentOrder.isDelegateDelivered() && currentOrder.isMerchantDelivered()){
+
+                            mNumbersEventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    zagelNumbers = dataSnapshot.getValue(ZagelNumbers.class);
+
+                                    numbersDatabaseReference.child("noOfCompletedOrders")
+                                            .setValue(zagelNumbers.getNoOfCompletedOrders()+1);
+
+                                    mOrdersDatabaseReference.child("packageState").setValue("Delivered");
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            };
+
+                            numbersDatabaseReference
+                                    .addListenerForSingleValueEvent(mNumbersEventListener);
+
+                        }
+
+                        if (mode.equals("Merchant"))
+                            mOrdersDatabaseReference.child("merchantDelivered").setValue(true);
+                        else
+                            mOrdersDatabaseReference.child("delegateDelivered").setValue(true);
+
+                        Intent i;
+                        if (mode.equals("Merchant"))
+                            i = new Intent(OrderDetails.this, MerchantDashboardActivity.class);
+                        else
+                            i = new Intent(OrderDetails.this, DelegateDashboardActivity.class);
+
                         i.putExtra("Which_Activity", "OrderDetails");
                         i.putExtra("PickedORDelivered", "Delivered");
                         startActivity(i);
-
 
 
                     }
@@ -216,7 +288,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                 , currentUser.getProfilePictureURL()
                                 , currentUser.getMobileNumber(), currentUser.getRate(), priceOffer, currentUser.isVerified());
                         MerchantsNotifications merchantsNotifications = new MerchantsNotifications(
-                                notificationId,"toMerchant","request"
+                                notificationId, "toMerchant", "request"
                                 , currentOrder.getMerchantId(), currentOrder.getPackageName()
                                 , currentOrder.getOrderId(), currentRequestInfo, "", ""
                         );
@@ -233,12 +305,11 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                         Snackbar snackbar = Snackbar
                                 .make(findViewById(R.id.scroll_view), "لقد تمل ارسال طلبك للتاجر", Snackbar.LENGTH_LONG);
                         snackbar.show();
-                        if (currentUser.getMode().equals("Merchant")){
+                        if (currentUser.getMode().equals("Merchant")) {
                             Intent i = new Intent(OrderDetails.this, MerchantDashboardActivity.class);
                             i.putExtra("Which_Activity", "SomethingElse");
                             startActivity(i);
-                        }
-                        else if (currentUser.getMode().equals("Delivery Delegate")){
+                        } else if (currentUser.getMode().equals("Delivery Delegate")) {
                             Intent i = new Intent(OrderDetails.this, DelegateDashboardActivity.class);
                             i.putExtra("Which_Activity", "SomethingElse");
                             startActivity(i);
@@ -259,17 +330,17 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void acceptMerchantOffer(){
+    private void acceptMerchantOffer() {
 
-        Log.e("test button pos.", "onClick: "+ currentDelegateNotification.getOrderId() );
+        Log.e("test button pos.", "onClick: " + currentDelegateNotification.getOrderId());
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrderDetails.this);
         alertDialog.setCancelable(false);
         alertDialog.setTitle("Accept Delivery Request Confirmation!");
-        alertDialog.setMessage("Are you sure you want " +" to deliver "
-                +currentDelegateNotification.getOrderName()+" for "
-                + currentDelegateNotification.getRequestInfo().getOfferPrice()+" EGP to "
-                +currentDelegateNotification.getRequestInfo().getUserName()+" in "+ currentDelegateNotification.getTripDate());
+        alertDialog.setMessage("Are you sure you want " + " to deliver "
+                + currentDelegateNotification.getOrderName() + " for "
+                + currentDelegateNotification.getRequestInfo().getOfferPrice() + " EGP to "
+                + currentDelegateNotification.getRequestInfo().getUserName() + " in " + currentDelegateNotification.getTripDate());
         alertDialog.setIcon(R.drawable.ic_delegates_requested);
 
         alertDialog.setPositiveButton("Yes I agree",
@@ -299,7 +370,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                     currentRequestInfo.setStatus(true);
 
                                     MerchantsNotifications merchantsNotifications = new MerchantsNotifications(
-                                            notificationId,"toMerchant","acceptance"
+                                            notificationId, "toMerchant", "acceptance"
                                             , currentOrder.getMerchantId(), currentOrder.getPackageName()
                                             , currentOrder.getOrderId(), currentRequestInfo
                                             , currentDelegateNotification.getTripId()
@@ -330,25 +401,27 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             currentTrip = dataSnapshot.getValue(Trips.class);
                                             Map<String, Map<String, String>> ordersInThisRoute;
-                                            if (currentTrip.getRouteOrders()!= null){
-                                                 ordersInThisRoute = currentTrip.getRouteOrders();
-                                                ordersInThisRoute.put(currentOrder.getOrderId(), new HashMap<String, String>() {{
-                                                    put(currentOrder.getPackageName(),currentOrder.getPackageImageURL());
-                                                }
+                                            if (currentTrip.getRouteOrders() != null) {
+                                                ordersInThisRoute = currentTrip.getRouteOrders();
+                                                ordersInThisRoute.put(currentOrder.getOrderId(), new HashMap<String, String>() {
+                                                    {
+                                                        put(currentOrder.getPackageName(), currentOrder.getPackageImageURL());
+                                                    }
                                                 });
                                                 mTripsDatabaseReference.child("routeOrders").setValue(ordersInThisRoute);
-                                            }else{
-                                                 ordersInThisRoute = new HashMap<String, Map<String, String>>(){{
-                                                    put(currentOrder.getOrderId(), new HashMap<String, String>() {{
-                                                        put(currentOrder.getPackageName(),currentOrder.getPackageImageURL());
-                                                    }
+                                            } else {
+                                                ordersInThisRoute = new HashMap<String, Map<String, String>>() {{
+                                                    put(currentOrder.getOrderId(), new HashMap<String, String>() {
+                                                        {
+                                                            put(currentOrder.getPackageName(), currentOrder.getPackageImageURL());
+                                                        }
                                                     });
                                                 }};
 
                                                 mTripsDatabaseReference.child("routeOrders").setValue(ordersInThisRoute);
 
                                             }
-                                            Log.e("OrderDetails", "onDataChange: route orders list sise is"+ ordersInThisRoute.size() );
+                                            Log.e("OrderDetails", "onDataChange: route orders list sise is" + ordersInThisRoute.size());
                                             if (ordersInThisRoute.size() == currentTrip.getMaxNoOrders())
                                                 mTripsDatabaseReference.child("fullRoute").setValue(true);
 
@@ -384,7 +457,6 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                         }
 
 
-
                     }
                 });
 
@@ -408,6 +480,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
+        numbersDatabaseReference = mFirebaseDatabase.getReference().child("ZagelNumbers");
 
         merchantName = findViewById(R.id.user_name);
         packageName = findViewById(R.id.package_name);
@@ -455,11 +528,11 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
 
         if (getIntent().getExtras() != null) {
             for (String key : getIntent().getExtras().keySet()) {
-                 String value = getIntent().getExtras().getString(key);
+                String value = getIntent().getExtras().getString(key);
                 Log.e("test notifications", "Key: " + key + " Value: " + value);
-                if(key.equals("orderId")){
+                if (key.equals("orderId")) {
                     isPickedOrDelivered = true;
-                    Log.e("test value of FCM", "onCreate: "+ value );
+                    Log.e("test value of FCM", "onCreate: " + value);
                     mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
                             .child(value);
 
@@ -492,74 +565,69 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
             return;
 
 
-
-            Intent i = getIntent();
-            String whichClass = i.getSerializableExtra("Package_ID").getClass().getName();
-            Log.e("test el ", "onCreate: " + whichClass);
-            if (whichClass.equals(Orders.class.getName())) {
-                currentOrder = (Orders) i.getSerializableExtra("Package_ID");
-
-
-                fillViewsWithCorrectData();
-
-            }
-            else if (whichClass.equals(DelegatesNotification.class.getName())) {
-                purpose = (String) i.getSerializableExtra("Purpose");
-                currentDelegateNotification = (DelegatesNotification) i.getSerializableExtra("Package_ID");
-                tripId = currentDelegateNotification.getTripId();
-
-                mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
-                        .child(currentDelegateNotification.getOrderId());
+        Intent i = getIntent();
+        String whichClass = i.getSerializableExtra("Package_ID").getClass().getName();
+        Log.e("test el ", "onCreate: " + whichClass);
+        if (whichClass.equals(Orders.class.getName())) {
+            currentOrder = (Orders) i.getSerializableExtra("Package_ID");
 
 
-                mOrderEventListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        currentOrder = dataSnapshot.getValue(Orders.class);
-                        Log.e("test Orders", "onDataChange: " + currentOrder.getOrderId());
-//
-                        fillViewsWithCorrectData();
+            fillViewsWithCorrectData();
 
-                    }
+        } else if (whichClass.equals(DelegatesNotification.class.getName())) {
+            purpose = (String) i.getSerializableExtra("Purpose");
+            currentDelegateNotification = (DelegatesNotification) i.getSerializableExtra("Package_ID");
+            tripId = currentDelegateNotification.getTripId();
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                };
-
-                mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
-            }
-            else if (whichClass.equals(MerchantsNotifications.class.getName())){
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.scroll_view), "سيتواصل معك المندوب في اقرب وقت ", Snackbar.LENGTH_LONG);
-                snackbar.show();
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
+                    .child(currentDelegateNotification.getOrderId());
 
 
-                currentMerchantNotification = (MerchantsNotifications) i.getSerializableExtra("Package_ID");
-                mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
-                        .child(currentMerchantNotification.getOrderId());
+            mOrderEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    currentOrder = dataSnapshot.getValue(Orders.class);
+                    Log.e("test Orders", "onDataChange: " + currentOrder.getOrderId());
+
+                    fillViewsWithCorrectData();
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            };
+
+            mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
+        } else if (whichClass.equals(MerchantsNotifications.class.getName())) {
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.scroll_view), "سيتواصل معك المندوب في اقرب وقت ", Snackbar.LENGTH_LONG);
+            snackbar.show();
 
 
-                mOrderEventListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        currentOrder = dataSnapshot.getValue(Orders.class);
-
-                        fillViewsWithCorrectData();
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                };
-
-                mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
-            }
+            currentMerchantNotification = (MerchantsNotifications) i.getSerializableExtra("Package_ID");
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders")
+                    .child(currentMerchantNotification.getOrderId());
 
 
+            mOrderEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    currentOrder = dataSnapshot.getValue(Orders.class);
+
+                    fillViewsWithCorrectData();
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            };
+
+            mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
+        }
 
 
     }
@@ -586,7 +654,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                             deleteOrder.setOnClickListener(OrderDetails.this);
                             showRequestOrder.setOnClickListener(OrderDetails.this);
 
-                        } else if(currentOrder.getMerchantId().equals(user.getUid())
+                        } else if (currentOrder.getMerchantId().equals(user.getUid())
                                 && !currentOrder.getAcceptedDelegateID().equals("")) {
 
                             assignedUserLayout.setVisibility(View.VISIBLE);
@@ -602,20 +670,27 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
 
                             deliveryRequest.setVisibility(View.GONE);
                             ownerLayout.setVisibility(View.GONE);
-                            if (currentOrder.isPicked()){
+                            if (!currentOrder.isMerchantPicked()) {
+                                orderPicked.setText("هل سلمت الشحنة للمندوب؟");
+                                orderPicked.setVisibility(View.VISIBLE);
+                                orderPicked.setOnClickListener(OrderDetails.this);
+                            }else if (currentOrder.isDelegatePicked() &&  !currentOrder.isMerchantDelivered()) {
                                 orderDelivered.setVisibility(View.VISIBLE);
                                 orderDelivered.setOnClickListener(OrderDetails.this);
+                            } else if (currentOrder.isMerchantDelivered()) {
+                                deliveryRequest.setVisibility(View.GONE);
+                                assignedUserLayout.setVisibility(View.GONE);
+                                endConsumerLayout.setVisibility(View.GONE);
+                                ownerLayout.setVisibility(View.GONE);
                             }
-                        }else{
+                        } else {
                             deliveryRequest.setVisibility(View.GONE);
-                            assignedUserLayout.setVisibility(View.GONE);
-                            endConsumerLayout.setVisibility(View.GONE);
                             ownerLayout.setVisibility(View.GONE);
                         }
 
-                    } else if( currentUser.getMode().equals("Delivery Delegate") ){
+                    } else if (currentUser.getMode().equals("Delivery Delegate")) {
 
-                        if(currentOrder.getAcceptedDelegateID().equals(user.getUid())){
+                        if (currentOrder.getAcceptedDelegateID().equals(user.getUid())) {
 
                             ownerLayout.setVisibility(View.GONE);
                             deliveryRequest.setVisibility(View.GONE);
@@ -631,14 +706,19 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                             callUser.setOnClickListener(OrderDetails.this);
                             callEndConsumer.setOnClickListener(OrderDetails.this);
 
-                            if (!currentOrder.isPicked()){
-                            orderPicked.setVisibility(View.VISIBLE);
-                            orderPicked.setOnClickListener(OrderDetails.this);
+                            if (!currentOrder.isDelegatePicked()) {
+                                orderPicked.setVisibility(View.VISIBLE);
+                                orderPicked.setOnClickListener(OrderDetails.this);
+                            }else if (currentOrder.isMerchantPicked() && !currentOrder.isDelegateDelivered()) {
+                                orderDelivered.setVisibility(View.VISIBLE);
+                                orderDelivered.setOnClickListener(OrderDetails.this);
+                            } else if (currentOrder.isDelegateDelivered()) {
+                                deliveryRequest.setVisibility(View.GONE);
+                                ownerLayout.setVisibility(View.GONE);
                             }
 
-                        }
-                        else {
-                            if(currentDelegateNotification!= null && purpose.equals("request")){
+                        } else {
+                            if (currentDelegateNotification != null && purpose.equals("request")) {
                                 deliveryRequest.setVisibility(View.GONE);
                                 ownerLayout.setVisibility(View.GONE);
                                 assignedUserLayout.setVisibility(View.GONE);
@@ -647,7 +727,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                 refuseOffer.setOnClickListener(OrderDetails.this);
                                 acceptOffer.setOnClickListener(OrderDetails.this);
 
-                            }else{
+                            } else {
                                 deliveryRequest.setVisibility(View.VISIBLE);
                                 assignedUserLayout.setVisibility(View.GONE);
                                 endConsumerLayout.setVisibility(View.GONE);
@@ -673,7 +753,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                     .addListenerForSingleValueEvent(mUserEventListener);
 
 
-        }else {
+        } else {
             AuthUI.getInstance().signOut(this);
 
         }
@@ -718,8 +798,8 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         else
             packageBreakablility.setText("Is Not Breakable");
         switch (currentOrder.getVehicle()) {
-            case "Car":
-                packageVehicleIcon.setImageResource(R.drawable.vehicle_car_yellow);
+            case "Any":
+                packageVehicleIcon.setImageResource(R.drawable.vehicle_any_yellow);
                 break;
             case "Train":
                 packageVehicleIcon.setImageResource(R.drawable.vehicle_train_yellow);
@@ -727,8 +807,8 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
             case "MotorCycle":
                 packageVehicleIcon.setImageResource(R.drawable.vehicle_motorcycle_yellow);
                 break;
-            case "Metro":
-                packageVehicleIcon.setImageResource(R.drawable.vehicle_metro_yellow);
+            case "Car":
+                packageVehicleIcon.setImageResource(R.drawable.vehicle_car_yellow);
                 break;
             case "Nos Na2l":
                 packageVehicleIcon.setImageResource(R.drawable.vehicle_nos_na2l_yellow);

@@ -378,7 +378,7 @@
                         android:id="@+id/vehicle_icon"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/vehicle_car_yellow" />
+                        android:src="@drawable/vehicle_any_yellow" />
 
 
                     <TextView

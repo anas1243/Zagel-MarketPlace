@@ -75,8 +75,8 @@ public class DashboardTipsAdapter extends ArrayAdapter<Trips> {
         sourceTV.setText(CurrentTrip.getLocationInfoForTrip().getsAdminArea());
         destinationTV.setText(CurrentTrip.getLocationInfoForTrip().getdAdminArea());
         switch (CurrentTrip.getVehicle()) {
-            case "Car":
-                vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);
+            case "Any":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_any_yellow);
                 break;
             case "Train":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_train_yellow);
@@ -84,8 +84,8 @@ public class DashboardTipsAdapter extends ArrayAdapter<Trips> {
             case "MotorCycle":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_motorcycle_yellow);
                 break;
-            case "Metro":
-                vehicleImageIV.setImageResource(R.drawable.vehicle_metro_yellow);
+            case "Car":
+                vehicleImageIV.setImageResource(R.drawable.vehicle_car_yellow);
                 break;
             case "Nos Na2l":
                 vehicleImageIV.setImageResource(R.drawable.vehicle_nos_na2l_yellow);

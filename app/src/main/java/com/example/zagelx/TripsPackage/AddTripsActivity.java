@@ -19,10 +19,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfoForPackage;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
+import com.example.zagelx.Models.ZagelNumbers;
+import com.example.zagelx.OrdersPackage.AddOrdersActivity;
 import com.example.zagelx.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -50,14 +53,16 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
     private Button AddTripButton;
 
-    private ImageButton icCar, icBus, icTrain, icMetro, icMotorcycle, icNosNal;
+    private ImageButton icAny, icBus, icTrain, icCar, icMotorcycle, icNosNal;
 
     private Spinner routeSLocation, routeSAreaName, routeDLocation, routeDAreaName;
     ArrayAdapter<CharSequence> adapter;
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mTripsDatabaseReference;
-    private DatabaseReference mUsersDatabaseReference;
+    private DatabaseReference mTripsDatabaseReference, numbersDatabaseReference, mUsersDatabaseReference;
+
+    private ValueEventListener mNumbersEventListener;
+    private ZagelNumbers zagelNumbers;
 
     private FirebaseAuth mFirebaseAuth;
 
@@ -95,9 +100,9 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         routeDAreaName = findViewById(R.id.area_Dname);
 
         icBus = findViewById(R.id.ic_bus);
-        icCar = findViewById(R.id.ic_car);
+        icAny = findViewById(R.id.ic_any);
         icTrain = findViewById(R.id.ic_train);
-        icMetro = findViewById(R.id.ic_metro);
+        icCar = findViewById(R.id.ic_car);
         icMotorcycle = findViewById(R.id.ic_motorcycle);
         icNosNal = findViewById(R.id.ic_nos_na2l);
 
@@ -478,6 +483,8 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
         mTripsDatabaseReference = mFirebaseDatabase.getReference().child("Trips");
 
+        numbersDatabaseReference = mFirebaseDatabase.getReference().child("ZagelNumbers");
+
 
         mUsersDatabaseReference = mFirebaseDatabase.getReference().child(("Users")).child(delegateId);
 
@@ -498,10 +505,10 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
         });
 
 
-        icCar.setOnClickListener(this);
+        icAny.setOnClickListener(this);
         icBus.setOnClickListener(this);
         icTrain.setOnClickListener(this);
-        icMetro.setOnClickListener(this);
+        icCar.setOnClickListener(this);
         icMotorcycle.setOnClickListener(this);
         icNosNal.setOnClickListener(this);
         AddTripButton.setOnClickListener(this);
@@ -571,13 +578,13 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
                     icBus.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_bus_yellow));
                 }
                 break;
-            case R.id.ic_car:
+            case R.id.ic_any:
                 clearVehicleOptionsColor();
-                vehicle.setText("Car");
+                vehicle.setText("Any");
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                    icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car_yellow));
+                    icAny.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_any_yellow));
                 } else {
-                    icCar.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_car_yellow));
+                    icAny.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_any_yellow));
                 }
                 break;
             case R.id.ic_train:
@@ -598,13 +605,13 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
                     icMotorcycle.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_motorcycle_yellow));
                 }
                 break;
-            case R.id.ic_metro:
+            case R.id.ic_car:
                 clearVehicleOptionsColor();
-                vehicle.setText("Metro");
+                vehicle.setText("Car");
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                    icMetro.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_metro_yellow));
+                    icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car_yellow));
                 } else {
-                    icMetro.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_metro_yellow));
+                    icCar.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_car_yellow));
                 }
                 break;
             case R.id.ic_nos_na2l:
@@ -625,17 +632,17 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
     public void clearVehicleOptionsColor() {
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
             icBus.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_bus));
-            icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car));
+            icAny.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_any));
             icTrain.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_train));
-            icMetro.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_metro));
+            icCar.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_car));
             icMotorcycle.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_motorcycle));
             icNosNal.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.vehicle_nos_na2l));
 
         } else {
             icBus.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_bus));
-            icCar.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_car));
+            icAny.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_any));
             icTrain.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_train));
-            icMetro.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_metro));
+            icCar.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_car));
             icMotorcycle.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_motorcycle));
             icNosNal.setBackground(ContextCompat.getDrawable(this, R.drawable.vehicle_nos_na2l));
 
@@ -650,11 +657,30 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
         mTripsDatabaseReference.child(tripId).setValue(trip);
 
-        Toast.makeText(AddTripsActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(AddTripsActivity.this, DelegateDashboardActivity.class);
-        i.putExtra("Which_Activity", "SomethingElse");
-        finish();
-        startActivity(i);
+        mNumbersEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                zagelNumbers = dataSnapshot.getValue(ZagelNumbers.class);
+
+                numbersDatabaseReference.child("noOfTrips").setValue(zagelNumbers.getNoOfTrips()+1);
+                Toast.makeText(AddTripsActivity.this, "your route has been add!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(AddTripsActivity.this, DelegateDashboardActivity.class);
+                i.putExtra("Which_Activity", "SomethingElse");
+                finish();
+                startActivity(i);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+
+        numbersDatabaseReference
+                .addListenerForSingleValueEvent(mNumbersEventListener);
+
+
     }
 
 
