@@ -104,9 +104,16 @@ public class MerchantsNotificationsAdapter extends ArrayAdapter<MerchantsNotific
                     context.startActivity(i);
                 }else{
 
+//                    Intent i = new Intent(context, OrderDetails.class);
+//                    i.putExtra("Package_ID", currentNotification);
+//                    i.putExtra("Purpose", currentNotification.getPurpose());
+//                    context.startActivity(i);
+
                     Intent i = new Intent(context, OrderDetails.class);
-                    i.putExtra("Package_ID", currentNotification);
+                    i.putExtra("orderId", currentNotification.getOrderId());
+                    i.putExtra("MerchantNotification", currentNotification);
                     i.putExtra("Purpose", currentNotification.getPurpose());
+                    i.putExtra("WhichActivity", "MNotificationsAdapter");
                     context.startActivity(i);
                 }
 

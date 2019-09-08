@@ -97,9 +97,17 @@ public class DashboardOrdersAdapter extends ArrayAdapter<Orders> {
             @Override
             public void onClick(View view) {
 
+//                Intent i = new Intent(context, OrderDetails.class);
+//                Log.e("zero one test test", "onClick: "+ CurrentOrder.isPrePaid() );
+//                i.putExtra("Package_Object", CurrentOrder);
+//                i.putExtra("WhichActivity", "OrderObjectActivity");
+//                context.startActivity(i);
+
+
                 Intent i = new Intent(context, OrderDetails.class);
                 Log.e("zero one test test", "onClick: "+ CurrentOrder.isPrePaid() );
-                i.putExtra("Package_ID", CurrentOrder);
+                i.putExtra("orderObject", CurrentOrder);
+                i.putExtra("WhichActivity", "MDashboardAdapter");
                 context.startActivity(i);
             }
         });

@@ -203,7 +203,8 @@ export const sendNotificationToUser = functions.database
           click_action : ".OrdersPackage.OrderDetails"
         }
         , data: {
-          "orderId" : orderId  
+          "orderId" : orderId,
+          "WhichActivity" : "cloudFunctions"  
         }
       }; 
 
@@ -219,7 +220,8 @@ export const sendNotificationToUser = functions.database
         click_action : ".OrdersPackage.OrderDetails"
       }
       , data: {
-        "orderId" : orderId
+        "orderId" : orderId,
+        "WhichActivity" : "cloudFunctions"
       }
     }; 
 
@@ -235,7 +237,8 @@ export const sendNotificationToUser = functions.database
       click_action : ".OrdersPackage.OrderDetails"
     }
     , data: {
-      "orderId" : orderId  
+      "orderId" : orderId,
+      "WhichActivity" : "cloudFunctions"
     }
   }; 
 
@@ -251,7 +254,8 @@ payload = {
     click_action : ".OrdersPackage.OrderDetails"
   }
   , data: {
-    "orderId" : orderId
+    "orderId" : orderId,
+    "WhichActivity" : "cloudFunctions" 
   }
 }; 
 

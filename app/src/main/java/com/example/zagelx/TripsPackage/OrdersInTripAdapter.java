@@ -59,6 +59,7 @@ public class OrdersInTripAdapter extends ArrayAdapter<OrdersInTrip> {
                 Intent i = new Intent(context, OrderDetails.class);
                 Log.e("zero one test test", "onClick: "+ currentOrderInTrip.getOrderName() );
                 i.putExtra("orderId", currentOrderInTrip.getOrderId());
+                i.putExtra("WhichActivity", "OrdersInTripAdapter");
                 context.startActivity(i);
             }
         });

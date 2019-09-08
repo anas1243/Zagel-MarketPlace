@@ -106,8 +106,14 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
                                 mOrdersDatabaseReference.child("packageState").setValue("Reserved");
                                 mNotificationDatabaseReference.setValue(delegatesNotification);
 
+//                                Intent i = new Intent(context, OrderDetails.class);
+//                                i.putExtra("Package_ID", currentNotification);
+//                                ((OrdersRequestsActivity)context).finish();
+//                                context.startActivity(i);
+
                                 Intent i = new Intent(context, OrderDetails.class);
-                                i.putExtra("Package_ID", currentNotification);
+                                i.putExtra("orderId", currentNotification.getOrderId());
+                                i.putExtra("WhichActivity", "MOrderRequestsAdapter");
                                 ((OrdersRequestsActivity)context).finish();
                                 context.startActivity(i);
 

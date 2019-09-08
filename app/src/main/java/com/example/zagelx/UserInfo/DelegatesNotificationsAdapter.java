@@ -99,9 +99,17 @@ public class DelegatesNotificationsAdapter extends ArrayAdapter<DelegatesNotific
             @Override
             public void onClick(View view) {
 
+//                Intent i = new Intent(context, OrderDetails.class);
+//                i.putExtra("Package_ID", currentNotification);
+//                i.putExtra("Purpose", currentNotification.getPurpose());
+//                Log.e("test1st purpose", "onClick: "+ currentNotification.getPurpose());
+//                context.startActivity(i);
+
                 Intent i = new Intent(context, OrderDetails.class);
-                i.putExtra("Package_ID", currentNotification);
+                i.putExtra("orderId", currentNotification.getOrderId());
                 i.putExtra("Purpose", currentNotification.getPurpose());
+                i.putExtra("WhichActivity", "DNotificationsAdapter");
+                i.putExtra("DelegateNotification", currentNotification);
                 Log.e("test1st purpose", "onClick: "+ currentNotification.getPurpose());
                 context.startActivity(i);
             }

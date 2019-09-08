@@ -11,7 +11,8 @@ public class RequestInfo implements Serializable {
     private int rating;
     private String offerPrice;
     private boolean verified;
-    private boolean status;
+    private boolean status; //an accepted request or not
+    private boolean actionTaken; //does merchant take an action to make this request invisible
 
     public RequestInfo() {
     }
@@ -71,4 +72,9 @@ public class RequestInfo implements Serializable {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public boolean isActionTaken() {
+        return actionTaken;
+    }
+
 }

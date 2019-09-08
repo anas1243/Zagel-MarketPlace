@@ -104,9 +104,17 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
             @Override
             public void onClick(View view) {
 
+//                Intent i = new Intent(context, OrderDetails.class);
+//                Log.e("zero one test test", "onClick: "+ currentOrder.isPrePaid() );
+//                i.putExtra("Package_Object", currentOrder);
+//                i.putExtra("WhichActivity", "OrderObjectActivity");
+//                context.startActivity(i);
+
+
                 Intent i = new Intent(context, OrderDetails.class);
                 Log.e("zero one test test", "onClick: "+ currentOrder.isPrePaid() );
-                i.putExtra("Package_ID", currentOrder);
+                i.putExtra("orderObject", currentOrder);
+                i.putExtra("WhichActivity", "ordersAdapter");
                 context.startActivity(i);
             }
         });
