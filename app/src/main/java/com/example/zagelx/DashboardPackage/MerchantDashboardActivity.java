@@ -1,5 +1,6 @@
 package com.example.zagelx.DashboardPackage;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +16,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.zagelx.MainPackage.MainActivity;
+import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.OrdersPackage.AddOrdersActivity;
 import com.example.zagelx.R;
@@ -96,7 +100,9 @@ public class MerchantDashboardActivity extends AppCompatActivity {
                 Snackbar snackbar = Snackbar
                         .make(findViewById(R.id.main_main_layout), "نتمنا ان تكون قد استمتعت باستخدام التطبيق", Snackbar.LENGTH_LONG);
                 snackbar.show();
+
             }
+
         } else {
             Snackbar snackbar = Snackbar
                     .make(findViewById(R.id.main_main_layout), "الشحنات الخاصة بك !", Snackbar.LENGTH_LONG);

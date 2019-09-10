@@ -100,7 +100,8 @@ public class MerchantsNotificationsAdapter extends ArrayAdapter<MerchantsNotific
             public void onClick(View view) {
                 if(currentNotification.getPurpose().equals("request")){
                     Intent i = new Intent(context, OrdersRequestsActivity.class);
-                    i.putExtra("currentNotification", currentNotification);
+                    i.putExtra("orderId", currentNotification.getOrderId());
+                    i.putExtra("WhichActivity", "MNotificationsAdapter");
                     context.startActivity(i);
                 }else{
 

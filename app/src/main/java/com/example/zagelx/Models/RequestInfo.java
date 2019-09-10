@@ -11,13 +11,12 @@ public class RequestInfo implements Serializable {
     private int rating;
     private String offerPrice;
     private boolean verified;
-    private boolean status; //an accepted request or not
-    private boolean actionTaken; //does merchant take an action to make this request invisible
+    private String status; //pending, accepted or rejected request;
 
     public RequestInfo() {
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -41,6 +40,10 @@ public class RequestInfo implements Serializable {
         return rating;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getUserID() {
         return userID;
     }
@@ -50,7 +53,7 @@ public class RequestInfo implements Serializable {
     }
 
     public RequestInfo(String requestId, String userID, String userName, String userImageURL
-            , String userMobile, int rating, String offerPrice, boolean verified) {
+            , String userMobile, int rating, String offerPrice, boolean verified, String status) {
         this.userID = userID;
         this.userName = userName;
         this.userImageURL = userImageURL;
@@ -59,6 +62,7 @@ public class RequestInfo implements Serializable {
         this.verified = verified;
         this.requestId = requestId;
         this.userMobile = userMobile;
+        this.status = status;
     }
 
     public void setRequestId(String requestId) {
@@ -69,12 +73,5 @@ public class RequestInfo implements Serializable {
         return userMobile;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public boolean isActionTaken() {
-        return actionTaken;
-    }
 
 }

@@ -327,7 +327,7 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                         String requestId = System.currentTimeMillis() + user.getUid();
                         String notificationId = System.currentTimeMillis() + currentTrip.getDelegateID();
                         RequestInfo currentRequestInfo = new RequestInfo(requestId, user.getUid(), currentUser.getName(), currentUser.getProfilePictureURL()
-                                , currentUser.getMobileNumber(), currentUser.getRate(), priceOffer, currentUser.isVerified());
+                                , currentUser.getMobileNumber(), currentUser.getRate(), priceOffer, currentUser.isVerified(), "requested");
                         DelegatesNotification delegatesNotifications = new DelegatesNotification(
                                 notificationId,"toDelegate", "request", currentTrip.getDelegateID(), currentTrip.getTripId(), currentTrip.getRouteDate().toString()
                                 , selectedOrderItemID, orderItems.getSelectedItem().toString()

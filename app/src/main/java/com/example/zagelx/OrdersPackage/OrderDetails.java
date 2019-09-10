@@ -85,6 +85,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                 confirmDeliveryFees();
                 break;
             case R.id.refuse_request:
+                refuseMerchantOffer();
                 break;
             case R.id.accept_request:
                 acceptMerchantOffer();
@@ -116,7 +117,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
     public void showOrderRequests() {
         Intent i = new Intent(OrderDetails.this, OrdersRequestsActivity.class);
         i.putExtra("Which_Activity", "OrderDetails");
-        i.putExtra("PickedORDelivered", "Picked");
+        i.putExtra("orderId", currentOrder.getOrderId());
         startActivity(i);
 
     }
@@ -287,7 +288,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                         RequestInfo currentRequestInfo = new RequestInfo(requestId
                                 , user.getUid(), currentUser.getName()
                                 , currentUser.getProfilePictureURL()
-                                , currentUser.getMobileNumber(), currentUser.getRate(), priceOffer, currentUser.isVerified());
+                                , currentUser.getMobileNumber(), currentUser.getRate(), priceOffer, currentUser.isVerified(), "pending");
                         MerchantsNotifications merchantsNotifications = new MerchantsNotifications(
                                 notificationId, "toMerchant", "request"
                                 , currentOrder.getMerchantId(), currentOrder.getPackageName()
@@ -330,6 +331,13 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         alertDialog.show();
 
     }
+    private void refuseMerchantOffer(){
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.scroll_view), "مازال بامكانك قبول طلبات التوصيل الاخري", Snackbar.LENGTH_LONG);
+        snackbar.show();
+        //but now merchants don't know anything about this rejection
+        //TODO send notification to merchant to find another delegate(route)
+    }
 
     private void acceptMerchantOffer() {
 
@@ -338,7 +346,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrderDetails.this);
         alertDialog.setCancelable(false);
         alertDialog.setTitle("Accept Delivery Request Confirmation!");
-        alertDialog.setMessage("Are you sure you want " + " to deliver "
+        alertDialog.setMessage("Are you sure you want to deliver "
                 + currentDelegateNotification.getOrderName() + " for "
                 + currentDelegateNotification.getRequestInfo().getOfferPrice() + " EGP to "
                 + currentDelegateNotification.getRequestInfo().getUserName() + " in " + currentDelegateNotification.getTripDate());
@@ -366,9 +374,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                             , currentUser.getProfilePictureURL()
                                             , currentUser.getMobileNumber(), currentUser.getRate()
                                             , currentDelegateNotification.getRequestInfo().getOfferPrice()
-                                            , currentUser.isVerified());
-
-                                    currentRequestInfo.setStatus(true);
+                                            , currentUser.isVerified(),"accepted");
 
                                     MerchantsNotifications merchantsNotifications = new MerchantsNotifications(
                                             notificationId, "toMerchant", "acceptance"
@@ -394,6 +400,8 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                     mOrdersDatabaseReference.child("acceptedDelegateMobile")
                                             .setValue(currentUser.getMobileNumber());
                                     mOrdersDatabaseReference.child("packageState").setValue("Reserved");
+                                    mOrdersDatabaseReference.child("acceptedDeliveryPrice").setValue(currentRequestInfo.getOfferPrice());
+
                                     mTripsDatabaseReference = mFirebaseDatabase.getReference().child("Trips")
                                             .child(tripId);
 

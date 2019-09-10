@@ -62,66 +62,67 @@
     <string-array name="type_array">
         <item>Merchant</item>
         <item>Delivery Delegate</item>
+        <item>Delivery Delegate</item>
     </string-array>
 
     <string-array name="AR_location_array">
         <item>الإسكندرية</item>
         <item>القاهرة</item>
-        <item>الجيزة</item>
-        <item>الإسماعيلية</item>
-        <item>السويس</item>
-        <item>بورسعيد</item>
-        <item>الغربية</item>
-        <item>القليوبية</item>
-        <item>الشرقية</item>
-        <item>كفر الشيخ</item>
-        <item>البحيرة</item>
-        <item>الدقهلية</item>
-        <item>المنوفية</item>
-        <item>الفيوم</item>
-        <item>مطروح</item>
-        <item>الوادي الجديد</item>
-        <item>البحر الأحمر</item>
-        <item>المنيا</item>
-        <item>دمياط</item>
-        <item>قنا</item>
-        <item>بني سويف</item>
-        <item>سوهاج</item>
-        <item>أسوان</item>
-        <item>أسيوط</item>
-        <item>الأقصر</item>
-        <item>جنوب سيناء</item>
+<!--        <item>الجيزة</item>-->
+<!--        <item>الإسماعيلية</item>-->
+<!--        <item>السويس</item>-->
+<!--        <item>بورسعيد</item>-->
+<!--        <item>الغربية</item>-->
+<!--        <item>القليوبية</item>-->
+<!--        <item>الشرقية</item>-->
+<!--        <item>كفر الشيخ</item>-->
+<!--        <item>البحيرة</item>-->
+<!--        <item>الدقهلية</item>-->
+<!--        <item>المنوفية</item>-->
+<!--        <item>الفيوم</item>-->
+<!--        <item>مطروح</item>-->
+<!--        <item>الوادي الجديد</item>-->
+<!--        <item>البحر الأحمر</item>-->
+<!--        <item>المنيا</item>-->
+<!--        <item>دمياط</item>-->
+<!--        <item>قنا</item>-->
+<!--        <item>بني سويف</item>-->
+<!--        <item>سوهاج</item>-->
+<!--        <item>أسوان</item>-->
+<!--        <item>أسيوط</item>-->
+<!--        <item>الأقصر</item>-->
+<!--        <item>جنوب سيناء</item>-->
         <!--<item>شمال سيناء</item>-->
     </string-array>
 
     <string-array name="En_location_array">
         <item>Alexandria</item>
         <item>Cairo</item>
-        <item>Giza</item>
-        <item>Ismailia</item>
-        <item>Suez</item>
-        <item>Port Said [5]</item>
-        <item>Gharbia</item>
-        <item>Qalyubia</item>
-        <item>Sharqia</item>
-        <item>Kafr El Sheikh</item>
-        <item>Beheira</item>
-        <item>Dakahlia</item>
-        <item>Monufia</item>
-        <item>Faiyum</item>
-        <item>Matruh</item>
-        <item>New Valley</item>
-        <item>Red Sea</item>
-        <item>Minya</item>
-        <item>Damietta</item>
-        <item>Qena</item>
-        <item>Beni Suef</item>
-        <item>Sohag</item>
-        <item>Aswan</item>
-        <item>Asyut</item>
-        <item>Luxor</item>
-        <item>South Sinai</item>
-        <item>North Sinai</item>
+<!--        <item>Giza</item>-->
+<!--        <item>Ismailia</item>-->
+<!--        <item>Suez</item>-->
+<!--        <item>Port Said [5]</item>-->
+<!--        <item>Gharbia</item>-->
+<!--        <item>Qalyubia</item>-->
+<!--        <item>Sharqia</item>-->
+<!--        <item>Kafr El Sheikh</item>-->
+<!--        <item>Beheira</item>-->
+<!--        <item>Dakahlia</item>-->
+<!--        <item>Monufia</item>-->
+<!--        <item>Faiyum</item>-->
+<!--        <item>Matruh</item>-->
+<!--        <item>New Valley</item>-->
+<!--        <item>Red Sea</item>-->
+<!--        <item>Minya</item>-->
+<!--        <item>Damietta</item>-->
+<!--        <item>Qena</item>-->
+<!--        <item>Beni Suef</item>-->
+<!--        <item>Sohag</item>-->
+<!--        <item>Aswan</item>-->
+<!--        <item>Asyut</item>-->
+<!--        <item>Luxor</item>-->
+<!--        <item>South Sinai</item>-->
+<!--        <item>North Sinai</item>-->
     </string-array>
 
     <string-array name="الغربية">
@@ -442,10 +443,6 @@
         <item>المعصرة</item>
         <item>وسط</item>
         <item>وسط البلد</item>
-        <item>السويس</item>
-        <item>قنا</item>
-
-
     </string-array>
 
     <string-array name="القليوبية">

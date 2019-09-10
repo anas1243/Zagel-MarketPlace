@@ -17,6 +17,7 @@ public class Orders implements Serializable {
     private String packageWeight = "";
     private BirthDate deliveryDate = null;
     private String deliveryPrice = "";
+    private String acceptedDeliveryPrice = "";
     private boolean prePaid = false;
     private boolean breakable = false;
     private boolean verifiedUser = false;
@@ -188,6 +189,11 @@ public class Orders implements Serializable {
     public void setCurrentRequestInfo(RequestInfo currentRequestInfo) {
         this.currentRequestInfo = currentRequestInfo;
     }
+
+    public String getAcceptedDeliveryPrice() {
+        return acceptedDeliveryPrice;
+    }
+
 
     public int getNumberOfRequests() {
         return numberOfRequests;
