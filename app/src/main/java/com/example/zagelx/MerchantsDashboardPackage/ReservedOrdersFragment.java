@@ -1,4 +1,4 @@
-package com.example.zagelx.DashboardPackage;
+package com.example.zagelx.MerchantsDashboardPackage;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.zagelx.DashboardPackage.DashboardOrdersAdapter;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.R;
 import com.google.firebase.database.ChildEventListener;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class NegotiableOrdersFragment extends Fragment {
+public class ReservedOrdersFragment extends Fragment {
     private String userId;
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -33,7 +34,7 @@ public class NegotiableOrdersFragment extends Fragment {
     private DashboardOrdersAdapter mOrdersAdapter;
 
 
-    public NegotiableOrdersFragment() {
+    public ReservedOrdersFragment() {
         // Required empty public constructor
     }
 
@@ -63,7 +64,7 @@ public class NegotiableOrdersFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Orders orders = dataSnapshot.getValue(Orders.class);
                 Log.e("test orders", "onChildAdded: " + orders);
-                if(orders.getPackageState().equals("Negotiable") &&
+                if(orders.getPackageState().equals("Reserved") &&
                         orders.getMerchantId().equals(userId)
                 )
                     mOrdersAdapter.add(orders);

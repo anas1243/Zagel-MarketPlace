@@ -18,6 +18,8 @@ public class LocationInfoForPackage implements Serializable {
     private String dSubAdmin = "";       //el markaz
     private String dLocality = "";       //el 7ay
 
+    private String dFullAddress = "";
+
 
 
     public LocationInfoForPackage() {
@@ -144,4 +146,11 @@ public class LocationInfoForPackage implements Serializable {
         return dAdminArea+", "+dSubAdmin;
     }
 
+    public void setdFullAddress(String dFullAddress) {
+        this.dFullAddress = dFullAddress;
+    }
+
+    public String getdFullAddress() {
+        return dFullAddress;
+    }
 }

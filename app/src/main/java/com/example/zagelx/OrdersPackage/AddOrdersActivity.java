@@ -29,9 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.Authentication.AfterRegisterUserInfo;
-import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfoForPackage;
 import com.example.zagelx.Models.Orders;
@@ -69,10 +67,10 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private ImageView packageImage;
     private ImageView editPackageImage;
 
-    private EditText packageNameET;
+    private EditText packageNameET, packagePriceET, packageDescriptionET
+            , endConsumerMobile, endConsumerName, endConsumerFullAddress;
     private DatePicker deliveryDateDP;
-    private EditText deliveryPriceET;
-    private EditText endConsumerMobile, endConsumerName;
+    //private EditText deliveryPriceET;
     private SwitchCompat isPrePaidSwitch, isSameSourceSwitch, isBreakableSwitch;
 
     private TextView vehicle;
@@ -80,12 +78,6 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private Spinner packageSLocation, packageSAreaName, packageDLocation, packageDAreaName, packageWeight;
     ArrayAdapter<CharSequence> adapter;
     private TextView userSLocationLable, userSAreaNameLable, userDLocationLable, userDAreaNameLable;
-
-    private EditText packageDescriptionET;
-    private EditText packagePriceET;
-
-    private EditText sourceET;
-    private EditText destinationET;
 
 
     private Button AddOrderButton;
@@ -132,7 +124,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         editPackageImage = findViewById(R.id.edit_package_image);
 
         packageNameET = findViewById(R.id.package_name);
-        deliveryPriceET = findViewById(R.id.delivery_price);
+        //deliveryPriceET = findViewById(R.id.delivery_price);
         endConsumerMobile = findViewById(R.id.end_consumer_mobile);
         endConsumerName = findViewById(R.id.end_consumer_name);
 
@@ -149,6 +141,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
         packageDLocation = findViewById(R.id.user_Dlocation);
         packageDAreaName = findViewById(R.id.area_Dname);
+        endConsumerFullAddress = findViewById(R.id.receiver_full_address);
 
         packageWeight = findViewById(R.id.spinner_weight);
 
@@ -168,9 +161,6 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
         icNosNal = findViewById(R.id.ic_nos_na2l);
 
         packageDescriptionET = findViewById(R.id.package_description);
-
-        sourceET = findViewById(R.id.source_txt_view);
-        destinationET = findViewById(R.id.destination_txt_view);
 
 
         AddOrderButton = findViewById(R.id.button_yalla);
@@ -768,7 +758,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private void validateTheUser() {
         oName = packageNameET.getText().toString().trim();
         oPrice = packagePriceET.getText().toString().trim();
-        dPrice = deliveryPriceET.getText().toString().trim();
+        //dPrice = deliveryPriceET.getText().toString().trim();
         RMobile = endConsumerMobile.getText().toString().trim();
         RName = endConsumerName.getText().toString().trim();
         oVehicle = vehicle.getText().toString().trim();
@@ -866,13 +856,47 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
                                 locationInfoForPackage.setdAdminArea(packageDLocation.getSelectedItem().toString());
                                 locationInfoForPackage.setdSubAdmin(packageDAreaName.getSelectedItem().toString());
+
+                                locationInfoForPackage.setdFullAddress(endConsumerFullAddress.getText().toString());
                             }else if (packageSLocation.getVisibility() == View.GONE){
                                 locationInfoForPackage.setsAdminArea(oSourceLocation);
                                 locationInfoForPackage.setsSubAdmin(oSourceAdmin);
 
                                 locationInfoForPackage.setdAdminArea(packageDLocation.getSelectedItem().toString());
                                 locationInfoForPackage.setdSubAdmin(packageDAreaName.getSelectedItem().toString());
+
+                                locationInfoForPackage.setdFullAddress(endConsumerFullAddress.getText().toString());
                             }
+
+                            if (locationInfoForPackage.getsAdminArea().equals("الإسكندرية")
+                            && locationInfoForPackage.getdAdminArea().equals("الإسكندرية")){
+                                dPrice = "25";
+                            }else if ( (locationInfoForPackage.getsAdminArea().equals("القاهرة")
+                                    && locationInfoForPackage.getdAdminArea().equals("القاهرة") ) ||
+                                    (locationInfoForPackage.getsAdminArea().equals("الجيزة")
+                                    && locationInfoForPackage.getdAdminArea().equals("الجيزة"))){
+                                dPrice = "50";
+
+                            }else if ( (locationInfoForPackage.getsAdminArea().equals("القاهرة")
+                                    && locationInfoForPackage.getdAdminArea().equals("الجيزة") ) ||
+                                    (locationInfoForPackage.getsAdminArea().equals("الجيزة")
+                                            && locationInfoForPackage.getdAdminArea().equals("القاهرة"))){
+                                dPrice = "50";
+
+                            }else if ( (locationInfoForPackage.getsAdminArea().equals("الإسكندرية")
+                                    && locationInfoForPackage.getdAdminArea().equals("القاهرة")) ||
+                                    (locationInfoForPackage.getsAdminArea().equals("القاهرة")
+                                            && locationInfoForPackage.getdAdminArea().equals("الإسكندرية"))){
+                                dPrice = "70";
+
+                            }else if ( (locationInfoForPackage.getsAdminArea().equals("الإسكندرية")
+                                    && locationInfoForPackage.getdAdminArea().equals("الجيزة")) ||
+                                    (locationInfoForPackage.getsAdminArea().equals("الجيزة")
+                                            && locationInfoForPackage.getdAdminArea().equals("الإسكندرية"))){
+                                dPrice = "70";
+
+                            }
+
                             String orderId = System.currentTimeMillis() + merchantId + RMobile;
 
                             Orders order = new Orders(orderId, merchantId,merchantMobile, merchantImageURL, getMerchantName, oName, oWeight, oImageUrl
@@ -887,7 +911,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     zagelNumbers = dataSnapshot.getValue(ZagelNumbers.class);
-                                    numbersDatabaseReference.child("noOfOrders").setValue(zagelNumbers.getNoOfOrders()+1);
+                                    numbersDatabaseReference.child("noOfOrders").setValue(zagelNumbers.getNoOfOrdersInAlex()+1);
                                     Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
                                     Intent i = new Intent(AddOrdersActivity.this, MerchantDashboardActivity.class);
                                     i.putExtra("Which_Activity", "OtherActivity");

@@ -1,6 +1,5 @@
-package com.example.zagelx.DashboardPackage;
+package com.example.zagelx.MerchantsDashboardPackage;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,21 +15,19 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.zagelx.MainPackage.MainActivity;
-import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.OrdersPackage.AddOrdersActivity;
 import com.example.zagelx.R;
-import com.example.zagelx.TripsPackage.AddTripsActivity;
 import com.example.zagelx.UserInfo.NotificationsActivity;
 import com.example.zagelx.Utilities.DrawerUtil;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import butterknife.BindView;
@@ -135,6 +133,19 @@ public class MerchantDashboardActivity extends AppCompatActivity {
                     viewPager.setAdapter(adapter);
                     TabLayout tabLayout = findViewById(R.id.tabMode);
                     tabLayout.setupWithViewPager(viewPager);
+
+                    FirebaseMessaging.getInstance().subscribeToTopic("alexBirds")
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    String msg = "succcccccccccccc";
+                                    if (!task.isSuccessful()) {
+                                        msg = "unsuccccccccccccccccccc";
+                                    }
+                                    Log.e("homeActivity", msg);
+                                    Toast.makeText(MerchantDashboardActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                     FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MerchantDashboardActivity.this,  new OnSuccessListener<InstanceIdResult>() {
                         @Override

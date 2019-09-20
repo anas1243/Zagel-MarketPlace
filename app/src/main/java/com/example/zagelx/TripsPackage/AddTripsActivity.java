@@ -19,13 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfoForPackage;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.Models.ZagelNumbers;
-import com.example.zagelx.OrdersPackage.AddOrdersActivity;
 import com.example.zagelx.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -661,8 +659,8 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 zagelNumbers = dataSnapshot.getValue(ZagelNumbers.class);
-
-                numbersDatabaseReference.child("noOfTrips").setValue(zagelNumbers.getNoOfTrips()+1);
+                //TODO wrong logic
+                numbersDatabaseReference.child("noOfTrips").setValue(zagelNumbers.getNoOfTripsFromAlexToCairo()+1);
                 Toast.makeText(AddTripsActivity.this, "your route has been add!", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(AddTripsActivity.this, DelegateDashboardActivity.class);
                 i.putExtra("Which_Activity", "SomethingElse");

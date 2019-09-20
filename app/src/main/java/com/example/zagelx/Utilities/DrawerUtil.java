@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.OrdersPackage.OrdersActivity;
 import com.example.zagelx.TripsPackage.TripsActivity;
 import com.example.zagelx.UserInfo.AboutUsActivity;

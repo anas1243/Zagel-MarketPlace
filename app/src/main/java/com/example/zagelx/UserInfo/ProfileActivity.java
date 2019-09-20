@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
@@ -71,7 +71,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Users currentUser;
     private TextView userName, userPhone, userEmail, userDate, userType, userLocation, userVerification;
     private ImageView userImage;
-    private ImageView editUserImageIcon, editUserName, editUserEmail, editUserPhone, editUserLocation, editUserBirthdate, editUserType, editUserVerification;
+    private ImageView editUserImageIcon, editUserName, editUserEmail
+            , editUserPhone, editUserLocation, editUserBirthdate, editUserType, editUserVerification;
     private EditText newEmail;
     private View emailLineSeparator;
     private Spinner newLocation, newType, newAdmin;
@@ -402,9 +403,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 snackbar.show();
                 break;
             case R.id.type_edit:
-                editUserType.setVisibility(View.GONE);
-                userType.setVisibility(View.GONE);
-                newType.setVisibility(View.VISIBLE);
+//                editUserType.setVisibility(View.GONE);
+//                userType.setVisibility(View.GONE);
+//                newType.setVisibility(View.VISIBLE);
+                if (currentUser.getMode().equals("Merchant")){
+                    snackbar = Snackbar
+                            .make(findViewById(R.id.scroll_view), "هذا الحساب مخصص للتجار", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }else{
+                    snackbar = Snackbar
+                            .make(findViewById(R.id.scroll_view), "هذا الحساب مخصص للمندوبين", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+
                 break;
             case R.id.location_edit:
                 editUserLocation.setVisibility(View.GONE);
@@ -473,7 +484,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     snackbar.show();
                 } else {
                     snackbar = Snackbar
-                            .make(findViewById(R.id.scroll_view), "Please Complete the progress bar to be a verified user", Snackbar.LENGTH_LONG);
+                            .make(findViewById(R.id.scroll_view), "من فضلك تواصل مع فريق عمل زاجل لتوثيق الحساب", Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
                 break;

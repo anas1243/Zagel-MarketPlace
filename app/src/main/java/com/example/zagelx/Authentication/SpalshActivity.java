@@ -7,11 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
-import com.example.zagelx.MainPackage.MainActivity;
+import com.example.zagelx.FreeBirdsDashboardPackage.FreesDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.Users;
+import com.example.zagelx.PMsDashboardPackage.PmsDashboardActivity;
 import com.example.zagelx.R;
-import com.example.zagelx.UserInfo.ProfileActivity;
+import com.example.zagelx.StaticBirdsDashboardPackage.StaticsDashboardActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -68,7 +69,7 @@ public class SpalshActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             currentUser = dataSnapshot.getValue(Users.class);
                             if (currentUser != null)
-                                AnExistingUserlogin();
+                                AnExistingUserLogin();
                             else
                                 addNewUser();
 
@@ -82,7 +83,7 @@ public class SpalshActivity extends AppCompatActivity {
 
                 } else {
                     //is signed out
-                    registerateUser();
+                    registerUser();
 
                 }
 
@@ -105,28 +106,67 @@ public class SpalshActivity extends AppCompatActivity {
     }
 
     public void addNewUser() {
-        Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(SpalshActivity.this, AfterRegisterUserInfo.class);
         startActivity(i);
 
     }
 
-    public void AnExistingUserlogin() {
+    public void AnExistingUserLogin() {
+        Intent i;
         Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-        if (currentUser.getMode().equals("Merchant")){
-            Intent i = new Intent(SpalshActivity.this, MerchantDashboardActivity.class);
-            i.putExtra("Which_Activity", "another_activity");
-            startActivity(i);
-        }
-        else if (currentUser.getMode().equals("Delivery Delegate")){
-            Intent i = new Intent(SpalshActivity.this, DelegateDashboardActivity.class);
-            i.putExtra("Which_Activity", "another_activity");
-            startActivity(i);
+        switch (currentUser.getGroup()){
+            case "AlexMerchants":
+            case "CairoMerchants":
+                if(currentUser.isVerified()){
+                    i = new Intent(SpalshActivity.this, MerchantDashboardActivity.class);
+                    i.putExtra("Which_Activity", "SomethingElse");
+                    startActivity(i);
+                }else{
+                    i = new Intent(SpalshActivity.this, NotVerifiedUser.class);
+                    startActivity(i);
+                }
+                break;
+            case "AlexFreeBirds":
+            case "CairoFreeBirds":
+                if(currentUser.isVerified()){
+                    i = new Intent(SpalshActivity.this, FreesDashboardActivity.class);
+                    i.putExtra("Which_Activity", "SomethingElse");
+                    startActivity(i);
+                }else{
+                    i = new Intent(SpalshActivity.this, NotVerifiedUser.class);
+                    startActivity(i);
+                }
+
+                break;
+
+            case "AlexStaticBirds":
+            case "CairoStaticBirds":
+                if(currentUser.isVerified()){
+                    i = new Intent(SpalshActivity.this, StaticsDashboardActivity.class);
+                    i.putExtra("Which_Activity", "SomethingElse");
+                    startActivity(i);
+                }else{
+                    i = new Intent(SpalshActivity.this, NotVerifiedUser.class);
+                    startActivity(i);
+                }
+                break;
+            case "AlexPM":
+            case "CairoPM":
+                if(currentUser.isVerified()){
+                    i = new Intent(SpalshActivity.this, PmsDashboardActivity.class);
+                    i.putExtra("Which_Activity", "SomethingElse");
+                    startActivity(i);
+                }else{
+                    i = new Intent(SpalshActivity.this, NotVerifiedUser.class);
+                    startActivity(i);
+                }
+                break;
         }
 
     }
 
-    private void registerateUser() {
+    private void registerUser() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
                 new AuthUI.IdpConfig.EmailBuilder().build());

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="126dp"
+        android:fontFamily="@font/archivo_narrow_bold"
+        android:text="Welcome to"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:typeface="normal"
+        android:layout_centerHorizontal="true" />
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:src="@drawable/zagel_logo_gray" />
+
+    <TextView
+        android:id="@+id/firstTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-200dp"
+        android:layout_marginRight="34dp"
+        android:textAlignment="center"
+        android:text="please call Zagel team to verify your account:"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:typeface="normal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/firstTXT"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="34dp"
+        android:text="0114-425-4326"
+        android:textColor="@color/colorSecondary"
+        android:textSize="40sp"
+        android:typeface="normal" />
+
+
+</RelativeLayout>

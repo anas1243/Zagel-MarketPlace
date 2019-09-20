@@ -128,6 +128,16 @@
                     android:elevation="24dp"
                     android:entries="@array/type_array"
                     android:prompt="@string/prompt_type" />
+                <Spinner
+                    android:id="@+id/zagel_team_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="24dp"
+                    android:entries="@array/zagel_team_array"
+                    android:prompt="@string/prompt_type"
+                    android:visibility="gone"/>
 
                 <TextView
                     style="@style/label_text"
@@ -166,6 +176,26 @@
                     android:elevation="24dp"
                     android:entries="@array/الإسكندرية"
                     android:prompt="@string/prompt_location" />
+
+                <EditText
+                    android:id="@+id/user_number_of_orders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ems="10"
+                    android:hint="كم عدد الشحنات التي تريد توصياها في اليوم؟"
+                    android:inputType="number"
+                    android:textAllCaps="true" />
+
+                <EditText
+                    android:id="@+id/user_business_industry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ems="10"
+                    android:hint="ما هو نوع تجارتك؟"
+                    android:inputType="text"
+                    android:textAllCaps="true" />
 
                 <TextView
                     android:id="@+id/textView3"

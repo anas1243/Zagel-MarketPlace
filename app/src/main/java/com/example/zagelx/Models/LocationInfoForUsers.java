@@ -40,4 +40,15 @@ public class LocationInfoForUsers implements Serializable {
     public String getuLocality() {
         return uLocality;
     }
+
+    @Override
+    public String toString() {
+        return "LocationInfoForUsers{" +
+                "uLat='" + uLat + '\'' +
+                ", uLng='" + uLng + '\'' +
+                ", uAdminArea='" + uAdminArea + '\'' +
+                ", uSubAdmin='" + uSubAdmin + '\'' +
+                ", uLocality='" + uLocality + '\'' +
+                '}';
+    }
 }

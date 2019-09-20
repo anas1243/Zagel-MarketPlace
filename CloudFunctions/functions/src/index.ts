@@ -283,6 +283,121 @@ payload = {
        return Promise.all(tokensToRemove);
     });
 
+
+    //------------------------------------------------------------------------------------------------------
+
+
+    export const sendNotificationToBirds = functions.database
+.ref('Orders/{OrdersId}')
+.onCreate(async (snapshot, contex) =>  {
+     
+    const orderId = contex.params.OrdersId
+    
+    console.log(`orderId is ${orderId}`);
+
+      const orderData = snapshot.val();
+
+      const orderName = orderData.packageName;
+      //const senderId = orderData.merchantId;
+      const senderName = orderData.merchantName;
+      const orderURL = orderData.packageImageURL;
+      const orderSource = orderData.locationInfoForPackage.sAdminArea;
+      const orderSubAdminSource = orderData.locationInfoForPackage.sAdminArea;
+      const orderDestination = orderData.locationInfoForPackage.dAdminArea;
+      const orderSubAdminDestination = orderData.locationInfoForPackage.sAdminArea;
+
+      let payload: any
+      let condition: any
+
+      if (orderSource == orderDestination){
+        if (orderSource == "الإسكندرية"){
+
+                  payload = {
+                    notification: {
+                      title: `${senderName} has a new order hurryup `,
+                      body: `${senderName} want to deliver ${orderName} from ${orderSubAdminSource} to ${orderSubAdminDestination} `,
+                      sound: "default",
+                      icon: orderURL,
+                      priority : "high",
+                      click_action : ".OrdersPackage.OrderDetails"
+              }, data: {
+                "orderId" : orderId,
+                "WhichActivity" : "cloudFunctions" 
+              }}
+              condition = "'alexFreeBirds' in topics || 'AlexPM' in topics"
+
+                    // Send notifications to all birds in alex plus alex PMs.
+            
+            
+        }else{
+
+                  payload = {
+                    notification: {
+                      title: `${senderName} has a new order hurryup `,
+                      body: `${senderName} want to deliver ${orderName} from ${orderSubAdminSource} to ${orderSubAdminDestination} `,
+                      sound: "default",
+                      icon: orderURL,
+                      priority : "high",
+                      click_action : ".OrdersPackage.OrderDetails"
+              }, data: {
+                "orderId" : orderId,
+                "WhichActivity" : "cloudFunctions" 
+              }}
+              condition = "'cairoFreeBirds' in topics || 'CairoPM' in topics"
+
+                    // Send notifications to all birds in cairo plus cairo PMs.
+
+        }
+
+      }else{
+
+        if (orderSource == "الإسكندرية" && (orderDestination == "القاهرة" || orderDestination == "الجيزة") ){
+
+                payload = {
+                  notification: {
+                    title: `${senderName} has a new order hurryup `,
+                    body: `please bring ${orderName} to the headquartes as soon as possible`,
+                    sound: "default",
+                    icon: orderURL,
+                    priority : "high",
+                    click_action : ".OrdersPackage.OrderDetails"
+            }, data: {
+              "orderId" : orderId,
+              "WhichActivity" : "cloudFunctions" 
+            }}
+            condition = "'AlexStaticBirds' in topics || 'AlexPM' in topics"
+
+                  // Send notifications to all birds in alex plus alex PMs.
+
+        } else if ((orderSource == "القاهرة" || orderSource == "الجيزة") && orderDestination == "الإسكندرية"){
+
+                payload = {
+                  notification: {
+                    title: `${senderName} has a new order hurryup `,
+                    body: `please bring ${orderName} to the headquartes as soon as possible`,
+                    sound: "default",
+                    icon: orderURL,
+                    priority : "high",
+                    click_action : ".OrdersPackage.OrderDetails"
+            }, data: {
+              "orderId" : orderId,
+              "WhichActivity" : "cloudFunctions" 
+            }}
+            condition = "'CairoStaticBirds' in topics || 'CairoPM' in topics"
+
+                  // Send notifications to all birds in cairo plus cairo PMs.
+
+        }
+
+      }
+      
+      return await admin.messaging().sendToCondition(condition, payload);
+              
+        
+         
+});
+
+
     
 
 

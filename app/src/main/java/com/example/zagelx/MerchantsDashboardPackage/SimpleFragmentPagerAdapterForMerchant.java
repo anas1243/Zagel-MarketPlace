@@ -1,4 +1,4 @@
-package com.example.zagelx.DashboardPackage;
+package com.example.zagelx.MerchantsDashboardPackage;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -49,7 +49,7 @@
     <string name="input_error_email">email required</string>
     <string name="input_error_password">password required</string>
     <string name="input_error_phone">phone required</string>
-    <string name="input_error_password_length">password should be atleast 6 characters long</string>
+    <string name="input_error_password_length">password should be at least 6 characters long</string>
     <string name="input_error_phone_invalid">enter a valid phone number</string>
     <string name="registration_success">Registered Successfully</string>
     <string name="input_error_email_invalid">enter a valid email</string>
@@ -60,15 +60,22 @@
     </string-array>
 
     <string-array name="type_array">
-        <item>Merchant</item>
-        <item>Delivery Delegate</item>
-        <item>Delivery Delegate</item>
+        <item>Merchant</item>       <!--includes AlexMerchants and CairoMerchants As groups-->
+        <item>Delivery Delegate</item> <!--includes CairoFreeBirds and AlexFreeBirds As groups-->
+        <item>Zagel Team</item>
+    </string-array>
+
+    <string-array name="zagel_team_array">
+        <item>Alex PM</item>    <!--AlexPM groups-->
+        <item>Alex Static Birds</item>  <!--AlexStaticBirds groups-->
+        <item>Cairo PM</item>   <!--CairoPM groups-->
+        <item>Cairo Static Birds</item> <!--CairoStaticBirds groups-->
     </string-array>
 
     <string-array name="AR_location_array">
         <item>الإسكندرية</item>
         <item>القاهرة</item>
-<!--        <item>الجيزة</item>-->
+        <item>الجيزة</item>
 <!--        <item>الإسماعيلية</item>-->
 <!--        <item>السويس</item>-->
 <!--        <item>بورسعيد</item>-->

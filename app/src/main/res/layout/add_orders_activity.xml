@@ -75,18 +75,20 @@
                     android:singleLine="true"
                     android:textAllCaps="true" />
 
-                <EditText
+<!--                <EditText-->
 
-                    android:id="@+id/delivery_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:ems="10"
-                    android:hint="Delivery Price"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textAllCaps="true" />
+<!--                    android:id="@+id/delivery_price"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:ems="10"-->
+<!--                    android:hint="Delivery Price"-->
+<!--                    android:inputType="number"-->
+<!--                    android:maxLines="1"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textAllCaps="true" />-->
+
+
 
 
 
@@ -243,6 +245,16 @@
                     android:elevation="5dp"
                     android:entries="@array/الإسكندرية"
                     android:prompt="@string/prompt_location" />
+
+                <EditText
+                    android:id="@+id/receiver_full_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ems="10"
+                    android:hint=" عنوان العميل النهائي الكامل"
+                    android:inputType="text"
+                    android:textAllCaps="true" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

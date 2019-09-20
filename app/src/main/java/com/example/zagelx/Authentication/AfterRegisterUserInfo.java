@@ -24,10 +24,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.FreeBirdsDashboardPackage.FreesDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
+import com.example.zagelx.Models.FreeDelegateDetails;
 import com.example.zagelx.Models.LocationInfoForUsers;
+import com.example.zagelx.Models.MerchantDetails;
+import com.example.zagelx.Models.PMDetails;
 import com.example.zagelx.Models.ZagelNumbers;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
@@ -45,6 +48,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -52,6 +56,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AfterRegisterUserInfo extends AppCompatActivity {
@@ -66,25 +71,28 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference ProfileImageReference;
 
-    private EditText userName, userEmail;
+    private EditText userName, userEmail, userNumberOfOrdersET, userBusinessIndustryET;
     private DatePicker userDate;
     private CircleImageView userPhotoUrl;
     private Button registerButton;
-    private Spinner userGender, userType, userLocation, userAreaName;
+    private Spinner userGender, userType, userLocation, userAreaName, zagelTeamSpinner;
 
     private UploadTask uploadTask;
     private Uri filePath = null;
 
     private FirebaseUser user;
 
-    private String uName, uEmail, uId;
+    private String uName, uEmail, uId, uNumberOfOrders, uBusinessIndustry, uGroup, uTeamMemberIfHeWas;
     private String userPhotoUrlVar;
+
+    String uMobile, gender, type, governorate, subAdmin;
 
     private String newToken;
 
     private Bitmap bmp;
     private Users currentUser;
     private ZagelNumbers zagelNumbers;
+    private LocationInfoForUsers locationInfoForUser;
 
 
     ArrayAdapter<CharSequence> adapter;
@@ -101,35 +109,93 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         usersDatabaseReference = firebaseDatabase.getReference().child("Users");
         numbersDatabaseReference = firebaseDatabase.getReference().child("ZagelNumbers");
-        ProfileImageReference = storage.getReference().child("profile_images/" +"ProfilePic-->"+ user.getUid());
+        ProfileImageReference = storage.getReference().child("profile_images/" + "ProfilePic-->" + user.getUid());
 
         userName = findViewById(R.id.user_name);
         userEmail = findViewById(R.id.user_email);
         userDate = findViewById(R.id.user_date);
-        userDate.updateDate(1995,0,1);
+        userDate.updateDate(1995, 0, 1);
         userPhotoUrl = findViewById(R.id.iv_profile_image);
         userGender = findViewById(R.id.user_gender);
         userType = findViewById(R.id.user_type);
+        zagelTeamSpinner = findViewById(R.id.zagel_team_spinner);
         userLocation = findViewById(R.id.user_location);
         userAreaName = findViewById(R.id.area_name);
         registerButton = findViewById(R.id.button_register);
 
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( AfterRegisterUserInfo.this,  new OnSuccessListener<InstanceIdResult>() {
+        userNumberOfOrdersET = findViewById(R.id.user_number_of_orders);
+        userBusinessIndustryET = findViewById(R.id.user_business_industry);
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(AfterRegisterUserInfo.this, new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
-                 newToken = instanceIdResult.getToken();
-                Log.e("newToken",newToken);
+                newToken = instanceIdResult.getToken();
+                Log.e("newToken", newToken);
 
             }
         });
 
-        userLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id)
-            {
+        userType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String userTypeString = userType.getSelectedItem().toString();
+                switch (userTypeString) {
+                    case "Merchant":
+                        userNumberOfOrdersET.setVisibility(View.VISIBLE);
+                        userBusinessIndustryET.setVisibility(View.VISIBLE);
+                        zagelTeamSpinner.setVisibility(View.GONE);
+                        break;
+                    case "Delivery Delegate":
+                        userNumberOfOrdersET.setVisibility(View.GONE);
+                        userBusinessIndustryET.setVisibility(View.GONE);
+                        zagelTeamSpinner.setVisibility(View.GONE);
+                        break;
+                    case "Zagel Team":
+                        userNumberOfOrdersET.setVisibility(View.GONE);
+                        userBusinessIndustryET.setVisibility(View.GONE);
+
+                        zagelTeamSpinner.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        zagelTeamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String zagelTeamString = zagelTeamSpinner.getSelectedItem().toString();
+                switch (zagelTeamString) {
+                    case "Alex PM":
+                        uTeamMemberIfHeWas = "AlexPM";
+                        break;
+                    case "Alex Static Birds":
+                        uTeamMemberIfHeWas = "AlexStaticBirds";
+                        break;
+                    case "Cairo PM":
+                        uTeamMemberIfHeWas = "CairoPM";
+                        break;
+                    case "Cairo Static Birds":
+                        uTeamMemberIfHeWas = "CairoStaticBirds";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        userLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
                 String AreaName = userLocation.getSelectedItem().toString();
 
-                switch (AreaName){
+                switch (AreaName) {
                     case "الإسكندرية":
                         adapter = ArrayAdapter.createFromResource(
                                 AfterRegisterUserInfo.this, R.array.الإسكندرية, android.R.layout.simple_spinner_item);
@@ -290,8 +356,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                 }
             }
 
-            public void onNothingSelected(AdapterView<?> arg0)
-            {
+            public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
 
@@ -333,19 +398,30 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
     private void validateTheUser() {
         uName = userName.getText().toString().trim();
         uEmail = userEmail.getText().toString().trim();
+        uNumberOfOrders = userNumberOfOrdersET.getText().toString().trim();
+        uBusinessIndustry = userBusinessIndustryET.getText().toString().trim();
         if (uName.equals("")) {
             //Snackbar.make(findViewById(R.id.scroll_view), "Enter your name", Snackbar.LENGTH_LONG).show();
             userName.setError("Enter your name");
             userName.requestFocus();
-            return;
         } else if (uEmail.equals("") || !Patterns.EMAIL_ADDRESS.matcher(uEmail).matches()) {
             userEmail.setError("Enter a valid email address");
             userEmail.requestFocus();
-            return;
         } else if (filePath == null) {
             Snackbar snackbar = Snackbar
                     .make(findViewById(R.id.scroll_view), "Choose your photo", Snackbar.LENGTH_LONG);
             snackbar.show();
+        } else if (userType.getSelectedItem().toString().equals("Merchant")) {
+
+            if (uBusinessIndustry.equals("")) {
+                userBusinessIndustryET.setError("ادخل نوع تجارتك من فضلك");
+                userBusinessIndustryET.requestFocus();
+            } else if (uNumberOfOrders.equals("")) {
+                userNumberOfOrdersET.setError("ادخل عدد شحناتك في اليوم تقريبا");
+                userNumberOfOrdersET.requestFocus();
+            } else {
+                uploadProfileImageAndProceed();
+            }
         } else {
             uploadProfileImageAndProceed();
         }
@@ -361,8 +437,8 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
 
             try {
                 bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-            }catch (IOException e){
-                Log.e(TAG, "uploadOrderImageAndProceed: ", e.fillInStackTrace() );
+            } catch (IOException e) {
+                Log.e(TAG, "uploadOrderImageAndProceed: ", e.fillInStackTrace());
             }
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
@@ -414,40 +490,61 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                             Log.e(TAG, "validateTheUser: the pp url is " + userPhotoUrlVar);
 
                             uId = user.getUid();
-                            String uMobile = user.getPhoneNumber();
-                            String gender = userGender.getSelectedItem().toString();
-                            String type = userType.getSelectedItem().toString();
-                            String governorate = userLocation.getSelectedItem().toString();
-                            String subAdmin = userAreaName.getSelectedItem().toString();
-                            LocationInfoForUsers locationInfoForUser = new LocationInfoForUsers("", "", governorate, subAdmin, "");
-                            currentUser = new Users(uId, uName, gender, uMobile,
-                                    userPhotoUrlVar, new BirthDate(userDate.getYear(),
-                                    userDate.getMonth()+1, userDate.getDayOfMonth()),
-                                    type, uEmail,locationInfoForUser , false, false, false, newToken);
+                            uMobile = user.getPhoneNumber();
+                            gender = userGender.getSelectedItem().toString();
+                            type = userType.getSelectedItem().toString();
+                            governorate = userLocation.getSelectedItem().toString();
+                            subAdmin = userAreaName.getSelectedItem().toString();
+                            locationInfoForUser = new LocationInfoForUsers("", "", governorate, subAdmin, "");
 
-                            usersDatabaseReference.child(uId).setValue(currentUser);
+                            switch (type) {
+                                case "Merchant":
+                                    if (governorate.equals("الإسكندرية")) {
+                                        uGroup = "AlexMerchants";
+                                    } else if (governorate.equals("القاهرة") || governorate.equals("الجيزة")) {
+                                        uGroup = "CairoMerchants";
+                                    }
+                                    initiateNewUserObject(true);
+                                    MerchantDetails merchantDetails = new MerchantDetails(uNumberOfOrders, uBusinessIndustry, 0, 0, 0, 0, 0);
+                                    currentUser.setMerchantDetails(merchantDetails);
+                                    break;
+                                case "Delivery Delegate":
+                                    if (governorate.equals("الإسكندرية")) {
+                                        uGroup = "AlexFreeBirds";
+                                    } else if (governorate.equals("القاهرة") || governorate.equals("الجيزة")) {
+                                        uGroup = "CairoFreeBirds";
+                                    }
+                                    initiateNewUserObject(false);
+                                    FreeDelegateDetails freeDelegateDetails = new FreeDelegateDetails(0, "", "", 0, 0);
+                                    currentUser.setFreeDelegateDetails(freeDelegateDetails);
+                                    break;
+                                case "Zagel Team":
+                                    uGroup = uTeamMemberIfHeWas;
 
+                                    if ("AlexPM".equals(uGroup) || "CairoPM".equals(uGroup)) {
+                                        initiateNewUserObject(false);
+                                        PMDetails pmDetails = new PMDetails(0, 0);
+                                        currentUser.setPmDetails(pmDetails);
+                                    } else if ("AlexStaticBirds".equals(uGroup) || "CairoStaticBirds".equals(uGroup)) {
+                                        initiateNewUserObject(false);
+                                        FreeDelegateDetails staticDelegateDetails = new FreeDelegateDetails(0, "", "", 0, 0);
+                                        currentUser.setFreeDelegateDetails(staticDelegateDetails);
+                                    }
+
+                                    break;
+
+                            }
+
+                            Log.e(TAG, "onComplete: "+currentUser.toString() );
                             mNumbersEventListener = new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     zagelNumbers = dataSnapshot.getValue(ZagelNumbers.class);
-
                                     Toast.makeText(AfterRegisterUserInfo.this, "Resgistered!", Toast.LENGTH_SHORT).show();
-                                    if (currentUser.getMode().equals("Merchant")){
-                                        numbersDatabaseReference.child("noOfMerchants")
-                                                .setValue(zagelNumbers.getNoOfMerchants()+1);
-                                        Intent i = new Intent(AfterRegisterUserInfo.this, MerchantDashboardActivity.class);
+                                    usersDatabaseReference.child(uId).setValue(currentUser);
 
-                                        i.putExtra("Which_Activity", "SomethingElse");
-                                        startActivity(i);
-                                    }
-                                    else if (currentUser.getMode().equals("Delivery Delegate")){
-                                        numbersDatabaseReference.child("noOfDelegates")
-                                                .setValue(zagelNumbers.getNoOfDelegates()+1);
-                                        Intent i = new Intent(AfterRegisterUserInfo.this, DelegateDashboardActivity.class);
-                                        i.putExtra("Which_Activity", "SomethingElse");
-                                        startActivity(i);
-                                    }
+                                    incrementZagelNumbers(uGroup);
+
 
                                 }
 
@@ -461,8 +558,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                                     .addListenerForSingleValueEvent(mNumbersEventListener);
 
 
-
-                        }else{
+                        } else {
                             Toast.makeText(AfterRegisterUserInfo.this, "cant upload package image please try again!", Toast.LENGTH_SHORT).show();
 
                         }
@@ -472,6 +568,142 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
 
         }
     }
+    public void initiateNewUserObject(boolean isMerchant){
+        //if isMerchant is true make him verified as default
+        currentUser = new Users(uId, uName, gender, uMobile,
+                userPhotoUrlVar, new BirthDate(userDate.getYear(),
+                userDate.getMonth() + 1, userDate.getDayOfMonth()),
+                type, uGroup, uEmail, locationInfoForUser, false, isMerchant, false, newToken
+        );
+
+    }
+
+    public void addUserToAGroup(final String uGroup) {
+
+        FirebaseMessaging.getInstance().subscribeToTopic(uGroup)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg;
+                        if (task.isSuccessful()) {
+                            msg = "successfully add this user to " + uGroup + " group";
+
+                        } else {
+                            msg = "unsuccessfully add this user to " + uGroup + " group";
+                        }
+                        Log.e("AfterRegisterUserInfo", msg);
+                    }
+                });
+
+    }
+
+    public void incrementZagelNumbers(final String uGroup) {
+
+        switch (uGroup) {
+            case "AlexMerchants":
+                try{
+                    numbersDatabaseReference.child("noOfMerchantsInAlex")
+                            .setValue(zagelNumbers.getNoOfMerchantsInAlex() + 1);
+                }catch (Exception e){
+                    numbersDatabaseReference.child("noOfMerchantsInAlex")
+                            .setValue(1);
+                }
+                addUserToAGroup(uGroup);
+                Intent i = new Intent(AfterRegisterUserInfo.this, MerchantDashboardActivity.class);
+                i.putExtra("Which_Activity", "SomethingElse");
+                startActivity(i);
+                break;
+            case "CairoMerchants":
+                try{
+                    numbersDatabaseReference.child("noOfMerchantsInCairo")
+                            .setValue(zagelNumbers.getNoOfMerchantsInCairo() + 1);
+                }catch (Exception e){
+                    numbersDatabaseReference.child("noOfMerchantsInCairo")
+                            .setValue(1);
+                }
+                addUserToAGroup(uGroup);
+
+                Intent intentToCairoMerchants = new Intent(AfterRegisterUserInfo.this, MerchantDashboardActivity.class);
+                intentToCairoMerchants.putExtra("Which_Activity", "SomethingElse");
+                startActivity(intentToCairoMerchants);
+                break;
+            case "AlexFreeBirds":
+                try{
+                    numbersDatabaseReference.child("noOfFreeAlexBirds")
+                            .setValue(zagelNumbers.getNoOfFreeAlexBirds() + 1);
+                }catch (Exception e){
+                    numbersDatabaseReference.child("noOfFreeAlexBirds")
+                            .setValue(1);
+                }
+                addUserToAGroup(uGroup);
+                Intent intentToAlexBirds = new Intent(AfterRegisterUserInfo.this, NotVerifiedUser.class);
+                startActivity(intentToAlexBirds);
+                break;
+            case "CairoFreeBirds":
+                try{
+                    numbersDatabaseReference.child("noOfFreeCairoBirds")
+                            .setValue(zagelNumbers.getNoOfFreeCairoBirds() + 1);
+                }catch (Exception e){
+                    numbersDatabaseReference.child("noOfFreeCairoBirds")
+                            .setValue(1);
+                }
+                addUserToAGroup(uGroup);
+                Intent intentToCairoBirds = new Intent(AfterRegisterUserInfo.this, NotVerifiedUser.class);
+                startActivity(intentToCairoBirds);
+                break;
+            case "AlexStaticBirds":
+                try{
+                    numbersDatabaseReference.child("noOfStaticAlexBirds")
+                            .setValue(zagelNumbers.getNoOfStaticAlexBirds() + 1);
+                }catch (Exception e){
+                    numbersDatabaseReference.child("noOfStaticAlexBirds")
+                            .setValue(1);
+                }
+                addUserToAGroup(uGroup);
+                Intent intentToAlexStatic = new Intent(AfterRegisterUserInfo.this, NotVerifiedUser.class);
+                startActivity(intentToAlexStatic);
+                break;
+            case "CairoStaticBirds":
+                try{
+                    numbersDatabaseReference.child("noOfStaticCairoBirds")
+                            .setValue(zagelNumbers.getNoOfStaticCairoBirds() + 1);
+                }catch (Exception e){
+                    numbersDatabaseReference.child("noOfStaticCairoBirds")
+                            .setValue(1);
+                }
+                addUserToAGroup(uGroup);
+                Intent intentToCairoStatic = new Intent(AfterRegisterUserInfo.this, NotVerifiedUser.class);
+                startActivity(intentToCairoStatic);
+                break;
+            case "AlexPM":
+                try{
+                    numbersDatabaseReference.child("noOfAlexPMs")
+                            .setValue(zagelNumbers.getNoOfAlexPMs() + 1);
+                }catch (Exception e){
+                    numbersDatabaseReference.child("noOfAlexPMs")
+                            .setValue(1);
+                }
+                addUserToAGroup(uGroup);
+                Intent intentToAlexPm = new Intent(AfterRegisterUserInfo.this, NotVerifiedUser.class);
+                startActivity(intentToAlexPm);
+                break;
+            case "CairoPM":
+                try{
+                    numbersDatabaseReference.child("noOfCairoPMs")
+                            .setValue(zagelNumbers.getNoOfCairoPMs() + 1);
+                }catch (Exception e){
+                    numbersDatabaseReference.child("noOfCairoPMs")
+                            .setValue(1);
+                }
+                addUserToAGroup(uGroup);
+                Intent intentToCairoPm = new Intent(AfterRegisterUserInfo.this, NotVerifiedUser.class);
+                startActivity(intentToCairoPm);
+                break;
+        }
+
+
+    }
+
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);

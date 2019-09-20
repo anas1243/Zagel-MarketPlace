@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.DashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Orders;
@@ -211,9 +211,9 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     zagelNumbers = dataSnapshot.getValue(ZagelNumbers.class);
-
+                                    //TODO wrong logic
                                     numbersDatabaseReference.child("noOfCompletedOrders")
-                                            .setValue(zagelNumbers.getNoOfCompletedOrders() + 1);
+                                            .setValue(zagelNumbers.getNoOfCompletedOrdersFromAlexToCairo() + 1);
 
                                     mOrdersDatabaseReference.child("packageState").setValue("Delivered");
                                 }

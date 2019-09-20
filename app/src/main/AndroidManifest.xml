@@ -127,12 +127,12 @@
         </activity>
         <activity android:name=".TripsPackage.TripsDetails" />
         <activity android:name=".OrdersPackage.OrdersRequestsActivity" />
-        <activity android:name=".DashboardPackage.NewOrdersActivity" />
-        <activity android:name=".DashboardPackage.PickedOrdersActivity" />
-        <activity android:name=".DashboardPackage.DeliveredOrdersActivity" />
-        <activity android:name=".DashboardPackage.NegotiableOrdersActivity" />
-        <activity android:name=".DashboardPackage.ReservedOrdersActivity" />
-        <activity android:name=".DashboardPackage.MerchantDashboardActivity" />
+        <activity android:name=".MerchantsDashboardPackage.NewOrdersActivity" />
+        <activity android:name=".MerchantsDashboardPackage.PickedOrdersActivity" />
+        <activity android:name=".MerchantsDashboardPackage.DeliveredOrdersActivity" />
+        <activity android:name=".MerchantsDashboardPackage.NegotiableOrdersActivity" />
+        <activity android:name=".MerchantsDashboardPackage.ReservedOrdersActivity" />
+        <activity android:name=".MerchantsDashboardPackage.MerchantDashboardActivity" />
         <activity android:name=".DashboardPackage.DelegateTripsActivity" />
         <activity android:name=".DashboardPackage.DelegateOrdersActivity" />
         <activity android:name=".DashboardPackage.DelegateDashboardActivity" />
@@ -140,6 +140,10 @@
         <activity android:name=".MainPackage.MainTrips" />
         <activity android:name=".MainPackage.MainOrders" />
         <activity android:name=".UserInfo.SetAcurrateLocationActivity" />
+        <activity android:name=".Authentication.NotVerifiedUser" />
+        <activity android:name=".StaticBirdsDashboardPackage.StaticsDashboardActivity" />
+        <activity android:name=".PMsDashboardPackage.PmsDashboardActivity" />
+        <activity android:name=".FreeBirdsDashboardPackage.FreesDashboardActivity" />
 
         <service
             android:name=".Utilities.MyFirebaseMessagingService"
