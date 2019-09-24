@@ -6,13 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
 import com.example.zagelx.FreeBirdsDashboardPackage.FreesDashboardActivity;
-import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
+import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
-import com.example.zagelx.PMsDashboardPackage.PmsDashboardActivity;
+import com.example.zagelx.OrdersPackage.OrdersActivity;
+import com.example.zagelx.PMsDashboardPackage.PMInSideOrdersPackage.InsideOrdersDashboardActivity;
 import com.example.zagelx.R;
-import com.example.zagelx.StaticBirdsDashboardPackage.StaticsDashboardActivity;
+import com.example.zagelx.StaticBirdsDashboardPackage.StaticsOrdersPackage.StaticsOrdersDashboardActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -119,7 +120,7 @@ public class SpalshActivity extends AppCompatActivity {
             case "AlexMerchants":
             case "CairoMerchants":
                 if(currentUser.isVerified()){
-                    i = new Intent(SpalshActivity.this, MerchantDashboardActivity.class);
+                    i = new Intent(SpalshActivity.this, MerchantDashboardInsideActivity.class);
                     i.putExtra("Which_Activity", "SomethingElse");
                     startActivity(i);
                 }else{
@@ -129,21 +130,10 @@ public class SpalshActivity extends AppCompatActivity {
                 break;
             case "AlexFreeBirds":
             case "CairoFreeBirds":
-                if(currentUser.isVerified()){
-                    i = new Intent(SpalshActivity.this, FreesDashboardActivity.class);
-                    i.putExtra("Which_Activity", "SomethingElse");
-                    startActivity(i);
-                }else{
-                    i = new Intent(SpalshActivity.this, NotVerifiedUser.class);
-                    startActivity(i);
-                }
-
-                break;
-
             case "AlexStaticBirds":
             case "CairoStaticBirds":
                 if(currentUser.isVerified()){
-                    i = new Intent(SpalshActivity.this, StaticsDashboardActivity.class);
+                    i = new Intent(SpalshActivity.this, OrdersActivity.class);
                     i.putExtra("Which_Activity", "SomethingElse");
                     startActivity(i);
                 }else{
@@ -154,7 +144,7 @@ public class SpalshActivity extends AppCompatActivity {
             case "AlexPM":
             case "CairoPM":
                 if(currentUser.isVerified()){
-                    i = new Intent(SpalshActivity.this, PmsDashboardActivity.class);
+                    i = new Intent(SpalshActivity.this, InsideOrdersDashboardActivity.class);
                     i.putExtra("Which_Activity", "SomethingElse");
                     startActivity(i);
                 }else{

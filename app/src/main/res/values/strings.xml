@@ -16,15 +16,27 @@
     <string name="unknown_error">Unknown Error</string>
 
     <!-- Navigation Drawer menu labels -->
-    <string name="nav_orders">Orders</string>
+    <string name="nav_orders">الشحنات الجديدة</string>
     <string name="nav_trips">Trips</string>
-    <string name="nav_profile">Profile</string>
-    <string name="nav_listen">Notifications</string>
-    <string name="nav_notify">Listening Now</string>
+    <string name="nav_profile">حسابك الشخصي</string>
+    <string name="nav_notify">الاشعارات</string>
     <string name="nav_settings">Account Settings</string>
-    <string name="nav_about_us">About Us</string>
-    <string name="nav_logout">Log Out</string>
-    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_about_us">عن زاجل</string>
+    <string name="nav_terms">الشروط و الاحكام</string>
+    <string name="nav_logout">تسجيل الخروج</string>
+    <string name="nav_dashboard_orders">التحكم في شحناتك</string>
+    <string name="nav_dashboard_trips">التحكم في رحلاتك</string>
+    <string name="nav_eWallet">النقديات</string>
+
+    <string name="nav_insideOrders">شحناتك داخل المحافظة</string>
+    <string name="nav_outsideOrders">شحناتك خارج المحافظة</string>
+
+    <string name="nav_pm_inside_orders">الشحنات داخل المحافظة</string>
+    <string name="nav_pm_outside_orders">الشحنات خارج المحافظة</string>
+    <string name="nav_pm_incoming_trips">الرحلات الواردة</string>
+    <string name="nav_pm_outgoing_trips">الرحلات الصادرة</string>
+
+
     <string name="yalla">Yalla</string>
     <string name="prompt_weight">Estimated Weight</string>
 
@@ -588,6 +600,11 @@
     <string name="reserved_orders">لم يتم الاستلام</string>
     <string name="picked_orders">تم الاستلام</string>
     <string name="delivered_orders">تم التسليم</string>
+    <string name="current_headquarters_orders">في المقر</string>
+    <string name="other_headquarters_orders">في المقر الاخر</string>
+
+    <string name="not_done_trips">رحلات لم تتم</string>
+    <string name="done_trips">رحلات تمت</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

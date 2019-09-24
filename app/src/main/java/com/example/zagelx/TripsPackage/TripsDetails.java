@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.OrdersInTrip;
@@ -347,7 +347,7 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                                 .make(findViewById(R.id.main_list), "لقد تمل ارسال طلبك للمندوب", Snackbar.LENGTH_LONG);
                         snackbar.show();
                         if (currentUser.getMode().equals("Merchant")){
-                            Intent i = new Intent(TripsDetails.this, MerchantDashboardActivity.class);
+                            Intent i = new Intent(TripsDetails.this, MerchantDashboardInsideActivity.class);
                             i.putExtra("Which_Activity", "SomethingElse");
                             finish();
                             startActivity(i);

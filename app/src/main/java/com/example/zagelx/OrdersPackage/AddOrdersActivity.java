@@ -29,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfoForPackage;
 import com.example.zagelx.Models.Orders;
@@ -100,7 +100,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
     private Uri selectedImageUri;
 
     private String merchantId, merchantMobile, merchantImageURL, getMerchantName, oImageUrl,
-            oName, dPrice, RMobile, RName, oPrice, oVehicle, oDescription, oWeight, oSourceLocation, oSourceAdmin;
+            oName, dPrice, RMobile, RName, oPrice, oVehicle, oDescription, oWeight, oSourceLocation, oSourceAdmin, oCategory;
 
     private LocationInfoForPackage locationInfoForPackage;
 
@@ -568,7 +568,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
 
         merchantId = mFirebaseAuth.getCurrentUser().getUid();
 
-        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
+
         numbersDatabaseReference = mFirebaseDatabase.getReference().child("ZagelNumbers");
 
         mPackagePhotoStorageReference = mFirebaseStorage.getReference().child("packages_photos");
@@ -871,29 +871,52 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                             if (locationInfoForPackage.getsAdminArea().equals("الإسكندرية")
                             && locationInfoForPackage.getdAdminArea().equals("الإسكندرية")){
                                 dPrice = "25";
+                                oCategory = "AlexOrders";
                             }else if ( (locationInfoForPackage.getsAdminArea().equals("القاهرة")
                                     && locationInfoForPackage.getdAdminArea().equals("القاهرة") ) ||
                                     (locationInfoForPackage.getsAdminArea().equals("الجيزة")
                                     && locationInfoForPackage.getdAdminArea().equals("الجيزة"))){
+                                oCategory = "CairoOrders";
                                 dPrice = "50";
 
                             }else if ( (locationInfoForPackage.getsAdminArea().equals("القاهرة")
                                     && locationInfoForPackage.getdAdminArea().equals("الجيزة") ) ||
                                     (locationInfoForPackage.getsAdminArea().equals("الجيزة")
                                             && locationInfoForPackage.getdAdminArea().equals("القاهرة"))){
+                                oCategory = "CairoOrders";
                                 dPrice = "50";
 
                             }else if ( (locationInfoForPackage.getsAdminArea().equals("الإسكندرية")
                                     && locationInfoForPackage.getdAdminArea().equals("القاهرة")) ||
                                     (locationInfoForPackage.getsAdminArea().equals("القاهرة")
                                             && locationInfoForPackage.getdAdminArea().equals("الإسكندرية"))){
+
                                 dPrice = "70";
+
+                                if (locationInfoForPackage.getsAdminArea().equals("الإسكندرية")
+                                        && locationInfoForPackage.getdAdminArea().equals("القاهرة")){
+                                    oCategory = "AlexToCairoOrders";
+
+                                }else if (locationInfoForPackage.getsAdminArea().equals("القاهرة")
+                                        && locationInfoForPackage.getdAdminArea().equals("الإسكندرية")){
+                                    oCategory = "CairoToAlexOrders";
+                                }
 
                             }else if ( (locationInfoForPackage.getsAdminArea().equals("الإسكندرية")
                                     && locationInfoForPackage.getdAdminArea().equals("الجيزة")) ||
                                     (locationInfoForPackage.getsAdminArea().equals("الجيزة")
                                             && locationInfoForPackage.getdAdminArea().equals("الإسكندرية"))){
+
                                 dPrice = "70";
+
+                                if (locationInfoForPackage.getsAdminArea().equals("الإسكندرية")
+                                        && locationInfoForPackage.getdAdminArea().equals("الجيزة")){
+                                    oCategory = "AlexToCairoOrders";
+
+                                }else if (locationInfoForPackage.getsAdminArea().equals("الجيزة")
+                                        && locationInfoForPackage.getdAdminArea().equals("الإسكندرية")){
+                                    oCategory = "CairoToAlexOrders";
+                                }
 
                             }
 
@@ -905,6 +928,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                                     dPrice, oVehicle, RMobile, RName
                                     , locationInfoForPackage, "New");
 
+                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(oCategory);
                             mOrdersDatabaseReference.child(orderId).setValue(order);
 
                             mNumbersEventListener = new ValueEventListener() {
@@ -913,7 +937,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                                     zagelNumbers = dataSnapshot.getValue(ZagelNumbers.class);
                                     numbersDatabaseReference.child("noOfOrders").setValue(zagelNumbers.getNoOfOrdersInAlex()+1);
                                     Toast.makeText(AddOrdersActivity.this, "your order has been add!", Toast.LENGTH_SHORT).show();
-                                    Intent i = new Intent(AddOrdersActivity.this, MerchantDashboardActivity.class);
+                                    Intent i = new Intent(AddOrdersActivity.this, MerchantDashboardInsideActivity.class);
                                     i.putExtra("Which_Activity", "OtherActivity");
                                     finish();
                                     startActivity(i);

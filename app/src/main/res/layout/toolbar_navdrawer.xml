@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
@@ -14,6 +13,15 @@
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/toolbar_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="شحنات"
+        android:textColor="@color/colorSecondary"
+        android:textSize="@dimen/tool_bar_top_padding"
+        android:layout_centerInParent="true"/>
 
 <ImageButton
     android:id="@+id/ic_notification_toolbar"
@@ -42,13 +50,13 @@ android:orientation="horizontal">
         <!--android:background="@color/white"-->
         <!--android:layout_toLeftOf="@id/ic_notification_toolbar"/>-->
 
-    <ImageButton
-        android:id="@+id/ic_search_toolbar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@color/colorPrimary"
-        android:src="@drawable/ic_search_toolbar_white"
-        android:layout_toLeftOf="@id/ic_notification_toolbar"/>
+<!--    <ImageButton-->
+<!--        android:id="@+id/ic_search_toolbar"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:background="@color/colorPrimary"-->
+<!--        android:src="@drawable/ic_search_toolbar_white"-->
+<!--        android:layout_toLeftOf="@id/ic_notification_toolbar"/>-->
 
     <!--<View-->
         <!--android:id="@+id/second_separator"-->

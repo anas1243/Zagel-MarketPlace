@@ -21,7 +21,7 @@ import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.AddTripsActivity;
 import com.example.zagelx.UserInfo.NotificationsActivity;
-import com.example.zagelx.Utilities.DrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,7 +55,7 @@ public class DelegateDashboardActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    DrawerUtil drawer;
+    MerchantDrawerUtil drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class DelegateDashboardActivity extends AppCompatActivity {
                     ButterKnife.bind(DelegateDashboardActivity.this);
                     setSupportActionBar(toolbar);
 
-                    drawer = new DrawerUtil(currentUser.getName()
+                    drawer = new MerchantDrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(DelegateDashboardActivity.this, toolbar);
                     mBadge.setNumber(currentUser.getNumberOfNotifications());

@@ -17,10 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Authentication.NotVerifiedUser;
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Orders;
@@ -30,6 +32,8 @@ import com.example.zagelx.Models.Users;
 import com.example.zagelx.Models.ZagelNumbers;
 import com.example.zagelx.R;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +41,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -163,7 +168,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
 
                         Intent i;
                         if (mode.equals("Merchant"))
-                            i = new Intent(OrderDetails.this, MerchantDashboardActivity.class);
+                            i = new Intent(OrderDetails.this, MerchantDashboardInsideActivity.class);
                         else
                             i = new Intent(OrderDetails.this, DelegateDashboardActivity.class);
                         i.putExtra("Which_Activity", "OrderDetails");
@@ -236,7 +241,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
 
                         Intent i;
                         if (mode.equals("Merchant"))
-                            i = new Intent(OrderDetails.this, MerchantDashboardActivity.class);
+                            i = new Intent(OrderDetails.this, MerchantDashboardInsideActivity.class);
                         else
                             i = new Intent(OrderDetails.this, DelegateDashboardActivity.class);
 
@@ -308,7 +313,7 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                                 .make(findViewById(R.id.scroll_view), "لقد تمل ارسال طلبك للتاجر", Snackbar.LENGTH_LONG);
                         snackbar.show();
                         if (currentUser.getMode().equals("Merchant")) {
-                            Intent i = new Intent(OrderDetails.this, MerchantDashboardActivity.class);
+                            Intent i = new Intent(OrderDetails.this, MerchantDashboardInsideActivity.class);
                             i.putExtra("Which_Activity", "SomethingElse");
                             startActivity(i);
                         } else if (currentUser.getMode().equals("Delivery Delegate")) {
@@ -733,6 +738,26 @@ public class OrderDetails extends AppCompatActivity implements View.OnClickListe
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
                     currentNumberOfNotifications = currentUser.getNumberOfNotifications();
+
+                    if (!currentUser.isVerified()){
+                        final String uGroup = currentUser.getGroup();
+                        Intent i = new Intent(OrderDetails.this, NotVerifiedUser.class);
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic(uGroup)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        String msg = "succ unsubscribing user in "+uGroup;
+                                        if (!task.isSuccessful()) {
+                                            msg = "failed unsubscribing user in "+uGroup;
+                                        }
+                                        Log.e("homeActivity", msg);
+                                        Toast.makeText(OrderDetails.this, msg, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                        mUserDatabaseReference.child("group").setValue("");
+                        finish();
+                        startActivity(i);
+                    }
 
                     if (currentUser.getMode().equals("Merchant")) {
                         if (currentOrder.getMerchantId().equals(user.getUid())

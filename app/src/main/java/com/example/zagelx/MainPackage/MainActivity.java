@@ -24,7 +24,7 @@ import com.example.zagelx.OrdersPackage.AddOrdersActivity;
 import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.AddTripsActivity;
 import com.example.zagelx.UserInfo.NotificationsActivity;
-import com.example.zagelx.Utilities.DrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    DrawerUtil drawer;
+    MerchantDrawerUtil drawer;
 
     private NotificationBadge mBadge;
     private ImageButton notificaitonsButton;
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                     mBadge.setNumber(currentUser.getNumberOfNotifications());
 
-                    drawer = new DrawerUtil(currentUser.getName()
+                    drawer = new MerchantDrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(MainActivity.this, toolbar);
                     // Find the view pager that will allow the user to swipe between fragments

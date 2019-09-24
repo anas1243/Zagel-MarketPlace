@@ -7,15 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.ListView;
 
-import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.Utilities.DrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,7 +46,7 @@ public class OrdersRequestsActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    DrawerUtil drawer;
+    MerchantDrawerUtil drawer;
 
 
 
@@ -109,7 +107,7 @@ public class OrdersRequestsActivity extends AppCompatActivity {
                     ButterKnife.bind(OrdersRequestsActivity.this);
                     setSupportActionBar(toolbar);
 
-                    drawer = new DrawerUtil(currentUser.getName()
+                    drawer = new MerchantDrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(OrdersRequestsActivity.this, toolbar);
 

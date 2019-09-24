@@ -12,7 +12,7 @@ import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.Utilities.DrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,7 +51,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    DrawerUtil drawer;
+    MerchantDrawerUtil drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class DashboardActivity extends AppCompatActivity {
                     ButterKnife.bind(DashboardActivity.this);
                     setSupportActionBar(toolbar);
 
-                    drawer = new DrawerUtil(currentUser.getName()
+                    drawer = new MerchantDrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(),currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(DashboardActivity.this, toolbar);
                     userType = currentUser.getMode();

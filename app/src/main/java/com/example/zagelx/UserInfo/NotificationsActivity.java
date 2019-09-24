@@ -12,12 +12,12 @@ import android.view.KeyEvent;
 import android.widget.ListView;
 
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
-import com.example.zagelx.Utilities.DrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,7 +55,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    DrawerUtil drawer;
+    MerchantDrawerUtil drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     ButterKnife.bind(NotificationsActivity.this);
                     setSupportActionBar(toolbar);
 
-                    drawer = new DrawerUtil(currentUser.getName()
+                    drawer = new MerchantDrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(NotificationsActivity.this, toolbar);
 
@@ -207,7 +207,7 @@ public class NotificationsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (currentUser.getMode().equals("Merchant")){
-            Intent i = new Intent(NotificationsActivity.this, MerchantDashboardActivity.class);
+            Intent i = new Intent(NotificationsActivity.this, MerchantDashboardInsideActivity.class);
             i.putExtra("Which_Activity", "SomethingElse");
             finish();
             startActivity(i);
@@ -223,7 +223,7 @@ public class NotificationsActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (currentUser.getMode().equals("Merchant")){
-                Intent i = new Intent(NotificationsActivity.this, MerchantDashboardActivity.class);
+                Intent i = new Intent(NotificationsActivity.this, MerchantDashboardInsideActivity.class);
                 i.putExtra("Which_Activity", "SomethingElse");
                 finish();
                 startActivity(i);

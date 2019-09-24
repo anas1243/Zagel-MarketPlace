@@ -7,6 +7,7 @@ public class Trips implements Serializable {
     private String tripId = "";
     private String delegateImageURL = "";
     private String delegateID = "";
+    private String PMID = "";
     private String delegateName = "";
 
     private BirthDate routeDate = null;
@@ -14,6 +15,9 @@ public class Trips implements Serializable {
     private String routeDescription = "";
     private boolean verifiedUser = false;
     private boolean fullRoute = false;
+    //is it done?
+    private boolean status = false;
+    private boolean passedToOtherSide = false;
 
     private int numberOfRequests = 0;
 
@@ -31,10 +35,11 @@ public class Trips implements Serializable {
     public Trips() {
     }
 
-    public Trips(String tripId, String delegateImageURL, String delegateID
+    public Trips(String tripId, String PMID, String delegateImageURL, String delegateID
             , String delegateName, BirthDate routeDate, String routePrice
             , String routeDescription, String vehicle, LocationInfoForPackage locationInfoForTrip
-            , int maxNoOrders, boolean prePaid, boolean breakable, String maxPrePaidLimit, boolean verifiedUser) {
+            , int maxNoOrders, boolean prePaid, boolean breakable, String maxPrePaidLimit
+            , boolean verifiedUser, boolean status, boolean passedToOtherSide) {
         this.tripId = tripId;
         this.delegateImageURL = delegateImageURL;
         this.delegateID = delegateID;
@@ -49,6 +54,9 @@ public class Trips implements Serializable {
         this.breakable = breakable;
         this.maxPrePaidLimit = maxPrePaidLimit;
         this.verifiedUser = verifiedUser;
+        this.PMID = PMID;
+        this.status = status;
+        this.passedToOtherSide = passedToOtherSide;
     }
 
     public String getTripId() {
@@ -117,5 +125,17 @@ public class Trips implements Serializable {
 
     public boolean isFullRoute() {
         return fullRoute;
+    }
+
+    public String getPMID() {
+        return PMID;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public boolean isPassedToOtherSide() {
+        return passedToOtherSide;
     }
 }

@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
@@ -466,7 +466,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.button_cancel_edit:
                 if (currentUser.getMode().equals("Merchant")){
-                    Intent i = new Intent(ProfileActivity.this, MerchantDashboardActivity.class);
+                    Intent i = new Intent(ProfileActivity.this, MerchantDashboardInsideActivity.class);
                     i.putExtra("Which_Activity", "SomethingElse");
                     startActivity(i);
                 }
@@ -740,7 +740,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         if (currentUser.getMode().equals("Merchant")){
-            Intent i = new Intent(ProfileActivity.this, MerchantDashboardActivity.class);
+            Intent i = new Intent(ProfileActivity.this, MerchantDashboardInsideActivity.class);
             i.putExtra("Which_Activity", "SomethingElse");
             finish();
             startActivity(i);
@@ -756,7 +756,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (currentUser.getMode().equals("Merchant")){
-                Intent i = new Intent(ProfileActivity.this, MerchantDashboardActivity.class);
+                Intent i = new Intent(ProfileActivity.this, MerchantDashboardInsideActivity.class);
                 i.putExtra("Which_Activity", "SomethingElse");
                 finish();
                 startActivity(i);

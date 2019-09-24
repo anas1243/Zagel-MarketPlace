@@ -11,12 +11,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.UserInfo.NotificationsActivity;
-import com.example.zagelx.Utilities.DrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,7 +55,7 @@ public class TripsActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    DrawerUtil drawer;
+    MerchantDrawerUtil drawer;
 
 
     @Override
@@ -102,7 +102,7 @@ public class TripsActivity extends AppCompatActivity {
                     ButterKnife.bind(TripsActivity.this);
                     setSupportActionBar(toolbar);
 
-                    drawer = new DrawerUtil(currentUser.getName()
+                    drawer = new MerchantDrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(),currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(TripsActivity.this, toolbar);
                     mBadge.setNumber(currentUser.getNumberOfNotifications());
@@ -159,7 +159,7 @@ public class TripsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-            Intent i = new Intent(TripsActivity.this, MerchantDashboardActivity.class);
+            Intent i = new Intent(TripsActivity.this, MerchantDashboardInsideActivity.class);
             i.putExtra("Which_Activity", "SomethingElse");
             startActivity(i);
 
@@ -169,7 +169,7 @@ public class TripsActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-                Intent i = new Intent(TripsActivity.this, MerchantDashboardActivity.class);
+                Intent i = new Intent(TripsActivity.this, MerchantDashboardInsideActivity.class);
                 i.putExtra("Which_Activity", "SomethingElse");
                 startActivity(i);
 

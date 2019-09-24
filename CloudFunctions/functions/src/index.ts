@@ -287,8 +287,8 @@ payload = {
     //------------------------------------------------------------------------------------------------------
 
 
-    export const sendNotificationToBirds = functions.database
-.ref('Orders/{OrdersId}')
+    export const sendToBirdsInAlex = functions.database
+.ref('AlexOrders/{OrdersId}')
 .onCreate(async (snapshot, contex) =>  {
      
     const orderId = contex.params.OrdersId
@@ -301,16 +301,15 @@ payload = {
       //const senderId = orderData.merchantId;
       const senderName = orderData.merchantName;
       const orderURL = orderData.packageImageURL;
-      const orderSource = orderData.locationInfoForPackage.sAdminArea;
-      const orderSubAdminSource = orderData.locationInfoForPackage.sAdminArea;
-      const orderDestination = orderData.locationInfoForPackage.dAdminArea;
-      const orderSubAdminDestination = orderData.locationInfoForPackage.sAdminArea;
+      //const orderSource = orderData.locationInfoForPackage.sAdminArea;
+      const orderSubAdminSource = orderData.locationInfoForPackage.sSubAdmin;
+      //const orderDestination = orderData.locationInfoForPackage.dAdminArea;
+      const orderSubAdminDestination = orderData.locationInfoForPackage.dSubAdmin;
 
       let payload: any
       let condition: any
 
-      if (orderSource == orderDestination){
-        if (orderSource == "الإسكندرية"){
+      
 
                   payload = {
                     notification: {
@@ -324,12 +323,39 @@ payload = {
                 "orderId" : orderId,
                 "WhichActivity" : "cloudFunctions" 
               }}
-              condition = "'alexFreeBirds' in topics || 'AlexPM' in topics"
+              condition = "'AlexFreeBirds' in topics || 'AlexPM' in topics"
 
                     // Send notifications to all birds in alex plus alex PMs.
             
-            
-        }else{
+      return await admin.messaging().sendToCondition(condition, payload);
+              
+        
+         
+});
+
+export const sendToBirdsInCairo = functions.database
+.ref('CairoOrders/{OrdersId}')
+.onCreate(async (snapshot, contex) =>  {
+     
+    const orderId = contex.params.OrdersId
+    
+    console.log(`orderId is ${orderId}`);
+
+      const orderData = snapshot.val();
+
+      const orderName = orderData.packageName;
+      //const senderId = orderData.merchantId;
+      const senderName = orderData.merchantName;
+      const orderURL = orderData.packageImageURL;
+      //const orderSource = orderData.locationInfoForPackage.sAdminArea;
+      const orderSubAdminSource = orderData.locationInfoForPackage.sSubAdmin;
+      //const orderDestination = orderData.locationInfoForPackage.dAdminArea;
+      const orderSubAdminDestination = orderData.locationInfoForPackage.dSubAdmin;
+
+      let payload: any
+      let condition: any
+
+      
 
                   payload = {
                     notification: {
@@ -343,20 +369,42 @@ payload = {
                 "orderId" : orderId,
                 "WhichActivity" : "cloudFunctions" 
               }}
-              condition = "'cairoFreeBirds' in topics || 'CairoPM' in topics"
+              condition = "'CairoFreeBirds' in topics || 'CairoPM' in topics"
 
                     // Send notifications to all birds in cairo plus cairo PMs.
+      
+      return await admin.messaging().sendToCondition(condition, payload);
+              
+        
+         
+});
 
-        }
+export const sendToBirdsFromAlexToCairo = functions.database
+.ref('AlexToCairoOrders/{OrdersId}')
+.onCreate(async (snapshot, contex) =>  {
+     
+    const orderId = contex.params.OrdersId
+    
+    console.log(`orderId is ${orderId}`);
 
-      }else{
+      const orderData = snapshot.val();
 
-        if (orderSource == "الإسكندرية" && (orderDestination == "القاهرة" || orderDestination == "الجيزة") ){
+      const orderName = orderData.packageName;
+      //const senderId = orderData.merchantId;
+      const senderName = orderData.merchantName;
+      const orderURL = orderData.packageImageURL;
+      //const orderSource = orderData.locationInfoForPackage.sAdminArea;
+      //const orderSubAdminSource = orderData.locationInfoForPackage.sAdminArea;
+      //const orderDestination = orderData.locationInfoForPackage.dAdminArea;
+      //const orderSubAdminDestination = orderData.locationInfoForPackage.sAdminArea;
+
+      let payload: any
+      let condition: any
 
                 payload = {
                   notification: {
                     title: `${senderName} has a new order hurryup `,
-                    body: `please bring ${orderName} to the headquartes as soon as possible`,
+                    body: `please bring ${orderName} to the headquartes as soon as possible to send it to cairo`,
                     sound: "default",
                     icon: orderURL,
                     priority : "high",
@@ -368,13 +416,40 @@ payload = {
             condition = "'AlexStaticBirds' in topics || 'AlexPM' in topics"
 
                   // Send notifications to all birds in alex plus alex PMs.
+      
+      return await admin.messaging().sendToCondition(condition, payload);
+              
+        
+         
+});
 
-        } else if ((orderSource == "القاهرة" || orderSource == "الجيزة") && orderDestination == "الإسكندرية"){
+export const sendToBirdsFromCairoToAlex = functions.database
+.ref('CairoToAlexOrders/{OrdersId}')
+.onCreate(async (snapshot, contex) =>  {
+     
+    const orderId = contex.params.OrdersId
+    
+    console.log(`orderId is ${orderId}`);
 
+      const orderData = snapshot.val();
+
+      const orderName = orderData.packageName;
+      //const senderId = orderData.merchantId;
+      const senderName = orderData.merchantName;
+      const orderURL = orderData.packageImageURL;
+      //const orderSource = orderData.locationInfoForPackage.sAdminArea;
+      //const orderSubAdminSource = orderData.locationInfoForPackage.sAdminArea;
+      //const orderDestination = orderData.locationInfoForPackage.dAdminArea;
+      //const orderSubAdminDestination = orderData.locationInfoForPackage.sAdminArea;
+
+      let payload: any
+      let condition: any
+
+     
                 payload = {
                   notification: {
                     title: `${senderName} has a new order hurryup `,
-                    body: `please bring ${orderName} to the headquartes as soon as possible`,
+                    body: `please bring ${orderName} to the headquartes as soon as possible to send it to Alex`,
                     sound: "default",
                     icon: orderURL,
                     priority : "high",
@@ -386,10 +461,6 @@ payload = {
             condition = "'CairoStaticBirds' in topics || 'CairoPM' in topics"
 
                   // Send notifications to all birds in cairo plus cairo PMs.
-
-        }
-
-      }
       
       return await admin.messaging().sendToCondition(condition, payload);
               

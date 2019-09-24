@@ -649,9 +649,9 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
 
     private void uploadTripAndProceed(){
         String tripId = System.currentTimeMillis() + delegateId;
-        Trips trip = new Trips(tripId, delegateImageURL ,delegateId , delegateName, dDate, TPrice
+        Trips trip = new Trips(tripId, "",delegateImageURL ,delegateId , delegateName, dDate, TPrice
                 , tNotes, tVehicle, locationInfoForTrip,
-                maxNoOrders , isPrePaid, isBreakable, oMaxPrice,delegateVerification);
+                maxNoOrders , isPrePaid, isBreakable, oMaxPrice,delegateVerification, false, false);
 
         mTripsDatabaseReference.child(tripId).setValue(trip);
 

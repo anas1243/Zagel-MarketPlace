@@ -17,14 +17,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.DashboardPackage.SimpleFragmentPagerAdapterForDelegate;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.TripsPackage.AddTripsActivity;
 import com.example.zagelx.UserInfo.NotificationsActivity;
-import com.example.zagelx.Utilities.DrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.FreeDDrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,10 +55,11 @@ public class FreesDashboardActivity extends AppCompatActivity {
     private ImageButton notificaitonsButton;
     private ImageView addButton;
     private NotificationBadge mBadge;
+    private TextView toolbarText;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    DrawerUtil drawer;
+    FreeDDrawerUtil drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,8 @@ public class FreesDashboardActivity extends AppCompatActivity {
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
 
         addButton = findViewById(R.id.add_button);
+        toolbarText = findViewById(R.id.toolbar_text);
+        toolbarText.setText("شحناتك المسؤل عنها");
         notificaitonsButton = findViewById(R.id.ic_notification_toolbar);
         notificaitonsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,24 +86,24 @@ public class FreesDashboardActivity extends AppCompatActivity {
 
         mBadge = findViewById(R.id.badge);
 
-        Intent i = getIntent();
-        whichActivity = (String) i.getSerializableExtra("Which_Activity");
-        if (whichActivity.equals("OrderDetails")) {
-            String pickedOrDelivered = (String) i.getSerializableExtra("PickedORDelivered");
-            if (pickedOrDelivered.equals("Picked")) {
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.main_main_layout), "الرجاء السراع في توصيل الشحنة لتعزيز الثقة بينك و بين التطبيق", Snackbar.LENGTH_LONG);
-                snackbar.show();
-            } else if (pickedOrDelivered.equals("Delivered")) {
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.main_main_layout), "نتمنا ان تكون قد استمتعت باستخدام التطبيق", Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
-        } else {
-            Snackbar snackbar = Snackbar
-                    .make(findViewById(R.id.main_main_layout), "الرحلات و الشحنات الخاصة بك !", Snackbar.LENGTH_LONG);
-            snackbar.show();
-        }
+//        Intent i = getIntent();
+//        whichActivity = (String) i.getSerializableExtra("Which_Activity");
+//        if (whichActivity.equals("OrderDetails")) {
+//            String pickedOrDelivered = (String) i.getSerializableExtra("PickedORDelivered");
+//            if (pickedOrDelivered.equals("Picked")) {
+//                Snackbar snackbar = Snackbar
+//                        .make(findViewById(R.id.main_main_layout), "الرجاء السراع في توصيل الشحنة لتعزيز الثقة بينك و بين التطبيق", Snackbar.LENGTH_LONG);
+//                snackbar.show();
+//            } else if (pickedOrDelivered.equals("Delivered")) {
+//                Snackbar snackbar = Snackbar
+//                        .make(findViewById(R.id.main_main_layout), "نتمنا ان تكون قد استمتعت باستخدام التطبيق", Snackbar.LENGTH_LONG);
+//                snackbar.show();
+//            }
+//        } else {
+//            Snackbar snackbar = Snackbar
+//                    .make(findViewById(R.id.main_main_layout), "الرحلات و الشحنات الخاصة بك !", Snackbar.LENGTH_LONG);
+//            snackbar.show();
+//        }
 
         if (user != null) {
 
@@ -112,7 +115,7 @@ public class FreesDashboardActivity extends AppCompatActivity {
                     ButterKnife.bind(FreesDashboardActivity.this);
                     setSupportActionBar(toolbar);
 
-                    drawer = new DrawerUtil(currentUser.getName()
+                    drawer = new FreeDDrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(FreesDashboardActivity.this, toolbar);
                     mBadge.setNumber(currentUser.getNumberOfNotifications());
@@ -120,9 +123,9 @@ public class FreesDashboardActivity extends AppCompatActivity {
                     ViewPager viewPager = findViewById(R.id.viewpager);
 
                     // Create an adapter that knows which fragment should be shown on each page
-                    SimpleFragmentPagerAdapterForDelegate adapter
-                            = new SimpleFragmentPagerAdapterForDelegate(getSupportFragmentManager()
-                            , FreesDashboardActivity.this, user.getUid());
+                    SimpleFragmentPagerAdapterForFrees adapter
+                            = new SimpleFragmentPagerAdapterForFrees(getSupportFragmentManager()
+                            , FreesDashboardActivity.this, user.getUid(), currentUser.getGroup());
 
                     // Set the adapter onto the view pager
                     viewPager.setAdapter(adapter);

@@ -24,8 +24,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.FreeBirdsDashboardPackage.FreesDashboardActivity;
-import com.example.zagelx.MerchantsDashboardPackage.MerchantDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.FreeDelegateDetails;
 import com.example.zagelx.Models.LocationInfoForUsers;
@@ -520,6 +519,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                                     break;
                                 case "Zagel Team":
                                     uGroup = uTeamMemberIfHeWas;
+                                    type = zagelTeamSpinner.getSelectedItem().toString();
 
                                     if ("AlexPM".equals(uGroup) || "CairoPM".equals(uGroup)) {
                                         initiateNewUserObject(false);
@@ -609,7 +609,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                             .setValue(1);
                 }
                 addUserToAGroup(uGroup);
-                Intent i = new Intent(AfterRegisterUserInfo.this, MerchantDashboardActivity.class);
+                Intent i = new Intent(AfterRegisterUserInfo.this, MerchantDashboardInsideActivity.class);
                 i.putExtra("Which_Activity", "SomethingElse");
                 startActivity(i);
                 break;
@@ -623,7 +623,7 @@ public class AfterRegisterUserInfo extends AppCompatActivity {
                 }
                 addUserToAGroup(uGroup);
 
-                Intent intentToCairoMerchants = new Intent(AfterRegisterUserInfo.this, MerchantDashboardActivity.class);
+                Intent intentToCairoMerchants = new Intent(AfterRegisterUserInfo.this, MerchantDashboardInsideActivity.class);
                 intentToCairoMerchants.putExtra("Which_Activity", "SomethingElse");
                 startActivity(intentToCairoMerchants);
                 break;

@@ -12,14 +12,21 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.UserInfo.NotificationsActivity;
-import com.example.zagelx.Utilities.DrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.FreeDDrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
+import com.example.zagelx.Utilities.NavDrawerPackage.StaticDDrawerUtil;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -27,7 +34,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
@@ -52,14 +63,14 @@ public class OrdersActivity extends AppCompatActivity {
 
     private FirebaseUser user;
     private Users currentUser;
-
+    private DataSnapshot PublicdataSnapshot;
 
     private NotificationBadge mBadge;
 
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    DrawerUtil drawer;
+    MerchantDrawerUtil drawer;
 
 
     @Override
@@ -69,7 +80,6 @@ public class OrdersActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
 
 
@@ -103,14 +113,43 @@ public class OrdersActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
-
+                    PublicdataSnapshot = dataSnapshot;
                     ButterKnife.bind(OrdersActivity.this);
                     setSupportActionBar(toolbar);
                     mBadge.setNumber(currentUser.getNumberOfNotifications());
 
-                    drawer = new DrawerUtil(currentUser.getName()
+                    drawer = new MerchantDrawerUtil(currentUser.getName()
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(OrdersActivity.this, toolbar);
+
+                    checkTokenAndGroup();
+
+                    switch (currentUser.getGroup()) {
+                        case "AlexFreeBirds":
+                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("AlexOrders");
+                            FreeDDrawerUtil drawer = new FreeDDrawerUtil(currentUser.getName()
+                                    , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
+                            drawer.getDrawer(OrdersActivity.this, toolbar);
+                            break;
+                        case "CairoFreeBirds":
+                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("CairoOrders");
+                            FreeDDrawerUtil drawer1 = new FreeDDrawerUtil(currentUser.getName()
+                                    , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
+                            drawer1.getDrawer(OrdersActivity.this, toolbar);
+                            break;
+                        case "AlexStaticBirds":
+                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("AlexToCairoOrders");
+                            StaticDDrawerUtil drawer2 = new StaticDDrawerUtil(currentUser.getName()
+                                    , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
+                            drawer2.getDrawer(OrdersActivity.this, toolbar);
+                            break;
+                        case "CairoStaticBirds":
+                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("CairoToAlexOrders");
+                            StaticDDrawerUtil drawer3 = new StaticDDrawerUtil(currentUser.getName()
+                                    , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
+                            drawer3.getDrawer(OrdersActivity.this, toolbar);
+                            break;
+                    }
 
                 }
 
@@ -123,15 +162,17 @@ public class OrdersActivity extends AppCompatActivity {
             mUserDatabaseReference.child(user.getUid())
                     .addListenerForSingleValueEvent(mUserEventListener);
 
+
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Orders orders = dataSnapshot.getValue(Orders.class);
                     Log.e("test orders", "onChildAdded: " + orders);
-                    if(orders.getPackageState().equals("New")
-                    || orders.getPackageState().equals("Negotiable")
-                    )
-                    mOrdersAdapter.add(orders);
+                    if(orders.getPackageState().equals("New")){
+                        mOrdersAdapter.notifyDataSetChanged();
+                        mOrdersAdapter.add(orders);
+                    }
+
 
                     //progressBar.setVisibility(View.GONE);
                 }
@@ -162,6 +203,74 @@ public class OrdersActivity extends AppCompatActivity {
             AuthUI.getInstance().signOut(this);
 
         }
+    }
+
+    private void checkTokenAndGroup(){
+        final String[] newToken = new String[1];
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(OrdersActivity.this, new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                newToken[0] = instanceIdResult.getToken();
+                Log.e("newToken", newToken[0]);
+                if (currentUser.getGroup().equals("")) {
+                    mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
+                    //it means that this user was banned from the app before
+                    switch (currentUser.getMode()){
+                        case "Alex PM":
+                            subscribeUserInAGroup("AlexPM");
+                            break;
+                        case "Cairo PM":
+                            subscribeUserInAGroup("CairoPM");
+                            break;
+                        case "Merchant":
+                            if (currentUser.getLocationInfoForUser().getuAdminArea().equals("الإسكندرية")) {
+                                subscribeUserInAGroup("AlexMerchants");
+                            } else if (currentUser.getLocationInfoForUser().getuAdminArea().equals("القاهرة")
+                                    || currentUser.getLocationInfoForUser().getuAdminArea().equals("الجيزة")) {
+                                subscribeUserInAGroup("CairoMerchants");
+                            }
+                            break;
+                        case "Alex Static Birds":
+                            subscribeUserInAGroup("AlexStaticBirds");
+                            break;
+                        case "Cairo Static Birds":
+                            subscribeUserInAGroup("CairoStaticBirds");
+                            break;
+                        case "Delivery Delegate":
+                            if (currentUser.getLocationInfoForUser().getuAdminArea().equals("الإسكندرية")) {
+                                subscribeUserInAGroup("AlexFreeBirds");
+                            } else if (currentUser.getLocationInfoForUser().getuAdminArea().equals("القاهرة")
+                                    || currentUser.getLocationInfoForUser().getuAdminArea().equals("الجيزة")) {
+                                subscribeUserInAGroup("CairoFreeBirds");
+                            }
+                            break;
+                    }
+                } else if (PublicdataSnapshot.hasChild("userToken")) {
+                    if (!currentUser.getUserToken().equals(newToken[0])) {
+                        mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
+                        subscribeUserInAGroup(currentUser.getGroup());
+                    }
+                } else {
+                    mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
+                    subscribeUserInAGroup(currentUser.getGroup());
+                }
+            }
+        });
+    }
+
+    public void subscribeUserInAGroup(final String uGroup) {
+        FirebaseMessaging.getInstance().subscribeToTopic(uGroup)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "succ subscribing user in " + uGroup;
+                        if (!task.isSuccessful()) {
+                            msg = "failed subscribing user in " + uGroup;
+                        }
+                        Log.e("homeActivity", msg);
+                        Toast.makeText(OrdersActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
