@@ -130,10 +130,19 @@ public class SpalshActivity extends AppCompatActivity {
                 break;
             case "AlexFreeBirds":
             case "CairoFreeBirds":
+                if(currentUser.isVerified()){
+                    i = new Intent(SpalshActivity.this, FreesDashboardActivity.class);
+                    i.putExtra("Which_Activity", "SomethingElse");
+                    startActivity(i);
+                }else{
+                    i = new Intent(SpalshActivity.this, NotVerifiedUser.class);
+                    startActivity(i);
+                }
+                break;
             case "AlexStaticBirds":
             case "CairoStaticBirds":
                 if(currentUser.isVerified()){
-                    i = new Intent(SpalshActivity.this, OrdersActivity.class);
+                    i = new Intent(SpalshActivity.this, StaticsOrdersDashboardActivity.class);
                     i.putExtra("Which_Activity", "SomethingElse");
                     startActivity(i);
                 }else{

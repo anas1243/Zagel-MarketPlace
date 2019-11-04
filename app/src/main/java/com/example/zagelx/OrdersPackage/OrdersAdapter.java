@@ -14,16 +14,21 @@ import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.R;
+import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OrdersAdapter extends ArrayAdapter<Orders> {
     Context context ;
-    public OrdersAdapter(Context context, int resource, List<Orders> objects) {
+    String whichBranch;
+    public OrdersAdapter(Context context, int resource
+            , List<Orders> objects, String whichBranch) {
         super(context, resource, objects);
         this.context = context;
+        this.whichBranch = whichBranch;
     }
 
 
@@ -99,22 +104,18 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
                 vehicleImageIV.setImageResource(R.drawable.vehicle_bus_yellow);
                 break;
         }
+        Log.e("test listItemView", "onClick: hal katalooh ? " );
 
         listItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-//                Intent i = new Intent(context, OrderDetails.class);
-//                Log.e("zero one test test", "onClick: "+ currentOrder.isPrePaid() );
-//                i.putExtra("Package_Object", currentOrder);
-//                i.putExtra("WhichActivity", "OrderObjectActivity");
-//                context.startActivity(i);
-
-
                 Intent i = new Intent(context, OrderDetails.class);
                 Log.e("zero one test test", "onClick: "+ currentOrder.isPrePaid() );
                 i.putExtra("orderObject", currentOrder);
-                i.putExtra("WhichActivity", "ordersAdapter");
+                i.putExtra("WhichActivity", "MDashboardAdapter");
+                i.putExtra("WhichBranch",  whichBranch);
+
                 context.startActivity(i);
             }
         });

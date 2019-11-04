@@ -11,10 +11,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ListView;
 
-import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.FreeBirdsDashboardPackage.FreesDashboardActivity;
 import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.MerchantsNotifications;
+import com.example.zagelx.Models.PmsNotifications;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
@@ -39,9 +40,10 @@ public class NotificationsActivity extends AppCompatActivity {
     private ListView mListView;
     private MerchantsNotificationsAdapter mMerchantNotificationsAdapter;
     private DelegatesNotificationsAdapter mDelegateNotificationAdapter;
+    private PmsNotificationsAdapter pmsNotificationsAdapter;
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mNotificationsDatabaseReference;
+    private DatabaseReference mNotificationsDatabaseReference, mPMNotificationsDatabaseReference;
     private DatabaseReference mUserDatabaseReference;
     private ChildEventListener mChildEventListener;
     private ValueEventListener mUserEventListener;
@@ -52,6 +54,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
     final List<MerchantsNotifications> MerchantNotificationsList = new ArrayList<>();
     final List<DelegatesNotification> delegateNotificationsList = new ArrayList<>();
+    final List<PmsNotifications> pmNotificationList = new ArrayList<>();
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -88,6 +91,9 @@ public class NotificationsActivity extends AppCompatActivity {
             mNotificationsDatabaseReference = mFirebaseDatabase
                     .getReference().child("Users/"+user.getUid()+"/Notifications");
 
+            mPMNotificationsDatabaseReference = mFirebaseDatabase
+                    .getReference().child("Users/"+user.getUid()+"/PMNotifications");
+
             mUserEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -100,10 +106,15 @@ public class NotificationsActivity extends AppCompatActivity {
                             , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                     drawer.getDrawer(NotificationsActivity.this, toolbar);
 
-                    if (currentUser.getMode().equals("Merchant")){
+                    if (currentUser.getGroup().equals("AlexMerchants")
+                    || currentUser.getGroup().equals("CairoMerchants")){
                         showNotificationsToMerchant();
                     }
-                    else if (currentUser.getMode().equals("Delivery Delegate")){
+                    else if (currentUser.getGroup().equals("AlexPM")
+                            || currentUser.getGroup().equals("CairoPM")){
+                        showNotificationsToPM();
+
+                    }else {
                         showNotificationsToDelegate();
                     }
 
@@ -129,9 +140,46 @@ public class NotificationsActivity extends AppCompatActivity {
 
     }
 
+    private void showNotificationsToPM(){
+        pmsNotificationsAdapter = new PmsNotificationsAdapter(NotificationsActivity.this
+                , R.layout.notification_item_delivered_topm, pmNotificationList);
+
+        mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                PmsNotifications pmsNotifications = dataSnapshot.getValue(PmsNotifications.class);
+                mListView.setAdapter(pmsNotificationsAdapter);
+                pmsNotificationsAdapter.add(pmsNotifications);
+
+                //progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        mPMNotificationsDatabaseReference.addChildEventListener(mChildEventListener);
+    }
+
     private void showNotificationsToMerchant(){
         mMerchantNotificationsAdapter = new MerchantsNotificationsAdapter(NotificationsActivity.this
-                , R.layout.notification_item_on_order, MerchantNotificationsList);
+                , R.layout.notification_item_onway_tomerchant, MerchantNotificationsList);
 
         mChildEventListener = new ChildEventListener() {
             @Override
@@ -170,7 +218,7 @@ public class NotificationsActivity extends AppCompatActivity {
     private void showNotificationsToDelegate(){
 
         mDelegateNotificationAdapter = new DelegatesNotificationsAdapter(NotificationsActivity.this
-                , R.layout.notification_item_on_trip, delegateNotificationsList);
+                , R.layout.notification_item_delivered_to_delegate, delegateNotificationsList);
 
         mChildEventListener = new ChildEventListener() {
             @Override
@@ -213,7 +261,7 @@ public class NotificationsActivity extends AppCompatActivity {
             startActivity(i);
         }
         else if (currentUser.getMode().equals("Delivery Delegate")){
-            Intent i = new Intent(NotificationsActivity.this, DelegateDashboardActivity.class);
+            Intent i = new Intent(NotificationsActivity.this, FreesDashboardActivity.class);
             i.putExtra("Which_Activity", "SomethingElse");
             finish();
             startActivity(i);
@@ -229,7 +277,7 @@ public class NotificationsActivity extends AppCompatActivity {
                 startActivity(i);
             }
             else if (currentUser.getMode().equals("Delivery Delegate")){
-                Intent i = new Intent(NotificationsActivity.this, DelegateDashboardActivity.class);
+                Intent i = new Intent(NotificationsActivity.this, FreesDashboardActivity.class);
                 i.putExtra("Which_Activity", "SomethingElse");
                 finish();
                 startActivity(i);

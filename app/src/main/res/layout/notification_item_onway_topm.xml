@@ -23,10 +23,13 @@
         android:layout_toRightOf="@id/delegate_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name accept to deliver Order in TripDate for Offer "
+        android:text=" تم التأكيد من قبل المندوب المندوبب انه في الطريق الى التاجر التاجرر لاستيلام الشحنة الشحنةة"
         android:textColor="#000000"
         android:textSize="18sp"
         />
+    <!--        android:text="Name want to deliver your package Order for Offer "-->
+
+
 
 
 </RelativeLayout>

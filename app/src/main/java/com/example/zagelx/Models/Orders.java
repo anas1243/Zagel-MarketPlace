@@ -30,18 +30,29 @@ public class Orders implements Serializable {
     private boolean delegatePicked = false;
     private boolean merchantPicked = false;
 
+    private boolean delegateHeadquarters = false;
+    private boolean pmHeadquarters = false;
+    private boolean otherDelegateOtherHeadquarters = false;
+    private boolean otherDelegatePmOtherHeadquarters = false;
+
     private String vehicle = "";
     private String packageState = "";
+    private String packageStateForPm="";
 
 
-    private RequestInfo currentRequestInfo;
+    private CourierInfo currentCourierInfo;
     private int numberOfRequests = 0;
 
     private String acceptedDelegateID = "";
     private String acceptedDelegateName = "";
     private String acceptedDelegateMobile = "";
+
+    private String secondAcceptedDelegateID = "";
+    private String secondAcceptedDelegateName = "";
+    private String secondAcceptedDelegateMobile = "";
     private String endConsumerMobile = "";
     private String endConsumerName = "";
+    private String whichBranch = "";
 
     public Orders() {
     }
@@ -53,7 +64,7 @@ public class Orders implements Serializable {
             , String packagePrice, boolean isPrePaid, boolean isBreakable, boolean verifiedUser
             , BirthDate deliveryDate, String deliveryPrice, String vehicle
             , String endConsumerMobile, String endConsumerName
-            , LocationInfoForPackage locationInfoForPackage, String packageState) {
+            , LocationInfoForPackage locationInfoForPackage, String packageState, String packageStateForPm, String whichBranch) {
         this.orderId = orderId;
         this.merchantId = merchantId;
         this.merchantImageURL = merchantImageURL;
@@ -72,9 +83,55 @@ public class Orders implements Serializable {
         this.endConsumerMobile = endConsumerMobile;
         this.locationInfoForPackage = locationInfoForPackage;
         this.packageState = packageState;
+        this.packageStateForPm = packageStateForPm;
         this.verifiedUser = verifiedUser;
         this.endConsumerName = endConsumerName;
         this.merchantMobile = merchantMobile;
+        this.whichBranch = whichBranch;
+    }
+
+    public boolean isOtherDelegatePmOtherHeadquarters() {
+        return otherDelegatePmOtherHeadquarters;
+    }
+
+    public String getPackageStateForPm() {
+        return packageStateForPm;
+    }
+
+    public void setPmHeadquarters(boolean pmHeadquarters) {
+        this.pmHeadquarters = pmHeadquarters;
+    }
+
+    public void setOtherDelegatePmOtherHeadquarters(boolean otherDelegatePmOtherHearquarters) {
+        this.otherDelegatePmOtherHeadquarters = otherDelegatePmOtherHearquarters;
+    }
+
+    public boolean isPmHeadquarters() {
+        return pmHeadquarters;
+    }
+
+    public boolean isOtherDelegatePmOtherHearquarters() {
+        return otherDelegatePmOtherHeadquarters;
+    }
+
+    public void setDelegateHeadquarters(boolean delegateHeadquarters) {
+        this.delegateHeadquarters = delegateHeadquarters;
+    }
+
+    public void setOtherDelegateOtherHearQuarters(boolean otherDelegateOtherHearQuarters) {
+        this.otherDelegateOtherHeadquarters = otherDelegateOtherHearQuarters;
+    }
+
+    public boolean isDelegateHeadquarters() {
+        return delegateHeadquarters;
+    }
+
+    public boolean isOtherDelegateOtherHeadquarters() {
+        return otherDelegateOtherHeadquarters;
+    }
+
+    public String getWhichBranch() {
+        return whichBranch;
     }
 
     public void setOrderId(String orderId) {
@@ -182,12 +239,12 @@ public class Orders implements Serializable {
     }
 
 
-    public RequestInfo getCurrentRequestInfo() {
-        return currentRequestInfo;
+    public CourierInfo getCurrentCourierInfo() {
+        return currentCourierInfo;
     }
 
-    public void setCurrentRequestInfo(RequestInfo currentRequestInfo) {
-        this.currentRequestInfo = currentRequestInfo;
+    public void setCurrentCourierInfo(CourierInfo currentCourierInfo) {
+        this.currentCourierInfo = currentCourierInfo;
     }
 
     public String getAcceptedDeliveryPrice() {
@@ -211,7 +268,7 @@ public class Orders implements Serializable {
                 ", merchantImageURL='" + merchantImageURL + '\'' +
                 ", merchantName='" + merchantName + '\'' +
                 ", merchantMobile='" + merchantMobile + '\'' +
-                ", LocationInfoForPackage=" + locationInfoForPackage +
+                ", locationInfoForPackage=" + locationInfoForPackage +
                 ", packageName='" + packageName + '\'' +
                 ", packageImageURL='" + packageImageURL + '\'' +
                 ", packageDescription='" + packageDescription + '\'' +
@@ -219,21 +276,44 @@ public class Orders implements Serializable {
                 ", packageWeight='" + packageWeight + '\'' +
                 ", deliveryDate=" + deliveryDate +
                 ", deliveryPrice='" + deliveryPrice + '\'' +
+                ", acceptedDeliveryPrice='" + acceptedDeliveryPrice + '\'' +
                 ", prePaid=" + prePaid +
                 ", breakable=" + breakable +
                 ", verifiedUser=" + verifiedUser +
                 ", merchantDelivered=" + merchantDelivered +
+                ", delegateDelivered=" + delegateDelivered +
                 ", delegatePicked=" + delegatePicked +
+                ", merchantPicked=" + merchantPicked +
+                ", delegateHeadquarters=" + delegateHeadquarters +
+                ", pmHeadquarters=" + pmHeadquarters +
+                ", otherDelegateOtherHeadquarters=" + otherDelegateOtherHeadquarters +
+                ", otherDelegatePmOtherHeadquarters=" + otherDelegatePmOtherHeadquarters +
                 ", vehicle='" + vehicle + '\'' +
                 ", packageState='" + packageState + '\'' +
-                ", currentRequestInfo=" + currentRequestInfo +
+                ", currentCourierInfo=" + currentCourierInfo +
                 ", numberOfRequests=" + numberOfRequests +
                 ", acceptedDelegateID='" + acceptedDelegateID + '\'' +
                 ", acceptedDelegateName='" + acceptedDelegateName + '\'' +
                 ", acceptedDelegateMobile='" + acceptedDelegateMobile + '\'' +
+                ", secondAcceptedDelegateID='" + secondAcceptedDelegateID + '\'' +
+                ", secondAcceptedDelegateName='" + secondAcceptedDelegateName + '\'' +
+                ", secondAcceptedDelegateMobile='" + secondAcceptedDelegateMobile + '\'' +
                 ", endConsumerMobile='" + endConsumerMobile + '\'' +
                 ", endConsumerName='" + endConsumerName + '\'' +
+                ", whichBranch='" + whichBranch + '\'' +
                 '}';
+    }
+
+    public String getSecondAcceptedDelegateID() {
+        return secondAcceptedDelegateID;
+    }
+
+    public String getSecondAcceptedDelegateName() {
+        return secondAcceptedDelegateName;
+    }
+
+    public String getSecondAcceptedDelegateMobile() {
+        return secondAcceptedDelegateMobile;
     }
 
     public String getEndConsumerName() {

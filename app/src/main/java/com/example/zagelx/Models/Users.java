@@ -1,7 +1,7 @@
 package com.example.zagelx.Models;
 
 public class Users {
-    private String ID = "";
+    private String id = "";
     private String name = "";
     private String email = "";
     private String mode = ""; //delegate:d, merchant: m
@@ -55,7 +55,7 @@ public class Users {
         this.mobileNumber = mobileNumber;
         this.profilePictureURL = profilePictureURL;
         this.firstTimeLogIn = firstTimeLogIn;
-        this.ID = ID;
+        this.id = ID;
         this.birthDate = birthDate;
         this.firstTimeLogIn = firstTimeLogIn;
         this.mode = mode;
@@ -119,7 +119,7 @@ public class Users {
     }
 
     public String getID() {
-        return ID;
+        return id;
     }
 
     public BirthDate getBirthDate() {
@@ -153,7 +153,7 @@ public class Users {
     @Override
     public String toString() {
         return "Users{" +
-                "ID='" + ID + '\'' +
+                "ID='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", mode='" + mode + '\'' +

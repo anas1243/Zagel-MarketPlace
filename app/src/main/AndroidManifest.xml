@@ -176,6 +176,7 @@
         <activity android:name=".MerchantsDashboardPackage.MerchantsOrdersOutside.DeliveredOrdersOutsideActivity" />
         <activity android:name=".EWalletPackage.MerchantsEWalletActivity" />
         <activity android:name=".Utilities.TermsAndCondActivity" />
+        <activity android:name=".PMsDashboardPackage.PMOutSideOrdersPackage.OutSideDeliveredOrdersActivity" />
 
         <service
             android:name=".Utilities.MyFirebaseMessagingService"

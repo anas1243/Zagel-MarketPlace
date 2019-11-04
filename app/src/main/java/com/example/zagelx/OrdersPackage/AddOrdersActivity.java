@@ -926,7 +926,7 @@ public class AddOrdersActivity extends AppCompatActivity implements View.OnClick
                                     , oDescription, oPrice
                                     , isPrePaid, isBreakable,merchantVerification, dDate,
                                     dPrice, oVehicle, RMobile, RName
-                                    , locationInfoForPackage, "New");
+                                    , locationInfoForPackage, "New", "New", oCategory);
 
                             mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(oCategory);
                             mOrdersDatabaseReference.child(orderId).setValue(order);

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="12dp">
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/merchant_image"
+        android:id="@+id/delegate_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:src="@drawable/profile_placeholder"/>
@@ -15,18 +15,21 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/ic_verification_badge"
-        android:layout_toRightOf="@id/merchant_image"
+        android:layout_toRightOf="@id/delegate_image"
         android:layout_marginLeft="-30dp"/>
     <TextView
         android:layout_margin="16dp"
         android:id="@+id/notification_body"
-        android:layout_toRightOf="@id/merchant_image"
+        android:layout_toRightOf="@id/delegate_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name want to deliver Order for Offer on TripDate"
+        android:text="المندوب المندوبب في طريقه اليك الان لاستلام شحنتك الشحنة"
         android:textColor="#000000"
         android:textSize="18sp"
         />
+    <!--        android:text="Name want to deliver your package Order for Offer "-->
+
+
 
 
 </RelativeLayout>

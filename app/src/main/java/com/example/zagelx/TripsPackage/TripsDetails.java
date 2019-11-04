@@ -2,6 +2,7 @@ package com.example.zagelx.TripsPackage;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -22,12 +23,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.FreeBirdsDashboardPackage.FreesDashboardActivity;
 import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.DelegatesNotification;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.OrdersInTrip;
-import com.example.zagelx.Models.RequestInfo;
+import com.example.zagelx.Models.CourierInfo;
 import com.example.zagelx.Models.Trips;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
@@ -315,7 +316,9 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
 
         input.setLayoutParams(lp);
         input.setText(currentTrip.getRoutePrice());
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
+            input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
 
         alertDialog.setView(input);
         alertDialog.setIcon(R.drawable.ic_cash);
@@ -326,16 +329,14 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                         String priceOffer = input.getText().toString();
                         String requestId = System.currentTimeMillis() + user.getUid();
                         String notificationId = System.currentTimeMillis() + currentTrip.getDelegateID();
-                        RequestInfo currentRequestInfo = new RequestInfo(requestId, user.getUid(), currentUser.getName(), currentUser.getProfilePictureURL()
-                                , currentUser.getMobileNumber(), currentUser.getRate(), priceOffer, currentUser.isVerified(), "requested");
-                        DelegatesNotification delegatesNotifications = new DelegatesNotification(
-                                notificationId,"toDelegate", "request", currentTrip.getDelegateID(), currentTrip.getTripId(), currentTrip.getRouteDate().toString()
-                                , selectedOrderItemID, orderItems.getSelectedItem().toString()
-                                , currentRequestInfo
-                        );
+                        CourierInfo currentCourierInfo = new CourierInfo(requestId, user.getUid(), currentUser.getName(), currentUser.getProfilePictureURL()
+                                , currentUser.getMobileNumber(), currentUser.getGroup(), currentUser.getRate()
+                                , currentUser.isVerified());
+                        //TODO Remove This Activity
+                        DelegatesNotification delegatesNotifications = new DelegatesNotification();
 
 
-                        mRequestInfoDatabaseReference.child(requestId).setValue(currentRequestInfo);
+                        mRequestInfoDatabaseReference.child(requestId).setValue(currentCourierInfo);
                         currentNumberOfNotifications += 1;
                         currentNumberOfCurrentOrderRequests += 1;
                         mTripsDatabaseReference.child("numberOfRequests").setValue(currentNumberOfCurrentOrderRequests);
@@ -353,7 +354,7 @@ public class TripsDetails extends AppCompatActivity implements View.OnClickListe
                             startActivity(i);
                         }
                         else if (currentUser.getMode().equals("Delivery Delegate")){
-                            Intent i = new Intent(TripsDetails.this, DelegateDashboardActivity.class);
+                            Intent i = new Intent(TripsDetails.this, FreesDashboardActivity.class);
                             i.putExtra("Which_Activity", "SomethingElse");
                             finish();
                             startActivity(i);

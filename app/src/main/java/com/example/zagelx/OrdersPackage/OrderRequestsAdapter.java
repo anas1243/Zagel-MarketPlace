@@ -15,10 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.zagelx.Models.CourierInfo;
 import com.example.zagelx.Models.DelegatesNotification;
-import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.Models.Orders;
-import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 
@@ -30,7 +29,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
+public class OrderRequestsAdapter extends ArrayAdapter<CourierInfo> {
     private Context context ;
     private String currentOrderName;
     private DatabaseReference mNotificationDatabaseReference, mRequestsDatabaseReference, mOrdersDatabaseReference;
@@ -39,7 +38,7 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
     private Users currentUser;
     private String delegateId, notificationId, requestId;
 
-    public OrderRequestsAdapter(Context context, int resource, List<RequestInfo> objects
+    public OrderRequestsAdapter(Context context, int resource, List<CourierInfo> objects
             , DatabaseReference mOrdersDatabaseReference, Orders currentOrder, Users currentUser) {
         super(context, resource, objects);
         this.context = context;
@@ -50,7 +49,7 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
 
 
     @Override
-    public RequestInfo getItem(int position) {
+    public CourierInfo getItem(int position) {
         return super.getItem(super.getCount() - position - 1);
     }
 
@@ -74,7 +73,7 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
 
 
 
-        final RequestInfo currentRequestInfo = getItem(position);
+        final CourierInfo currentCourierInfo = getItem(position);
 
 
 
@@ -82,13 +81,12 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("test button pos.", "onClick: "+ currentRequestInfo.getOfferPrice() );
 
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                 alertDialog.setCancelable(false);
                 alertDialog.setTitle("Accept Delivery Request Confirmation!");
-                alertDialog.setMessage("Are you sure you want "+currentRequestInfo.getUserName()
-                        +" to deliver "+currentOrderName+" for "+ currentRequestInfo.getOfferPrice()+" EGP");
+                alertDialog.setMessage("Are you sure you want "+ currentCourierInfo.getUserName()
+                        +" to deliver "+currentOrderName+" for "+" EGP");
                 alertDialog.setIcon(R.drawable.ic_delegates_requested);
 
                 alertDialog.setPositiveButton("Yes I agree",
@@ -99,34 +97,28 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
 
                                 FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-                                delegateId = currentRequestInfo.getUserID();
+                                delegateId = currentCourierInfo.getUserID();
                                 notificationId = System.currentTimeMillis() + delegateId;
                                 requestId = System.currentTimeMillis() + currentOrder.getMerchantId();
 
                                 mNotificationDatabaseReference = mFirebaseDatabase.getReference("Users/"
                                         + delegateId + "/Notifications/" + notificationId);
+                                //TODO remove this activity
+                                delegatesNotification = new DelegatesNotification();
 
-
-                                delegatesNotification = new DelegatesNotification(
-                                        notificationId,"toDelegate", "acceptance", delegateId, "", "", currentOrder.getOrderId()
-                                        , currentOrderName, new RequestInfo(requestId, currentOrder.getMerchantId()
-                                        , currentUser.getName(), currentUser.getProfilePictureURL(), currentUser.getMobileNumber(), currentUser.getRate()
-                                        , currentRequestInfo.getOfferPrice(), currentUser.isVerified(), "accepted" )
-                                );
-
-                                mRequestsDatabaseReference = mOrdersDatabaseReference.child("currentRequestInfo");
-                                mRequestsDatabaseReference.child(currentRequestInfo.getRequestId()).child("status").setValue("accepted");
+                                mRequestsDatabaseReference = mOrdersDatabaseReference.child("currentCourierInfo");
+                                mRequestsDatabaseReference.child(currentCourierInfo.getRequestId()).child("status").setValue("accepted");
 
                                 mNotificationDatabaseReference.setValue(delegatesNotification);
 
                                 mOrdersDatabaseReference.child("acceptedDelegateID")
-                                        .setValue(currentRequestInfo.getUserID());
+                                        .setValue(currentCourierInfo.getUserID());
                                 mOrdersDatabaseReference.child("acceptedDelegateName")
-                                        .setValue(currentRequestInfo.getUserName());
+                                        .setValue(currentCourierInfo.getUserName());
                                 mOrdersDatabaseReference.child("acceptedDelegateMobile")
-                                        .setValue(currentRequestInfo.getUserMobile());
+                                        .setValue(currentCourierInfo.getUserMobile());
                                 mOrdersDatabaseReference.child("packageState").setValue("Reserved");
-                                mOrdersDatabaseReference.child("acceptedDeliveryPrice").setValue(currentRequestInfo.getOfferPrice());
+                               // mOrdersDatabaseReference.child("acceptedDeliveryPrice").setValue(currentCourierInfo.getOfferPrice());
 
 
 //                                Intent i = new Intent(context, OrderDetails.class);
@@ -163,7 +155,8 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                 alertDialog.setCancelable(false);
                 alertDialog.setTitle("refuse Delivery Request Confirmation!");
-                alertDialog.setMessage("Are you sure you want to refuse delivering "+currentOrderName+" for "+ currentRequestInfo.getOfferPrice()+" EGP");
+                alertDialog.setMessage("Are you sure you want to refuse delivering "+currentOrderName+" for "+" EGP");
+//                alertDialog.setMessage("Are you sure you want to refuse delivering "+currentOrderName+" for "+ currentCourierInfo.getOfferPrice()+" EGP");
                 alertDialog.setIcon(R.drawable.ic_delegates_requested);
 
                 alertDialog.setPositiveButton("Yes I refuse",
@@ -172,8 +165,8 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
 
                                 dialog.cancel();
 
-                                mRequestsDatabaseReference = mOrdersDatabaseReference.child("currentRequestInfo");
-                                mRequestsDatabaseReference.child(currentRequestInfo.getRequestId()).child("status").setValue("rejected");
+                                mRequestsDatabaseReference = mOrdersDatabaseReference.child("currentCourierInfo");
+                                mRequestsDatabaseReference.child(currentCourierInfo.getRequestId()).child("status").setValue("rejected");
 
                                 Snackbar snackbar = Snackbar
                                         .make(parent.findViewById(R.id.requests_list), "مازال بامكانك قبول طلبات التوصيل الاخري", Snackbar.LENGTH_LONG);
@@ -193,17 +186,17 @@ public class OrderRequestsAdapter extends ArrayAdapter<RequestInfo> {
             }
         });
 
-        if (!currentRequestInfo.isVerified())
+        if (!currentCourierInfo.isVerified())
             delegateVerificationIcon.setVisibility(View.GONE);
 
 
         Glide.with(delegateImageIV.getContext())
-                .load(currentRequestInfo.getUserImageURL())
+                .load(currentCourierInfo.getUserImageURL())
                 .into(delegateImageIV);
 
-        deliveryFeesTV.setText(currentRequestInfo.getOfferPrice()+" EGP");
-        delegateNameTV.setText(currentRequestInfo.getUserName());
-        delegateRating.setRating(currentRequestInfo.getRating());
+        //deliveryFeesTV.setText(currentCourierInfo.getOfferPrice()+" EGP");
+        delegateNameTV.setText(currentCourierInfo.getUserName());
+        delegateRating.setRating(currentCourierInfo.getRating());
 
 
 

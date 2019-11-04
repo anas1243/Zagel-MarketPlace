@@ -18,7 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.FreeBirdsDashboardPackage.FreesDashboardActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.LocationInfoForPackage;
 import com.example.zagelx.Models.Trips;
@@ -662,7 +662,7 @@ public class AddTripsActivity extends AppCompatActivity implements View.OnClickL
                 //TODO wrong logic
                 numbersDatabaseReference.child("noOfTrips").setValue(zagelNumbers.getNoOfTripsFromAlexToCairo()+1);
                 Toast.makeText(AddTripsActivity.this, "your route has been add!", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(AddTripsActivity.this, DelegateDashboardActivity.class);
+                Intent i = new Intent(AddTripsActivity.this, FreesDashboardActivity.class);
                 i.putExtra("Which_Activity", "SomethingElse");
                 finish();
                 startActivity(i);

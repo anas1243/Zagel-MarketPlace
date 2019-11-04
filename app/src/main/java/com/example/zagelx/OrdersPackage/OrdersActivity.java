@@ -14,8 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
-import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
+import com.example.zagelx.FreeBirdsDashboardPackage.FreesDashboardActivity;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
@@ -66,6 +65,8 @@ public class OrdersActivity extends AppCompatActivity {
     private DataSnapshot PublicdataSnapshot;
 
     private NotificationBadge mBadge;
+    private String whichBranch;
+    private String uGroup;
 
 
     @BindView(R.id.toolbar)
@@ -103,8 +104,7 @@ public class OrdersActivity extends AppCompatActivity {
 
         // Initialize message ListView and its adapter
         final List<Orders> ordersList = new ArrayList<>();
-        mOrdersAdapter = new OrdersAdapter(OrdersActivity.this, R.layout.order_item, ordersList);
-        mOrdersListView.setAdapter(mOrdersAdapter);
+
 
 
         if (user != null) {
@@ -113,7 +113,9 @@ public class OrdersActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     currentUser = dataSnapshot.getValue(Users.class);
+                    uGroup = currentUser.getGroup();
                     PublicdataSnapshot = dataSnapshot;
+                    Log.e("test snapshot", "onDataChange: "+PublicdataSnapshot.toString() );
                     ButterKnife.bind(OrdersActivity.this);
                     setSupportActionBar(toolbar);
                     mBadge.setNumber(currentUser.getNumberOfNotifications());
@@ -124,32 +126,77 @@ public class OrdersActivity extends AppCompatActivity {
 
                     checkTokenAndGroup();
 
-                    switch (currentUser.getGroup()) {
+                    switch (uGroup) {
                         case "AlexFreeBirds":
-                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("AlexOrders");
+                            whichBranch = "AlexOrders";
+                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
                             FreeDDrawerUtil drawer = new FreeDDrawerUtil(currentUser.getName()
                                     , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                             drawer.getDrawer(OrdersActivity.this, toolbar);
                             break;
                         case "CairoFreeBirds":
-                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("CairoOrders");
+                            whichBranch = "CairoOrders";
+                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
                             FreeDDrawerUtil drawer1 = new FreeDDrawerUtil(currentUser.getName()
                                     , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                             drawer1.getDrawer(OrdersActivity.this, toolbar);
                             break;
                         case "AlexStaticBirds":
-                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("AlexToCairoOrders");
+                            whichBranch = "AlexToCairoOrders";
+                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
                             StaticDDrawerUtil drawer2 = new StaticDDrawerUtil(currentUser.getName()
                                     , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                             drawer2.getDrawer(OrdersActivity.this, toolbar);
                             break;
                         case "CairoStaticBirds":
-                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("CairoToAlexOrders");
+                            whichBranch = "CairoToAlexOrders";
+                            mOrdersDatabaseReference.addChildEventListener(mChildEventListener);
+                            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
                             StaticDDrawerUtil drawer3 = new StaticDDrawerUtil(currentUser.getName()
                                     , currentUser.getMobileNumber(), currentUser.getProfilePictureURL(), currentUser.getMode());
                             drawer3.getDrawer(OrdersActivity.this, toolbar);
                             break;
+
                     }
+
+                    mOrdersAdapter = new OrdersAdapter(OrdersActivity.this, R.layout.order_item, ordersList, whichBranch);
+                    mOrdersListView.setAdapter(mOrdersAdapter);
+
+                    mChildEventListener = new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            Orders orders = dataSnapshot.getValue(Orders.class);
+                            Log.e("test orders", "onChildAdded: " + orders);
+                            if(orders.getPackageState().equals("New")){
+                                //mOrdersAdapter.notifyDataSetChanged();
+                                mOrdersAdapter.add(orders);
+                            }
+
+
+                            //progressBar.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    };
+                    mOrdersDatabaseReference.addChildEventListener(mChildEventListener);
 
                 }
 
@@ -163,41 +210,7 @@ public class OrdersActivity extends AppCompatActivity {
                     .addListenerForSingleValueEvent(mUserEventListener);
 
 
-            mChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Orders orders = dataSnapshot.getValue(Orders.class);
-                    Log.e("test orders", "onChildAdded: " + orders);
-                    if(orders.getPackageState().equals("New")){
-                        mOrdersAdapter.notifyDataSetChanged();
-                        mOrdersAdapter.add(orders);
-                    }
 
-
-                    //progressBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            };
-            mOrdersDatabaseReference.addChildEventListener(mChildEventListener);
 
         } else {
             AuthUI.getInstance().signOut(this);
@@ -215,6 +228,8 @@ public class OrdersActivity extends AppCompatActivity {
                 if (currentUser.getGroup().equals("")) {
                     mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
                     //it means that this user was banned from the app before
+
+
                     switch (currentUser.getMode()){
                         case "Alex PM":
                             subscribeUserInAGroup("AlexPM");
@@ -245,12 +260,15 @@ public class OrdersActivity extends AppCompatActivity {
                             }
                             break;
                     }
+
                 } else if (PublicdataSnapshot.hasChild("userToken")) {
                     if (!currentUser.getUserToken().equals(newToken[0])) {
+                        Log.e("zzzzz", "onSuccess: publicData is working there is a user token" );
                         mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
                         subscribeUserInAGroup(currentUser.getGroup());
                     }
                 } else {
+                    Log.e("zzzzz", "onSuccess: publicData is notttt working there is a user token" );
                     mUserDatabaseReference.child(user.getUid()).child("userToken").setValue(newToken[0]);
                     subscribeUserInAGroup(currentUser.getGroup());
                 }
@@ -275,7 +293,7 @@ public class OrdersActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(OrdersActivity.this, DelegateDashboardActivity.class);
+        Intent i = new Intent(OrdersActivity.this, FreesDashboardActivity.class);
         i.putExtra("Which_Activity", "another_activity");
         startActivity(i);
     }
@@ -284,7 +302,7 @@ public class OrdersActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-                Intent i = new Intent(OrdersActivity.this, DelegateDashboardActivity.class);
+                Intent i = new Intent(OrdersActivity.this, FreesDashboardActivity.class);
                 i.putExtra("Which_Activity", "another_activity");
                 startActivity(i);
 

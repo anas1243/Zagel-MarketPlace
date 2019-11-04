@@ -23,7 +23,7 @@
         android:layout_toRightOf="@id/merchant_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name accept your offer on Order for Offer EGP "
+        android:text="تم التأكيد من قبل التاجر التاجرر ان العميل النهائى استلم الشحنة الشحنةة"
         android:textColor="#000000"
         android:textSize="18sp"
         />

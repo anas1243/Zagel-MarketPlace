@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -710,25 +713,37 @@
                     android:visibility="gone"
                     >
 
-                    <Button
-                        android:id="@+id/delete_request"
-                        style="@style/button"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/button_red"
-                        android:text="delete this order!" />
+<!--                    <Button-->
+<!--                        android:id="@+id/delete_request"-->
+<!--                        style="@style/button"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:background="@drawable/button_red"-->
+<!--                        android:text="delete this order!" />-->
 
-                    <Button
-                        android:id="@+id/show_requests"
-                        style="@style/button"
-                        android:layout_width="0dp"
+<!--                    <Button-->
+<!--                        android:id="@+id/show_requests"-->
+<!--                        style="@style/button"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:background="@drawable/button"-->
+<!--                        android:text="show requests" />-->
+                    <TextView
+                        android:id="@+id/owner_text_message"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/button"
-                        android:text="show requests" />
+                        android:textColor="@color/colorSecondary"
+                        android:textSize="18sp"
+                        android:text="سيصلك اشعار تأكيد من المندوب بأنه في طريقه اليك "/>
+                    <!--android:text="سيصلك اشعار تأكيد من المندوب بأنه استلم الشحنة منك للتأكيد "
+                    #android:text="سيصلك اشعار تأكيد من المندوب بأنه سلم الشحنة لعميلنا النهائي "-->
+
+
+
 
                 </LinearLayout>
 
@@ -775,6 +790,16 @@
                     android:text="استلمت الشحنة؟"
                     android:visibility="gone"
                     />
+                <Button
+                    android:id="@+id/button_delivered_headQuarters"
+                    style="@style/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/button"
+                    android:text="سلمت الشحنة للمقر؟"
+                    android:visibility="gone"
+                    />
 
                 <Button
                     android:id="@+id/button_delivered_order"
@@ -794,4 +819,14 @@
 
 
     </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/colorSecondary"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
 </ScrollView>

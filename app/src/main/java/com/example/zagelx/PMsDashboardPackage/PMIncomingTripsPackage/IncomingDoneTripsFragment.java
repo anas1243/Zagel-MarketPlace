@@ -33,7 +33,6 @@ public class IncomingDoneTripsFragment extends Fragment {
 
     private TripsAdapter mTripsAdapter;
 
-
     public IncomingDoneTripsFragment() {
         // Required empty public constructor
     }

@@ -86,24 +86,24 @@ public class StaticsOrdersDashboardActivity extends AppCompatActivity {
 
         mBadge = findViewById(R.id.badge);
 
-//        Intent i = getIntent();
-//        whichActivity = (String) i.getSerializableExtra("Which_Activity");
-//        if (whichActivity.equals("OrderDetails")) {
-//            String pickedOrDelivered = (String) i.getSerializableExtra("PickedORDelivered");
-//            if (pickedOrDelivered.equals("Picked")) {
-//                Snackbar snackbar = Snackbar
-//                        .make(findViewById(R.id.main_main_layout), "الرجاء السراع في توصيل الشحنة لتعزيز الثقة بينك و بين التطبيق", Snackbar.LENGTH_LONG);
-//                snackbar.show();
-//            } else if (pickedOrDelivered.equals("Delivered")) {
-//                Snackbar snackbar = Snackbar
-//                        .make(findViewById(R.id.main_main_layout), "نتمنا ان تكون قد استمتعت باستخدام التطبيق", Snackbar.LENGTH_LONG);
-//                snackbar.show();
-//            }
-//        } else {
-//            Snackbar snackbar = Snackbar
-//                    .make(findViewById(R.id.main_main_layout), "الرحلات و الشحنات الخاصة بك !", Snackbar.LENGTH_LONG);
-//            snackbar.show();
-//        }
+        Intent i = getIntent();
+        whichActivity = (String) i.getSerializableExtra("WhichActivity");
+        if (whichActivity.equals("OrderDetails")) {
+            String pickedOrDelivered = (String) i.getSerializableExtra("PickedORDelivered");
+            if (pickedOrDelivered.equals("Picked")) {
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.main_main_layout), "الرجاء السراع في توصيل الشحنة لتعزيز الثقة بينك و بين التطبيق", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            } else if (pickedOrDelivered.equals("Delivered")) {
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.main_main_layout), "نتمنا ان تكون قد استمتعت باستخدام التطبيق", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        } else {
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.main_main_layout), "الرحلات و الشحنات الخاصة بك !", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
 
         if (user != null) {
 

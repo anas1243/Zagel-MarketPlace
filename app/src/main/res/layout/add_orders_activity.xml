@@ -252,7 +252,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:ems="10"
-                    android:hint=" عنوان العميل النهائي الكامل"
+                    android:hint="عنوان العميل النهائي الكامل"
                     android:inputType="text"
                     android:textAllCaps="true" />
 

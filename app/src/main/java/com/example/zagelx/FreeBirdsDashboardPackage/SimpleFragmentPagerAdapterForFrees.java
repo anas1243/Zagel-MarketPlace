@@ -31,10 +31,14 @@ public class SimpleFragmentPagerAdapterForFrees extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0){
+            FreeNewOrdersFragment fragObj = new FreeNewOrdersFragment();
+            fragObj.setArguments(bundle);
+            return fragObj;
+        }if (position == 1){
             FreeUnPickedOrdersFragment fragObj = new FreeUnPickedOrdersFragment();
             fragObj.setArguments(bundle);
             return fragObj;
-        }else if(position == 1){
+        }else if(position == 2){
             FreePickedOrdersFragment fragObj = new FreePickedOrdersFragment();
             fragObj.setArguments(bundle);
             return fragObj;
@@ -47,15 +51,17 @@ public class SimpleFragmentPagerAdapterForFrees extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
 
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0){
+            return mContext.getResources().getString(R.string.new_orders);
+        }if (position == 1){
             return mContext.getResources().getString(R.string.reserved_orders);
-        }else if (position == 1){
+        }else if (position == 2){
             return mContext.getResources().getString(R.string.picked_orders);
         }else {
             return mContext.getResources().getString(R.string.delivered_orders);

@@ -96,7 +96,7 @@ public class InsideOrdersDashboardActivity extends AppCompatActivity {
         mBadge = findViewById(R.id.badge);
 
         Intent i = getIntent();
-        whichActivity = (String) i.getSerializableExtra("Which_Activity");
+        whichActivity = (String) i.getSerializableExtra("WhichActivity");
         if (whichActivity.equals("OrderDetails")) {
             String pickedOrDelivered = (String) i.getSerializableExtra("PickedORDelivered");
             if (pickedOrDelivered.equals("Picked")) {

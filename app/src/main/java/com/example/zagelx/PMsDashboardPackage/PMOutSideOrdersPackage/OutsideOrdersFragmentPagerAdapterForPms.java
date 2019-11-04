@@ -38,8 +38,13 @@ public class OutsideOrdersFragmentPagerAdapterForPms extends FragmentPagerAdapte
             OutSideHeadQuarOrdersFragment fragObj = new OutSideHeadQuarOrdersFragment();
             fragObj.setArguments(bundle);
             return fragObj;
-        }else{
+        }
+        else if(position == 4){
             OutSideOtherHeadQuarOrdersFragment fragObj = new OutSideOtherHeadQuarOrdersFragment();
+            fragObj.setArguments(bundle);
+            return fragObj;
+        }else{
+            OutSideDeliveredOrdersFragment fragObj = new OutSideDeliveredOrdersFragment();
             fragObj.setArguments(bundle);
             return fragObj;
         }
@@ -47,7 +52,7 @@ public class OutsideOrdersFragmentPagerAdapterForPms extends FragmentPagerAdapte
 
     @Override
     public int getCount() {
-        return 5;
+        return 6;
     }
 
 
@@ -61,8 +66,10 @@ public class OutsideOrdersFragmentPagerAdapterForPms extends FragmentPagerAdapte
             return mContext.getResources().getString(R.string.picked_orders);
         }else if (position == 3){
             return mContext.getResources().getString(R.string.current_headquarters_orders);
-        }else {
+        }else if (position == 4){
             return mContext.getResources().getString(R.string.other_headquarters_orders);
+        }else {
+            return mContext.getResources().getString(R.string.delivered_orders);
         }
     }
 }

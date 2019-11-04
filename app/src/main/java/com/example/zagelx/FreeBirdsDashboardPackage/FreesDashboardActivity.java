@@ -74,7 +74,7 @@ public class FreesDashboardActivity extends AppCompatActivity {
 
         addButton = findViewById(R.id.add_button);
         toolbarText = findViewById(R.id.toolbar_text);
-        toolbarText.setText("شحناتك المسؤل عنها");
+        toolbarText.setText("شحناتك المسؤل عنها و الجديدة");
         notificaitonsButton = findViewById(R.id.ic_notification_toolbar);
         notificaitonsButton.setOnClickListener(new View.OnClickListener() {
             @Override

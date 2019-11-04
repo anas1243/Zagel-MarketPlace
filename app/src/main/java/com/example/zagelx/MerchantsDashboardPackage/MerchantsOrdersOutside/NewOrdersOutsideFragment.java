@@ -9,8 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
-import com.example.zagelx.DashboardPackage.DashboardOrdersAdapter;
+import com.example.zagelx.MerchantsDashboardPackage.DashboardOrdersAdapter;
 import com.example.zagelx.Models.Orders;
 import com.example.zagelx.R;
 import com.google.firebase.database.ChildEventListener;
@@ -25,6 +24,7 @@ import java.util.List;
 public class NewOrdersOutsideFragment extends Fragment {
     private String userId;
     private String uGroup;
+    private String whichBranch;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
     private ChildEventListener mOrdersChildEventListener;
@@ -53,15 +53,17 @@ public class NewOrdersOutsideFragment extends Fragment {
         ListView mListView = rootView.findViewById(R.id.list);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         if (uGroup.equals("AlexMerchants")){
-            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("AlexToCairoOrders");
+            whichBranch = "AlexToCairoOrders";
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
         }else if (uGroup.equals("CairoMerchants")){
-            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("CairoToAlexOrders");
+            whichBranch = "CairoToAlexOrders";
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
         }
 
 
         final List<Orders> ordersList = new ArrayList<>();
         mOrdersAdapter = new DashboardOrdersAdapter(getActivity()
-                , R.layout.order_list_dashboard, ordersList);
+                , R.layout.order_list_dashboard, ordersList, whichBranch);
         mListView.setAdapter(mOrdersAdapter);
 
         mOrdersChildEventListener = new ChildEventListener() {

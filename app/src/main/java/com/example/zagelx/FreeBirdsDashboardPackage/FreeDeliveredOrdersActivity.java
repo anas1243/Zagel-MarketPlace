@@ -2,8 +2,6 @@ package com.example.zagelx.FreeBirdsDashboardPackage;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
-import com.example.zagelx.DashboardPackage.DelegateOrdersFragment;
 import com.example.zagelx.R;
 
 public class FreeDeliveredOrdersActivity extends AppCompatActivity {

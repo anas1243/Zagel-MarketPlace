@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
 
+import com.example.zagelx.Models.CourierInfo;
 import com.example.zagelx.Models.Orders;
-import com.example.zagelx.Models.RequestInfo;
 import com.example.zagelx.Models.Users;
 import com.example.zagelx.R;
 import com.example.zagelx.Utilities.NavDrawerPackage.MerchantDrawerUtil;
@@ -85,7 +85,7 @@ public class OrdersRequestsActivity extends AppCompatActivity {
 
         mOrdersDatabaseReference.addListenerForSingleValueEvent(mOrderEventListener);
 
-//        delegateId = currentNotification.getRequestInfo().getUserID();
+//        delegateId = currentNotification.getCourierInfo().getUserID();
 //         notificationId = System.currentTimeMillis() + delegateId;
 //         requestId = System.currentTimeMillis() + currentNotification.getMerchantId();
 
@@ -112,7 +112,7 @@ public class OrdersRequestsActivity extends AppCompatActivity {
                     drawer.getDrawer(OrdersRequestsActivity.this, toolbar);
 
 
-                    final List<RequestInfo> requestsList = new ArrayList<>();
+                    final List<CourierInfo> requestsList = new ArrayList<>();
                     mRequestsAdapter = new OrderRequestsAdapter(OrdersRequestsActivity.this
                             , R.layout.request_item, requestsList, mOrdersDatabaseReference, currentOrder, currentUser);
                     mListView.setAdapter(mRequestsAdapter);
@@ -149,9 +149,9 @@ public class OrdersRequestsActivity extends AppCompatActivity {
         ChildEventListener mRequestsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                RequestInfo currentRequestInfo = dataSnapshot.getValue(RequestInfo.class);
-                if (currentRequestInfo.getStatus().equals("pending"))
-                    mRequestsAdapter.add(currentRequestInfo);
+                CourierInfo currentCourierInfo = dataSnapshot.getValue(CourierInfo.class);
+                //if (currentCourierInfo.getStatus().equals("pending"))
+                    mRequestsAdapter.add(currentCourierInfo);
 
                 //progressBar.setVisibility(View.GONE);
             }

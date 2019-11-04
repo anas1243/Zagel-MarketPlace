@@ -7,34 +7,28 @@ public class DelegatesNotification implements Serializable {
     private String type;
     private String purpose;
     private String delegateId;
-    private String tripId;
     private String orderName;
     private String orderId;
-    private String tripDate;
-    private RequestInfo requestInfo;
+    private String whichBranch;
+    private CourierInfo courierInfo;
 
-    public DelegatesNotification(String notificationsId, String type, String purpose, String delegateId, String tripId, String tripDate
-            , String orderId, String orderName, RequestInfo requestInfo) {
-        this.tripId = tripId;
+    public DelegatesNotification(String notificationsId, String type, String purpose, String delegateId
+            , String orderId, String orderName, String whichBranch, CourierInfo courierInfo) {
         this.orderId = orderId;
-        this.tripDate = tripDate;
         this.orderName = orderName;
-        this.requestInfo = requestInfo;
+        this.courierInfo = courierInfo;
         this.delegateId = delegateId;
         this.notificationsId = notificationsId;
         this.type = type;
         this.purpose = purpose;
+        this.whichBranch = whichBranch;
     }
 
     public DelegatesNotification() {
     }
 
-    public String getTripId() {
-        return tripId;
-    }
-
-    public RequestInfo getRequestInfo() {
-        return requestInfo;
+    public CourierInfo getCourierInfo() {
+        return courierInfo;
     }
 
     public String getOrderName() {
@@ -43,10 +37,6 @@ public class DelegatesNotification implements Serializable {
 
     public String getOrderId() {
         return orderId;
-    }
-
-    public String getTripDate() {
-        return tripDate;
     }
 
     public String getDelegateId() {
@@ -63,5 +53,9 @@ public class DelegatesNotification implements Serializable {
 
     public String getPurpose() {
         return purpose;
+    }
+
+    public String getWhichBranch() {
+        return whichBranch;
     }
 }

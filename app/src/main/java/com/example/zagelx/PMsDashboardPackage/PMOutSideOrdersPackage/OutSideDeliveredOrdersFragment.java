@@ -1,4 +1,4 @@
-package com.example.zagelx.MainPackage;
+package com.example.zagelx.PMsDashboardPackage.PMOutSideOrdersPackage;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,9 +22,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrdersFragment extends Fragment {
+public class OutSideDeliveredOrdersFragment extends Fragment {
     private String userId;
-
+    private String uGroup;
+    private String whichBranch;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
     private ChildEventListener mOrdersChildEventListener;
@@ -33,7 +34,7 @@ public class OrdersFragment extends Fragment {
     private OrdersAdapter mOrdersAdapter;
 
 
-    public OrdersFragment() {
+    public OutSideDeliveredOrdersFragment() {
         // Required empty public constructor
     }
 
@@ -47,15 +48,20 @@ public class OrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         userId = getArguments().getString("userId");
+        uGroup = getArguments().getString("uGroup");
         View rootView = inflater.inflate(R.layout.activity_view_pager_list
                 , container, false);
         ListView mListView = rootView.findViewById(R.id.list);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
-
+        if (uGroup.equals("AlexPM")){
+            whichBranch = "AlexToCairoOrders";
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
+        }else if (uGroup.equals("CairoPM")){
+            whichBranch = "CairoToAlexOrders";
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
+        }
         final List<Orders> ordersList = new ArrayList<>();
-        mOrdersAdapter = new OrdersAdapter(getActivity()
-                , R.layout.order_item, ordersList);
+        mOrdersAdapter = new OrdersAdapter(getActivity(), R.layout.order_item, ordersList, whichBranch);
         mListView.setAdapter(mOrdersAdapter);
 
         mOrdersChildEventListener = new ChildEventListener() {
@@ -63,10 +69,11 @@ public class OrdersFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Orders orders = dataSnapshot.getValue(Orders.class);
                 Log.e("test orders", "onChildAdded: " + orders);
-                if(orders.getPackageState().equals("New")
-                        || orders.getPackageState().equals("Negotiable")
-                )
+                if(orders.getPackageStateForPm().equals("Delivered")){
+                    mOrdersAdapter.notifyDataSetChanged();
                     mOrdersAdapter.add(orders);
+                }
+
 
                 //progressBar.setVisibility(View.GONE);
             }

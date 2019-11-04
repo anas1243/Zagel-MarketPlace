@@ -72,7 +72,7 @@ public class OutsideOrdersDashboardActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("Users");
 
-
+        addButton = findViewById(R.id.add_button);
         toolbarText = findViewById(R.id.toolbar_text);
         toolbarText.setText("شحنات الي خارج المحافظة");
         notificaitonsButton = findViewById(R.id.ic_notification_toolbar);

@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/round_corners"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="12dp"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -51,7 +52,8 @@
         android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/package_image"
             android:layout_width="48dp"
             android:layout_height="48dp"

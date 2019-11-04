@@ -2,30 +2,21 @@ package com.example.zagelx.Models;
 
 import java.io.Serializable;
 
-public class RequestInfo implements Serializable {
+public class CourierInfo implements Serializable {
     private String requestId;
     private String userID;
     private String userName;
     private String userImageURL;
     private String userMobile;
+    private String userGroup;
     private int rating;
-    private String offerPrice;
     private boolean verified;
-    private String status; //pending, accepted or rejected request;
 
-    public RequestInfo() {
-    }
-
-    public String getStatus() {
-        return status;
+    public CourierInfo() {
     }
 
     public String getRequestId() {
         return requestId;
-    }
-
-    public String getOfferPrice() {
-        return offerPrice;
     }
 
     public String getUserName() {
@@ -40,10 +31,6 @@ public class RequestInfo implements Serializable {
         return rating;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getUserID() {
         return userID;
     }
@@ -52,17 +39,16 @@ public class RequestInfo implements Serializable {
         return verified;
     }
 
-    public RequestInfo(String requestId, String userID, String userName, String userImageURL
-            , String userMobile, int rating, String offerPrice, boolean verified, String status) {
+    public CourierInfo(String requestId, String userID, String userName, String userImageURL
+            , String userMobile, String userGroup, int rating, boolean verified) {
         this.userID = userID;
         this.userName = userName;
         this.userImageURL = userImageURL;
         this.rating = rating;
-        this.offerPrice = offerPrice;
         this.verified = verified;
         this.requestId = requestId;
         this.userMobile = userMobile;
-        this.status = status;
+        this.userGroup = userGroup;
     }
 
     public void setRequestId(String requestId) {
@@ -73,5 +59,7 @@ public class RequestInfo implements Serializable {
         return userMobile;
     }
 
-
+    public String getUserGroup() {
+        return userGroup;
+    }
 }

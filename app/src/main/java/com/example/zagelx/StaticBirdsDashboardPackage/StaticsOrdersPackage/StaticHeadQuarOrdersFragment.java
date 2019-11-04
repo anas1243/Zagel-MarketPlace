@@ -9,9 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
-import com.example.zagelx.DashboardPackage.DashboardOrdersAdapter;
 import com.example.zagelx.Models.Orders;
+import com.example.zagelx.OrdersPackage.OrdersAdapter;
 import com.example.zagelx.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,13 +24,13 @@ import java.util.List;
 public class StaticHeadQuarOrdersFragment extends Fragment {
     private String userId;
     private String uGroup;
-
+    private String whichBranch;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
     private ChildEventListener mOrdersChildEventListener;
 
 
-    private DashboardOrdersAdapter mOrdersAdapter;
+    private OrdersAdapter mOrdersAdapter;
 
 
     public StaticHeadQuarOrdersFragment() {
@@ -54,14 +53,16 @@ public class StaticHeadQuarOrdersFragment extends Fragment {
         ListView mListView = rootView.findViewById(R.id.list);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         if (uGroup.equals("AlexStaticBirds")){
-            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("AlexToCairoOrders");
+            whichBranch = "AlexToCairoOrders";
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
         }else if (uGroup.equals("CairoStaticBirds")){
-            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("CairoToAlexOrders");
+            whichBranch = "CairoToAlexOrders";
+            mOrdersDatabaseReference = mFirebaseDatabase.getReference().child(whichBranch);
         }
 
         final List<Orders> ordersList = new ArrayList<>();
-        mOrdersAdapter = new DashboardOrdersAdapter(getActivity()
-                , R.layout.order_list_dashboard, ordersList);
+        mOrdersAdapter = new OrdersAdapter(getActivity()
+                , R.layout.order_list_dashboard, ordersList, whichBranch);
         mListView.setAdapter(mOrdersAdapter);
 
         mOrdersChildEventListener = new ChildEventListener() {
@@ -69,8 +70,8 @@ public class StaticHeadQuarOrdersFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Orders orders = dataSnapshot.getValue(Orders.class);
                 Log.e("test orders", "onChildAdded: " + orders);
-                if(orders.getPackageState().equals("Headquarters") &&
-                        orders.getMerchantId().equals(userId)){
+                if(orders.getPackageState().equals("CurrentHeadquarters") &&
+                        orders.getAcceptedDelegateID().equals(userId)){
                     mOrdersAdapter.notifyDataSetChanged();
                     mOrdersAdapter.add(orders);
                 }

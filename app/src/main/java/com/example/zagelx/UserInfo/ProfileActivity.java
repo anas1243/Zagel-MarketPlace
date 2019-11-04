@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.zagelx.DashboardPackage.DelegateDashboardActivity;
+import com.example.zagelx.FreeBirdsDashboardPackage.FreesDashboardActivity;
 import com.example.zagelx.MerchantsDashboardPackage.MerchantsOrdersInside.MerchantDashboardInsideActivity;
 import com.example.zagelx.Models.BirthDate;
 import com.example.zagelx.Models.Users;
@@ -471,7 +471,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     startActivity(i);
                 }
                 else if (currentUser.getMode().equals("Delivery Delegate")){
-                    Intent i = new Intent(ProfileActivity.this, DelegateDashboardActivity.class);
+                    Intent i = new Intent(ProfileActivity.this, FreesDashboardActivity.class);
                     i.putExtra("Which_Activity", "SomethingElse");
                     startActivity(i);
                 }
@@ -746,7 +746,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             startActivity(i);
         }
         else if (currentUser.getMode().equals("Delivery Delegate")){
-            Intent i = new Intent(ProfileActivity.this, DelegateDashboardActivity.class);
+            Intent i = new Intent(ProfileActivity.this, FreesDashboardActivity.class);
             i.putExtra("Which_Activity", "SomethingElse");
             finish();
             startActivity(i);
@@ -762,7 +762,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(i);
             }
             else if (currentUser.getMode().equals("Delivery Delegate")){
-                Intent i = new Intent(ProfileActivity.this, DelegateDashboardActivity.class);
+                Intent i = new Intent(ProfileActivity.this, FreesDashboardActivity.class);
                 i.putExtra("Which_Activity", "SomethingElse");
                 finish();
                 startActivity(i);

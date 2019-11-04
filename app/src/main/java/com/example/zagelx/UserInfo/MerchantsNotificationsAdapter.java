@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.zagelx.Models.MerchantsNotifications;
 import com.example.zagelx.OrdersPackage.OrderDetails;
-import com.example.zagelx.OrdersPackage.OrdersRequestsActivity;
 import com.example.zagelx.R;
 
 import java.util.List;
@@ -42,11 +41,11 @@ public class MerchantsNotificationsAdapter extends ArrayAdapter<MerchantsNotific
         purpose = currentNotification.getPurpose();
 
         if (convertView == null|| !purpose.equals( convertView.getTag())) {
-            if(purpose.equals("acceptance")){
-                convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.notification_item_acceptance_to_merchant
+            if(purpose.equals("OnWay")){
+                convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.notification_item_onway_tomerchant
                         , parent, false);
-            }else{
-                convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.notification_item_on_order
+            }else if (purpose.equals("Picked") || purpose.equals("Delivered")){
+                convertView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.notification_item_pickedanddelivered_tomerchant
                         , parent, false);
             }
 
@@ -62,62 +61,55 @@ public class MerchantsNotificationsAdapter extends ArrayAdapter<MerchantsNotific
         TextView NotificationBodyTV = convertView.findViewById(R.id.notification_body);
         ImageButton verificationIcon = convertView.findViewById(R.id.user_verification);
 
-        String DelegateName = currentNotification.getRequestInfo().getUserName();
+        String DelegateName = currentNotification.getCourierInfo().getUserName();
         String notificationBody = NotificationBodyTV.getText().toString();
 
-        if(purpose.equals("request")){
-            notificationBody = notificationBody.replace("Name", Html.fromHtml("<b>"+DelegateName+"</b>"));
-            notificationBody = notificationBody.replace("Order"
-                    ,Html.fromHtml("<b>"+currentNotification.getOrderName()+"</b>"));
-            notificationBody = notificationBody.replace("Offer"
-                    ,Html.fromHtml("<b>"+currentNotification.getRequestInfo().getOfferPrice()+"</b>"));
-        }else{
+        switch (purpose) {
+            case "OnWay":
+                notificationBody = notificationBody.replace("المندوبب", Html.fromHtml("<b>" + DelegateName + "</b>"));
+                notificationBody = notificationBody.replace("الشحنة"
+                        , Html.fromHtml("<b>" + currentNotification.getOrderName() + "</b>"));
+                break;
+            case "Picked":
 
-            notificationBody = notificationBody.replace("Name", Html.fromHtml("<b>"+DelegateName+"</b>"));
-            notificationBody = notificationBody.replace("Order"
-                    ,Html.fromHtml("<b>"+currentNotification.getOrderName()+"</b>"));
-            notificationBody = notificationBody.replace("Offer"
-                    ,Html.fromHtml("<b>"+currentNotification.getRequestInfo().getOfferPrice()+"</b>"));
-            notificationBody = notificationBody.replace("TripDate"
-                    ,Html.fromHtml("<b>"+currentNotification.getTripDate()+"</b>"));
+                notificationBody = notificationBody.replace("المندوبب", Html.fromHtml("<b>" + DelegateName + "</b>"));
+                notificationBody = notificationBody.replace("الشحنة"
+                        , Html.fromHtml("<b>" + currentNotification.getOrderName() + "</b>"));
 
+                break;
+            case "Delivered":
+
+                notificationBody = notificationBody.replace("المندوبب", Html.fromHtml("<b>" + DelegateName + "</b>"));
+                notificationBody = notificationBody.replace("الشحنة"
+                        , Html.fromHtml("<b>" + currentNotification.getOrderName() + "</b>"));
+                notificationBody = notificationBody.replace("استلم"
+                        , Html.fromHtml("<b>" + "سلم" + "</b>"));
+//
+
+                break;
         }
 
 
 
 
-        if (!currentNotification.getRequestInfo().isVerified())
+        if (!currentNotification.getCourierInfo().isVerified())
             verificationIcon.setVisibility(View.GONE);
 
 
         Glide.with(delegateImageIV.getContext())
-                .load(currentNotification.getRequestInfo().getUserImageURL())
+                .load(currentNotification.getCourierInfo().getUserImageURL())
                 .into(delegateImageIV);
         NotificationBodyTV.setText(notificationBody);
 
         listItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentNotification.getPurpose().equals("request")){
-                    Intent i = new Intent(context, OrdersRequestsActivity.class);
-                    i.putExtra("orderId", currentNotification.getOrderId());
-                    i.putExtra("WhichActivity", "MNotificationsAdapter");
-                    context.startActivity(i);
-                }else{
 
-//                    Intent i = new Intent(context, OrderDetails.class);
-//                    i.putExtra("Package_ID", currentNotification);
-//                    i.putExtra("Purpose", currentNotification.getPurpose());
-//                    context.startActivity(i);
-
-                    Intent i = new Intent(context, OrderDetails.class);
-                    i.putExtra("orderId", currentNotification.getOrderId());
-                    i.putExtra("MerchantNotification", currentNotification);
-                    i.putExtra("Purpose", currentNotification.getPurpose());
-                    i.putExtra("WhichActivity", "MNotificationsAdapter");
-                    context.startActivity(i);
-                }
-
+                Intent i = new Intent(context, OrderDetails.class);
+                i.putExtra("orderId", currentNotification.getOrderId());
+                i.putExtra("WhichBranch", currentNotification.getWhichBranch());
+                i.putExtra("WhichActivity", "MNotificationsAdapter");
+                context.startActivity(i);
             }
         });
 
