@@ -1,11 +1,7 @@
 # Zagel-MarketPlace
 
-Zagel is a marketplace for e-merchants, delivery companies and freelancers delivery delegates. Zagel facilitates the communication
-between them in order to ship e-commerce products effectively with the least price. Delivery delegates enter package details including source and destination
-that can be add throw google maps API and Google Places using auto Complete Edit Texts. Also, they enter intended delivery price and whether the order is pre-paid or not.
-also, the proffered type to vehicle and if the package is breakable.
-on the other hand, delivery delegates pick the suitable orders for them. 
-Delivery delegates can also specify a certain route in a specific date so e-merchants can put the package in this route.
+Zagel is a delivery marketplace that facilitates the communication between E-merchants and freelancer delivery delegates at the lowest price. Merchants add their orders’ details to the platform, including source and destination, using Google Maps APIs, and freelancers bid on delivering them.
+Delivery delegates can also specify a particular route on a specific date so that e-merchants can put the package on this route.
 
 Project ScreenShots:
 The List of orders:
